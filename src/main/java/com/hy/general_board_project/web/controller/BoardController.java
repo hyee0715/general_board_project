@@ -1,4 +1,4 @@
-package com.hy.general_board_project.controller;
+package com.hy.general_board_project.web.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
