@@ -1,42 +1,49 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header">
-    <title>Hello</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <body>
 <div class="container">
     <main role="main" class="container">
-        <br>
-        <h2>게시판</h2>
-        <br>
+        <br><br>
+        <div class="p-5 mb-4 bg-light rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">게시판</h1>
+                <br>
+                <p class="col-md-8 fs-4">
+                <div class="starter-template">
 
-        <div class="starter-template">
+                    <table class="table table-bordered">
+                        <!-- CONTENTS !-->
+                        <thead>
+                        <tr style="text-align: center">
+                            <th class="col-md-1">번호</th>
+                            <th class="col-md-4">제목</th>
+                            <th class="col-md-3">작성자</th>
+                            <th class="col-md-2">작성일</th>
+                            <th class="col-md-2">수정일</th>
+                        </tr>
+                        </thead>
 
-            <table class="table table-bordered">
-                <!-- CONTENTS !-->
-                <thead>
-                <tr>
-                    <th class="col-md-1">번호</th>
-                    <th class="col-md-4">제목</th>
-                    <th class="col-md-3">작성자</th>
-                    <th class="col-md-2">작성일</th>
-                    <th class="col-md-2">수정일</th>
-                </tr>
-                </thead>
+                        <tbody>
+                        <!-- CONTENTS !-->
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
 
-                <tbody>
-                <!-- CONTENTS !-->
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                </tbody>
-            </table>
+                    <!-- 글쓰기 버튼 -->
+                    <a style="float: right; margin-top: 10px;" class="btn btn-primary" th:href="@{/board/write}">글쓰기</a>
+                </div>
+                </p>
+            </div>
         </div>
 
         <div th:replace="fragments/footer :: footer" />
