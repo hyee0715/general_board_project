@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+<div class="container">
+    <main role="main" class="container">
+        <br><br>
+        <div class="p-5 mb-4 bg-light rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">게시글</h1>
+                <br>
+                <p class="col-md-8 fs-4">
+                <div class="starter-template">
+                <table class ="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <th>제목</th>
+                        <td></td>
+                    </tr>
+                    <tbody>
+                    <tr>
+                        <th>작성자</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>작성일</th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>본문 내용</th>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!-- 수정/삭제 -->
+                <button class="btn btn-primary">수정</button>
+                <button class="btn btn-warning" id="delete-btn">삭제</button>
+
+                <div class="btn_wrap text-center">
+                    <a href="" class="btn btn-secondary">목룍으로</a>
+                </div>
+                </div>
+                </p>
+
+            </div>
+        </div>
+
+        <div th:replace="fragments/footer :: footer" />
+    </main>
+</div> <!-- /container -->
+
+</body>
+</html>
