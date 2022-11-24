@@ -16,4 +16,9 @@ public class BoardController {
     public String write() {
         return "board/write";
     }
+
+    @GetMapping("/detail")
+    public String detail() {
+        return "board/detail";
+    }
 }
