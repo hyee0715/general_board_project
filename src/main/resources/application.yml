@@ -15,6 +15,10 @@ spring:
   devtools:
     livereload:
       enabled: true
+    restart:
+      enabled: true
+    thymeleaf:
+      cache: false
 
   logging:
     level:
