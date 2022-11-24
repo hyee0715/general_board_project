@@ -21,4 +21,9 @@ public class BoardController {
     public String detail() {
         return "board/detail";
     }
+
+    @GetMapping("/update")
+    public String update() {
+        return "board/update";
+    }
 }
