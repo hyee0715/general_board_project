@@ -53,4 +53,11 @@ public class BoardController {
 
         return "redirect:/";
     }
+
+    @DeleteMapping("/detail/{no}")
+    public String delete(@PathVariable("no") Long no) {
+        boardService.deletePost(no);
+
+        return "redirect:/";
+    }
 }
