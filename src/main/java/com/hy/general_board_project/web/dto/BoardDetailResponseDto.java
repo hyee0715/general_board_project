@@ -25,7 +25,7 @@ public class BoardDetailResponseDto {
         this.createdDate = createdDate;
     }
 
-    // Entity -> BoardListResponseDto로 변환
+    // Entity -> BoardDetailResponseDto로 변환
     public static BoardDetailResponseDto convertBoardEntityToBoardDetailResponseDto(Board board) {
         return BoardDetailResponseDto.builder()
                 .id(board.getId())
