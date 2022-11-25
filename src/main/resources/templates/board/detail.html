@@ -37,7 +37,9 @@
                 </table>
 
                 <!-- 수정/삭제 -->
-                <button class="btn btn-primary">수정</button>
+                <a th:href="@{'/board/detail/update/' + ${boardDetailResponseDto.id}}">
+                    <button class="btn btn-primary">수정</button>
+                </a>
                 <button class="btn btn-warning" id="delete-btn">삭제</button>
 
                 <div class="btn_wrap text-center">

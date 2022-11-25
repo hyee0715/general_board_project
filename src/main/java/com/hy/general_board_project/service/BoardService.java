@@ -5,14 +5,11 @@ import com.hy.general_board_project.domain.board.BoardRepository;
 import com.hy.general_board_project.web.dto.BoardDetailResponseDto;
 import com.hy.general_board_project.web.dto.BoardListResponseDto;
 import com.hy.general_board_project.web.dto.BoardSaveRequestDto;
+import com.hy.general_board_project.web.dto.BoardUpdateResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,5 +43,10 @@ public class BoardService {
         BoardDetailResponseDto boardDetailResponseDto = BoardDetailResponseDto.convertBoardEntityToBoardDetailResponseDto(board);
 
         return boardDetailResponseDto;
+    }
+
+    @Transactional
+    public Long update(BoardUpdateResponseDto boardUpdateResponseDto) {
+        return boardRepository.save(boardUpdateResponseDto.toEntity()).getId();
     }
 }
