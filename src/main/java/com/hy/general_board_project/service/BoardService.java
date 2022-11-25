@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -29,11 +30,10 @@ public class BoardService {
     @Transactional
     public List<BoardListResponseDto> getBoardList() {
         List<Board> boardList = boardRepository.findAll();
-        List<BoardListResponseDto> boardDtoList = new ArrayList<>();
 
-        for (Board board : boardList) {
-            boardDtoList.add(BoardListResponseDto.convertBoardEntityToBoardListResponseDto(board));
-        }
+        List<BoardListResponseDto> boardDtoList = boardList.stream()
+                .map(BoardListResponseDto::convertBoardEntityToBoardListResponseDto)
+                .collect(Collectors.toList());
 
         return boardDtoList;
     }
