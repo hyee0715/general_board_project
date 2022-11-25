@@ -2,6 +2,7 @@ package com.hy.general_board_project.service;
 
 import com.hy.general_board_project.domain.board.Board;
 import com.hy.general_board_project.domain.board.BoardRepository;
+import com.hy.general_board_project.web.dto.BoardDetailResponseDto;
 import com.hy.general_board_project.web.dto.BoardListResponseDto;
 import com.hy.general_board_project.web.dto.BoardSaveRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -36,5 +38,13 @@ public class BoardService {
         return boardDtoList;
     }
 
+    @Transactional
+    public BoardDetailResponseDto getBoardDetail(Long id) {
+        Optional<Board> boardWrapper = boardRepository.findById(id);
+        Board board = boardWrapper.get();
 
+        BoardDetailResponseDto boardDetailResponseDto = BoardDetailResponseDto.convertBoardEntityToBoardDetailResponseDto(board);
+
+        return boardDetailResponseDto;
+    }
 }

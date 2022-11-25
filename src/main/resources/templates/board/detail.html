@@ -18,20 +18,20 @@
                     <tbody>
                     <tr>
                         <th>제목</th>
-                        <td></td>
+                        <td th:text="${boardDetailResponseDto.title}"></td>
                     </tr>
                     <tbody>
                     <tr>
                         <th>작성자</th>
-                        <td></td>
+                        <td th:text="${boardDetailResponseDto.writer}"></td>
                     </tr>
                     <tr>
                         <th>작성일</th>
-                        <td></td>
+                        <td th:inline="text">[[${#temporals.format(boardDetailResponseDto.createdDate, 'yyyy-MM-dd HH:mm')}]]</td>
                     </tr>
                     <tr>
                         <th>본문 내용</th>
-                        <td></td>
+                        <td th:text="${boardDetailResponseDto.content}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -41,7 +41,7 @@
                 <button class="btn btn-warning" id="delete-btn">삭제</button>
 
                 <div class="btn_wrap text-center">
-                    <a href="" class="btn btn-secondary">목룍으로</a>
+                    <a href="/" class="btn btn-secondary">목룍으로</a>
                 </div>
                 </div>
                 </p>
