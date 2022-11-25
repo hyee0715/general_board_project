@@ -49,4 +49,9 @@ public class BoardService {
     public Long update(BoardUpdateResponseDto boardUpdateResponseDto) {
         return boardRepository.save(boardUpdateResponseDto.toEntity()).getId();
     }
+
+    @Transactional
+    public void deletePost(Long id) {
+        boardRepository.deleteById(id);
+    }
 }

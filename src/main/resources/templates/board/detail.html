@@ -37,13 +37,19 @@
                 </table>
 
                 <!-- 수정/삭제 -->
+                <div style="display: inline-block">
                 <a th:href="@{'/board/detail/update/' + ${boardDetailResponseDto.id}}">
-                    <button class="btn btn-primary">수정</button>
+                    <button class="btn btn-outline-primary">수정</button>
                 </a>
-                <button class="btn btn-warning" id="delete-btn">삭제</button>
-
+                </div>
+                <div style="display: inline-block">
+                <form id="delete-form" th:action="@{'/board/detail/' + ${boardDetailResponseDto.id}}" method="post">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button class="btn btn-outline-danger" id="delete-btn">삭제</button>
+                </form>
+                </div>
                 <div class="btn_wrap text-center">
-                    <a href="/" class="btn btn-secondary">목록으로</a>
+                    <a href="/" class="btn btn-outline-secondary">목록으로</a>
                 </div>
                 </div>
                 </p>
