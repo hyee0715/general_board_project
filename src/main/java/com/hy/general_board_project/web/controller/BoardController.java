@@ -2,11 +2,14 @@ package com.hy.general_board_project.web.controller;
 
 import com.hy.general_board_project.domain.board.BoardRepository;
 import com.hy.general_board_project.service.BoardService;
+import com.hy.general_board_project.web.dto.BoardDetailResponseDto;
 import com.hy.general_board_project.web.dto.BoardSaveRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -28,8 +31,12 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @GetMapping("/detail")
-    public String detail() {
+    @GetMapping("/detail/{no}")
+    public String detail(@PathVariable("no") Long no, Model model) {
+        BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(no);
+
+        model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
+
         return "board/detail";
     }
 
