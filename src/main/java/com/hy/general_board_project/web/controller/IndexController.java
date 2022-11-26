@@ -18,10 +18,17 @@ public class IndexController {
 
     private BoardService boardService;
 
-    @GetMapping("/")
-    public String index(Model model) {
-        List<BoardListResponseDto> boardList = boardService.getBoardList();
+    @GetMapping({"/", "/board/list"})
+    public String index(Model model, @RequestParam(value="page", defaultValue = "1") Integer pageNum) {
+        List<BoardListResponseDto> boardList = boardService.getBoardList(pageNum);
+        List<Integer> pageList = boardService.getPageList(pageNum);
+        Integer totalLastPageNum = boardService.getTotalLastPageNum();
+
         model.addAttribute("boardList", boardList);
+        model.addAttribute("pageList", pageList);
+        model.addAttribute("curPage", pageNum);
+        model.addAttribute("totalLastPageNum", totalLastPageNum);
+
         return "index";
     }
 

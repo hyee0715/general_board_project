@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 
 <body>
@@ -33,20 +33,85 @@
                             <td th:text="${board.id}" style="text-align: center"></td>
                             <td><a th:href="'/board/detail/'+${board.id}" th:text="${board.title}"></a></td>
                             <td th:text="${board.writer}" style="text-align: center"></td>
-                            <td th:text="${board.createdDate} ? ${#temporals.format(board.createdDate,'yyyy-MM-dd HH:mm')} : ${board.createdDate}" style="text-align: center"></td>
-                            <td th:text="${board.modifiedDate} ? ${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')} : ${board.modifiedDate}" style="text-align: center"></td>
+                            <td th:text="${board.createdDate} ? ${#temporals.format(board.createdDate,'yyyy-MM-dd HH:mm')} : ${board.createdDate}"
+                                style="text-align: center"></td>
+                            <td th:text="${board.modifiedDate} ? ${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')} : ${board.modifiedDate}"
+                                style="text-align: center"></td>
                         </tr>
                         </tbody>
                     </table>
 
-                    <!-- 글쓰기 버튼 -->
-                    <a style="float: right; margin-top: 10px;" class="btn btn-outline-dark" th:href="@{/board/write}">글쓰기</a>
+                    <!-- Pagination -->
+                    <div>
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a th:if="${curPage != 1}" class="page-link" href="/board/list/?page=1"
+                                       aria-label="Start">
+                                        <span aria-hidden="true" class="sr-only">Start</span>
+                                    </a>
+                                    <a th:if="${curPage == 1}" class="page-link" href="/board/list/?page=1"
+                                       aria-label="Start" style="display: none;">
+                                        <span aria-hidden="true" class="sr-only">Start</span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a th:if="${curPage != 1}" class="page-link"
+                                       th:href="@{'/board/list/?page=' + ${curPage - 1}}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a th:if="${curPage == 1}" class="page-link" href="/board/list/?page=1"
+                                       aria-label="Previous" style="display: none;">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <span th:each="pageNum : ${pageList}" th:inline="text">
+                    <li class="page-item">
+                        <a th:if="${pageNum != curPage}" class="page-link"
+                           th:href="@{'/board/list/?page=' + ${pageNum}}">[[${pageNum}]]</a>
+                        <strong th:if="${pageNum == curPage}" class="page-link"
+                                th:href="@{'/board/list/?page=' + ${pageNum}}">[[${pageNum}]] </strong>
+                    </li>
+                    </span>
+                                <li class="page-item">
+                                    <a th:if="${curPage != totalLastPageNum}" class="page-link"
+                                       th:href="@{'/board/list/?page=' + ${curPage + 1}}" aria-label="Next">
+                                        <span class="sr-only">Next</span>
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                    <a th:if="${curPage == totalLastPageNum}" class="page-link"
+                                       th:href="@{'/board/list/?page=' + ${curPage}}" aria-label="Next"
+                                       style="display: none;">
+                                        <span class="sr-only">Next</span>
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a th:if="${curPage != totalLastPageNum}" class="page-link" th:href="@{'/board/list/?page=' + ${totalLastPageNum}}"
+                                       aria-label="End">
+                                        <span aria-hidden="true" class="sr-only">End</span>
+                                    </a>
+
+                                    <a th:if="${curPage == totalLastPageNum}" class="page-link" th:href="@{'/board/list/?page=' + ${totalLastPageNum}}"
+                                       aria-label="End" style="display: none;">
+                                        <span aria-hidden="true" class="sr-only">End</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+
+                        <!-- 글쓰기 버튼 -->
+                        <a style="float: right; margin-top: 10px;" class="btn btn-outline-dark"
+                           th:href="@{/board/write}">글쓰기</a>
+                    </div>
                 </div>
                 </p>
             </div>
         </div>
 
-        <div th:replace="fragments/footer :: footer" />
+        <div th:replace="fragments/footer :: footer"/>
     </main>
 </div> <!-- /container -->
 
