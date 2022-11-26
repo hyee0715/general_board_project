@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+<div class="container">
+    <main role="main" class="container">
+        <br><br>
+        <div class="p-5 mb-4 bg-light rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">게시판</h1>
+                <br>
+                <p class="col-md-8 fs-4">
+                <div class="starter-template">
+
+                    <table class="table table-bordered">
+                        <!-- CONTENTS !-->
+                        <thead>
+                        <tr style="text-align: center">
+                            <th class="col-md-1">번호</th>
+                            <th class="col-md-5">제목</th>
+                            <th class="col-md-2">작성자</th>
+                            <th class="col-md-2">작성일</th>
+                            <th class="col-md-2">수정일</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <!-- CONTENTS !-->
+                        <tr th:each="board : ${boardList}">
+                            <td th:text="${board.id}" style="text-align: center"></td>
+                            <td><a th:href="'/board/detail/'+${board.id}" th:text="${board.title}"></a></td>
+                            <td th:text="${board.writer}" style="text-align: center"></td>
+                            <td th:text="${board.createdDate} ? ${#temporals.format(board.createdDate,'yyyy-MM-dd HH:mm')} : ${board.createdDate}"
+                                style="text-align: center"></td>
+                            <td th:text="${board.modifiedDate} ? ${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')} : ${board.modifiedDate}"
+                                style="text-align: center"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="display: inline;">
+                        <a style="float: right;" href="/" class="btn btn-outline-secondary">목록으로</a>
+                    </div>
+                    <div style="display: inline;">
+
+                        <!-- 글쓰기 버튼 -->
+                        <a style="float: right; margin-right: 20px;" class="btn btn-outline-dark"
+                           th:href="@{/board/write}">글쓰기</a>
+                    </div>
+                </div>
+                <div>
+                    <form action="/board/search" method="GET">
+                        <input name="keyword" type="text" th:value="${keyword}">
+                        <button class="btn btn-primary">검색하기</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="fragments/footer :: footer"/>
+    </main>
+</div> <!-- /container -->
+
+</body>
+</html>

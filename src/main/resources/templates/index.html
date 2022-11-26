@@ -89,12 +89,14 @@
                                     </a>
                                 </li>
                                 <li class="page-item">
-                                    <a th:if="${curPage != totalLastPageNum}" class="page-link" th:href="@{'/board/list/?page=' + ${totalLastPageNum}}"
+                                    <a th:if="${curPage != totalLastPageNum}" class="page-link"
+                                       th:href="@{'/board/list/?page=' + ${totalLastPageNum}}"
                                        aria-label="End">
                                         <span aria-hidden="true" class="sr-only">End</span>
                                     </a>
 
-                                    <a th:if="${curPage == totalLastPageNum}" class="page-link" th:href="@{'/board/list/?page=' + ${totalLastPageNum}}"
+                                    <a th:if="${curPage == totalLastPageNum}" class="page-link"
+                                       th:href="@{'/board/list/?page=' + ${totalLastPageNum}}"
                                        aria-label="End" style="display: none;">
                                         <span aria-hidden="true" class="sr-only">End</span>
                                     </a>
@@ -103,11 +105,19 @@
                         </nav>
 
                         <!-- 글쓰기 버튼 -->
-                        <a style="float: right; margin-top: 10px;" class="btn btn-outline-dark"
+                        <a style="float: right;" class="btn btn-outline-dark"
                            th:href="@{/board/write}">글쓰기</a>
                     </div>
                 </div>
                 </p>
+
+                <!-- 검색 form -->
+                <div>
+                    <form action="/board/search" method="GET">
+                        <input name="keyword" type="text" placeholder="검색어를 입력해주세요.">
+                        <button class="btn btn-primary">검색하기</button>
+                    </form>
+                </div>
             </div>
         </div>
 
