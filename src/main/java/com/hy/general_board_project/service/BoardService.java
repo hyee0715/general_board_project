@@ -7,9 +7,13 @@ import com.hy.general_board_project.web.dto.BoardListResponseDto;
 import com.hy.general_board_project.web.dto.BoardSaveRequestDto;
 import com.hy.general_board_project.web.dto.BoardUpdateResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,6 +21,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class BoardService {
+    private static final int PAGE_NUMBER_COUNT_OF_ONE_BLOCK = 8; // 한 블럭에 존재하는 페이지 번호 개수
+    private static final int PAGE_NUMBER_HALF_COUNT_OF_ONE_BLOCK = PAGE_NUMBER_COUNT_OF_ONE_BLOCK / 2;
+    private static final int POST_COUNT_OF_ONE_PAGE = 4; // 한 페이지에 존재하는 게시글 수
+
+    private static final int DEFAULT_START_PAGE_NUMBER = 1;
+
     private final BoardRepository boardRepository;
 
     @Transactional
@@ -25,8 +35,12 @@ public class BoardService {
     }
 
     @Transactional
-    public List<BoardListResponseDto> getBoardList() {
-        List<Board> boardList = boardRepository.findAll();
+    public List<BoardListResponseDto> getBoardList(Integer pageNum) {
+        Page<Board> page = boardRepository.findAll(PageRequest.of(
+                pageNum - 1, POST_COUNT_OF_ONE_PAGE, Sort.by(Sort.Direction.DESC, "createdDate")
+        ));
+
+        List<Board> boardList = page.getContent();
 
         List<BoardListResponseDto> boardDtoList = boardList.stream()
                 .map(BoardListResponseDto::convertBoardEntityToBoardListResponseDto)
@@ -53,5 +67,82 @@ public class BoardService {
     @Transactional
     public void deletePost(Long id) {
         boardRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Long getBoardCount() {
+        return boardRepository.count();
+    }
+
+    /***
+     *
+     * @return 총 게시물의 마지막 페이지 번호
+     */
+    public Integer getTotalLastPageNum() {
+        Double postsTotalCount = Double.valueOf(this.getBoardCount());
+
+        // 총 게시글의 마지막 페이지 번호 계산 (올림으로 계산)
+        Integer totalLastPageNum = (int) (Math.ceil((postsTotalCount / POST_COUNT_OF_ONE_PAGE)));
+
+        return totalLastPageNum;
+    }
+
+    /***
+     *
+     * @param curPageNum 현재 페이지 번호
+     * @return 화면에 띄울 페이지 번호 배열
+     */
+    public List<Integer> getPageList(Integer curPageNum) {
+        Integer totalLastPageNum = getTotalLastPageNum();
+
+        if (totalLastPageNum < PAGE_NUMBER_COUNT_OF_ONE_BLOCK) {
+            int lastPageNumberOfCurrentBlock = totalLastPageNum;
+
+            return makePageList(DEFAULT_START_PAGE_NUMBER, lastPageNumberOfCurrentBlock);
+        }
+
+        int lastPageNumberOfCurrentBlock = findLastPageNumberOfCurrentBlock(curPageNum, totalLastPageNum);
+        int pageStartNumber = updatePageStartNumberOfCurrentPage(curPageNum, totalLastPageNum);
+
+        List<Integer> pageList = makePageList(pageStartNumber, lastPageNumberOfCurrentBlock);
+
+        return pageList;
+    }
+
+    public List<Integer> makePageList(int pageStartNumber, int pageLastNumber) {
+        List<Integer> pageList = new ArrayList<>();
+
+        for (int number = pageStartNumber; number <= pageLastNumber; number++) {
+            pageList.add(number);
+        }
+
+        return pageList;
+    }
+
+    public int findLastPageNumberOfCurrentBlock(int curPageNum, int totalLastPageNum) {
+        if (curPageNum < PAGE_NUMBER_HALF_COUNT_OF_ONE_BLOCK) {
+            return PAGE_NUMBER_COUNT_OF_ONE_BLOCK;
+        }
+
+        int calculatedCurrentLastPageNumber = curPageNum + PAGE_NUMBER_HALF_COUNT_OF_ONE_BLOCK;
+        //현재 페이지에 띄울 마지막 페이지 번호가 총 페이지 번호를 넘지 않는다면 업데이트
+        if (calculatedCurrentLastPageNumber < totalLastPageNum) {
+            return calculatedCurrentLastPageNumber;
+        }
+
+        return totalLastPageNum;
+    }
+
+    public int updatePageStartNumberOfCurrentPage(int curPageNum, int totalLastPageNum) {
+        if (curPageNum < PAGE_NUMBER_HALF_COUNT_OF_ONE_BLOCK) {
+            return DEFAULT_START_PAGE_NUMBER;
+        }
+
+        int pageNumberEndZone = totalLastPageNum - PAGE_NUMBER_HALF_COUNT_OF_ONE_BLOCK;
+        if (curPageNum > pageNumberEndZone) {
+            return totalLastPageNum - PAGE_NUMBER_COUNT_OF_ONE_BLOCK + 1;
+        }
+
+        return curPageNum - PAGE_NUMBER_HALF_COUNT_OF_ONE_BLOCK + 1;
     }
 }
