@@ -2,10 +2,7 @@ package com.hy.general_board_project.service;
 
 import com.hy.general_board_project.domain.board.Board;
 import com.hy.general_board_project.domain.board.BoardRepository;
-import com.hy.general_board_project.web.dto.BoardDetailResponseDto;
-import com.hy.general_board_project.web.dto.BoardListResponseDto;
-import com.hy.general_board_project.web.dto.BoardSaveRequestDto;
-import com.hy.general_board_project.web.dto.BoardUpdateResponseDto;
+import com.hy.general_board_project.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,6 +65,21 @@ public class BoardService {
     @Transactional
     public void deletePost(Long id) {
         boardRepository.deleteById(id);
+    }
+
+    @Transactional
+    public List<BoardSearchResponseDto> search(String keyword) {
+        List<Board> boardSearchList = boardRepository.findByTitleContaining(keyword);
+        List<BoardSearchResponseDto> boardSearchDtoList = new ArrayList<>();
+
+        if (boardSearchList.isEmpty())
+            return boardSearchDtoList;
+
+        boardSearchList.stream()
+                .map(BoardSearchResponseDto::convertBoardEntityToBoardSearchResponseDto)
+                .forEach(boardSearchDtoList::add);
+
+        return boardSearchDtoList;
     }
 
     @Transactional

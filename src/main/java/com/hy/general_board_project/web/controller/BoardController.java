@@ -4,12 +4,15 @@ import com.hy.general_board_project.domain.board.BoardRepository;
 import com.hy.general_board_project.service.BoardService;
 import com.hy.general_board_project.web.dto.BoardDetailResponseDto;
 import com.hy.general_board_project.web.dto.BoardSaveRequestDto;
+import com.hy.general_board_project.web.dto.BoardSearchResponseDto;
 import com.hy.general_board_project.web.dto.BoardUpdateResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -59,5 +62,15 @@ public class BoardController {
         boardService.deletePost(no);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(value="keyword") String keyword, Model model) {
+        List<BoardSearchResponseDto> boardSearchDtoList = boardService.search(keyword);
+
+        model.addAttribute("boardList", boardSearchDtoList);
+        model.addAttribute("keyword", keyword);
+
+        return "board/search";
     }
 }
