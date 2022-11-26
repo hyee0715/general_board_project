@@ -1,4 +1,4 @@
-package com.hy.general_board_project.web.dto;
+package com.hy.general_board_project.web.dto.board;
 
 import com.hy.general_board_project.domain.board.Board;
 import lombok.*;

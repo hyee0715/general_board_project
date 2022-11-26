@@ -1,11 +1,10 @@
 package com.hy.general_board_project.web.controller;
 
-import com.hy.general_board_project.domain.board.BoardRepository;
 import com.hy.general_board_project.service.BoardService;
-import com.hy.general_board_project.web.dto.BoardDetailResponseDto;
-import com.hy.general_board_project.web.dto.BoardSaveRequestDto;
-import com.hy.general_board_project.web.dto.BoardSearchResponseDto;
-import com.hy.general_board_project.web.dto.BoardUpdateResponseDto;
+import com.hy.general_board_project.web.dto.board.BoardDetailResponseDto;
+import com.hy.general_board_project.web.dto.board.BoardSaveRequestDto;
+import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
+import com.hy.general_board_project.web.dto.board.BoardUpdateResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -59,7 +58,7 @@ public class BoardController {
 
     @DeleteMapping("/detail/{no}")
     public String delete(@PathVariable("no") Long no) {
-        boardService.deletePost(no);
+        boardService.delete(no);
 
         return "redirect:/";
     }

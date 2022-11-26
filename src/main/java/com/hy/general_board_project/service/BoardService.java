@@ -2,7 +2,7 @@ package com.hy.general_board_project.service;
 
 import com.hy.general_board_project.domain.board.Board;
 import com.hy.general_board_project.domain.board.BoardRepository;
-import com.hy.general_board_project.web.dto.*;
+import com.hy.general_board_project.web.dto.board.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -63,7 +62,7 @@ public class BoardService {
     }
 
     @Transactional
-    public void deletePost(Long id) {
+    public void delete(Long id) {
         boardRepository.deleteById(id);
     }
 

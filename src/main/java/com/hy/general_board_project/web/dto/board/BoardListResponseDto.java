@@ -1,4 +1,4 @@
-package com.hy.general_board_project.web.dto;
+package com.hy.general_board_project.web.dto.board;
 
 import com.hy.general_board_project.domain.board.Board;
 import lombok.*;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @NoArgsConstructor
-public class BoardSearchResponseDto {
+public class BoardListResponseDto {
     private Long id;
     private String title;
     private String writer;
@@ -17,7 +17,7 @@ public class BoardSearchResponseDto {
     private LocalDateTime modifiedDate;
 
     @Builder
-    public BoardSearchResponseDto(Long id, String title, String writer, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public BoardListResponseDto(Long id, String title, String writer, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.writer = writer;
         this.title = title;
@@ -25,9 +25,9 @@ public class BoardSearchResponseDto {
         this.modifiedDate = modifiedDate;
     }
 
-    // Entity -> BoardSearchResponseDto로 변환
-    public static BoardSearchResponseDto convertBoardEntityToBoardSearchResponseDto(Board board) {
-        return BoardSearchResponseDto.builder()
+    // Entity -> BoardListResponseDto로 변환
+    public static BoardListResponseDto convertBoardEntityToBoardListResponseDto(Board board) {
+        return BoardListResponseDto.builder()
                 .id(board.getId())
                 .title(board.getTitle())
                 .writer(board.getWriter())
