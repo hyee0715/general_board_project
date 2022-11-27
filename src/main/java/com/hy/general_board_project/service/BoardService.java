@@ -87,6 +87,7 @@ public class BoardService {
         if (searchOption.equals("title")) {
             return boardRepository.findByTitleContaining(keyword);
         }
+
         if (searchOption.equals("content")) {
             return boardRepository.findByContentContaining(keyword);
         }
@@ -121,8 +122,8 @@ public class BoardService {
      * @param curPageNum 현재 페이지 번호
      * @return 화면에 띄울 페이지 번호 배열
      */
-    public List<Integer> getPageList(Integer curPageNum) {
-        Integer totalLastPageNum = getTotalLastPageNum();
+    public List<Integer> getPageList(int curPageNum) {
+        int totalLastPageNum = getTotalLastPageNum();
 
         if (totalLastPageNum < PAGE_NUMBER_COUNT_OF_ONE_BLOCK) {
             return makePageList(DEFAULT_START_PAGE_NUMBER, totalLastPageNum);
