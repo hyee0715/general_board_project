@@ -32,7 +32,7 @@ public class BoardService {
     }
 
     @Transactional
-    public List<BoardListResponseDto> getBoardList(Integer pageNum) {
+    public List<BoardListResponseDto> getBoardList(int pageNum) {
         Page<Board> page = boardRepository.findAll(PageRequest.of(
                 pageNum - 1, POST_COUNT_OF_ONE_PAGE, Sort.by(Sort.Direction.DESC, "createdDate")
         ));
@@ -67,36 +67,23 @@ public class BoardService {
     }
 
     @Transactional
-    public List<BoardSearchResponseDto> search(String keyword, String searchOption) {
-        List<Board> boardSearchList = makeBoardSearchList(keyword, searchOption);
+    public List<Board> makeBoardSearchList(String keyword, int pageNum, String searchOption) {
+        PageRequest pageRequest = PageRequest.of(
+                pageNum - 1, POST_COUNT_OF_ONE_PAGE, Sort.by(Sort.Direction.DESC, "createdDate"));
 
-        List<BoardSearchResponseDto> boardSearchDtoList = new ArrayList<>();
-
-        if (boardSearchList.isEmpty())
-            return boardSearchDtoList;
-
-        boardSearchList.stream()
-                .map(BoardSearchResponseDto::convertBoardEntityToBoardSearchResponseDto)
-                .forEach(boardSearchDtoList::add);
-
-        return boardSearchDtoList;
-    }
-
-    @Transactional
-    public List<Board> makeBoardSearchList(String keyword, String searchOption) {
         if (searchOption.equals("title")) {
-            return boardRepository.findByTitleContaining(keyword);
+            return boardRepository.findByTitleContaining(keyword, pageRequest);
         }
 
         if (searchOption.equals("content")) {
-            return boardRepository.findByContentContaining(keyword);
+            return boardRepository.findByContentContaining(keyword, pageRequest);
         }
 
         if (searchOption.equals("writer")) {
-            return boardRepository.findByWriterContaining(keyword);
+            return boardRepository.findByWriterContaining(keyword, pageRequest);
         }
 
-        return boardRepository.findByAllOptionContaining(keyword);
+        return boardRepository.findByAllOptionContaining(keyword, pageRequest);
     }
 
     @Transactional
@@ -117,14 +104,7 @@ public class BoardService {
         return totalLastPageNum;
     }
 
-    /***
-     *
-     * @param curPageNum 현재 페이지 번호
-     * @return 화면에 띄울 페이지 번호 배열
-     */
-    public List<Integer> getPageList(int curPageNum) {
-        int totalLastPageNum = getTotalLastPageNum();
-
+    public List<Integer> getPageList(int curPageNum, int totalLastPageNum) {
         if (totalLastPageNum < PAGE_NUMBER_COUNT_OF_ONE_BLOCK) {
             return makePageList(DEFAULT_START_PAGE_NUMBER, totalLastPageNum);
         }
@@ -170,5 +150,45 @@ public class BoardService {
         }
 
         return curPageNum - PAGE_NUMBER_HALF_COUNT_OF_ONE_BLOCK + 1;
+    }
+
+    @Transactional
+    public List<BoardSearchResponseDto> search(String keyword, int pageNum, String searchOption) {
+        List<Board> boardSearchList = makeBoardSearchList(keyword, pageNum, searchOption);
+
+        List<BoardSearchResponseDto> boardSearchDtoList = new ArrayList<>();
+
+        if (boardSearchList.isEmpty()) return boardSearchDtoList;
+
+        boardSearchList.stream()
+                .map(BoardSearchResponseDto::convertBoardEntityToBoardSearchResponseDto)
+                .forEach(boardSearchDtoList::add);
+
+        return boardSearchDtoList;
+    }
+
+    public int getSearchPostTotalCount(String keyword, String searchOption) {
+        List<Board> boardEntities;
+
+        if (searchOption.equals("title")) {
+            boardEntities = boardRepository.findByTitleContaining(keyword);
+        } else if (searchOption.equals("content")) {
+            boardEntities = boardRepository.findByContentContaining(keyword);
+        } else if (searchOption.equals("writer")) {
+            boardEntities = boardRepository.findByWriterContaining(keyword);
+        } else {
+            boardEntities = boardRepository.findByAllOptionContaining(keyword);
+        }
+
+        if (boardEntities.isEmpty()) return 0;
+        return boardEntities.size();
+    }
+
+    public Integer getTotalLastSearchPageNum(Integer searchPostTotalCount) {
+        Double postsTotalCount = Double.valueOf(searchPostTotalCount);
+
+        Integer totalLastSearchPageNum = (int) (Math.ceil((postsTotalCount / POST_COUNT_OF_ONE_PAGE)));
+
+        return totalLastSearchPageNum;
     }
 }

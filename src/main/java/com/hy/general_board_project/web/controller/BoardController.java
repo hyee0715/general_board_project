@@ -64,11 +64,20 @@ public class BoardController {
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam(value="keyword") String keyword, Model model,  @RequestParam(value="searchOption", required = false) String searchOption) {
-        List<BoardSearchResponseDto> boardSearchDtoList = boardService.search(keyword, searchOption);
+    public String search(@RequestParam(value="keyword") String keyword, Model model, @RequestParam(value="page", defaultValue = "1") int pageNum, @RequestParam(value="searchOption", required = false) String searchOption) {
+        List<BoardSearchResponseDto> boardDtoList = boardService.search(keyword, pageNum, searchOption);
 
-        model.addAttribute("boardList", boardSearchDtoList);
+        int searchPostTotalCount = boardService.getSearchPostTotalCount(keyword, searchOption);
+
+        int totalLastPageNum = boardService.getTotalLastSearchPageNum(searchPostTotalCount);
+
+        List<Integer> pageList = boardService.getPageList(pageNum, totalLastPageNum);
+
+        model.addAttribute("boardList", boardDtoList);
+        model.addAttribute("pageList", pageList);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("curPage", pageNum);
+        model.addAttribute("totalLastPageNum", totalLastPageNum);
         model.addAttribute("searchOption", searchOption);
 
         return "board/search";
