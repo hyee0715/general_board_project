@@ -64,11 +64,12 @@ public class BoardController {
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam(value="keyword") String keyword, Model model) {
-        List<BoardSearchResponseDto> boardSearchDtoList = boardService.search(keyword);
+    public String search(@RequestParam(value="keyword") String keyword, Model model,  @RequestParam(value="searchOption", required = false) String searchOption) {
+        List<BoardSearchResponseDto> boardSearchDtoList = boardService.search(keyword, searchOption);
 
         model.addAttribute("boardList", boardSearchDtoList);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("searchOption", searchOption);
 
         return "board/search";
     }
