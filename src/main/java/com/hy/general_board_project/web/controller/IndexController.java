@@ -15,14 +15,15 @@ import java.util.List;
 @AllArgsConstructor
 @Controller
 public class IndexController {
-
     private BoardService boardService;
 
     @GetMapping({"/", "/board/list"})
     public String index(Model model, @RequestParam(value="page", defaultValue = "1") Integer pageNum) {
         List<BoardListResponseDto> boardList = boardService.getBoardList(pageNum);
-        List<Integer> pageList = boardService.getPageList(pageNum);
+
         Integer totalLastPageNum = boardService.getTotalLastPageNum();
+
+        List<Integer> pageList = boardService.getPageList(pageNum, totalLastPageNum);
 
         model.addAttribute("boardList", boardList);
         model.addAttribute("pageList", pageList);
@@ -31,6 +32,4 @@ public class IndexController {
 
         return "index";
     }
-
-
 }
