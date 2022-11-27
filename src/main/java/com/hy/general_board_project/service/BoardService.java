@@ -68,16 +68,7 @@ public class BoardService {
 
     @Transactional
     public List<BoardSearchResponseDto> search(String keyword, String searchOption) {
-        List<Board> boardSearchList;
-        if (searchOption.equals("title")) {
-            boardSearchList = boardRepository.findByTitleContaining(keyword);
-        } else if (searchOption.equals("content")) {
-            boardSearchList = boardRepository.findByContentContaining(keyword);
-        } else if (searchOption.equals("writer")) {
-            boardSearchList = boardRepository.findByWriterContaining(keyword);
-        } else {
-            boardSearchList = boardRepository.findByAllOptionContaining(keyword);
-        }
+        List<Board> boardSearchList = makeBoardSearchList(keyword, searchOption);
 
         List<BoardSearchResponseDto> boardSearchDtoList = new ArrayList<>();
 
@@ -89,6 +80,22 @@ public class BoardService {
                 .forEach(boardSearchDtoList::add);
 
         return boardSearchDtoList;
+    }
+
+    @Transactional
+    public List<Board> makeBoardSearchList(String keyword, String searchOption) {
+        if (searchOption.equals("title")) {
+            return boardRepository.findByTitleContaining(keyword);
+        }
+        if (searchOption.equals("content")) {
+            return boardRepository.findByContentContaining(keyword);
+        }
+
+        if (searchOption.equals("writer")) {
+            return boardRepository.findByWriterContaining(keyword);
+        }
+
+        return boardRepository.findByAllOptionContaining(keyword);
     }
 
     @Transactional
@@ -118,17 +125,13 @@ public class BoardService {
         Integer totalLastPageNum = getTotalLastPageNum();
 
         if (totalLastPageNum < PAGE_NUMBER_COUNT_OF_ONE_BLOCK) {
-            int lastPageNumberOfCurrentBlock = totalLastPageNum;
-
-            return makePageList(DEFAULT_START_PAGE_NUMBER, lastPageNumberOfCurrentBlock);
+            return makePageList(DEFAULT_START_PAGE_NUMBER, totalLastPageNum);
         }
 
         int lastPageNumberOfCurrentBlock = findLastPageNumberOfCurrentBlock(curPageNum, totalLastPageNum);
         int pageStartNumber = updatePageStartNumberOfCurrentPage(curPageNum, totalLastPageNum);
 
-        List<Integer> pageList = makePageList(pageStartNumber, lastPageNumberOfCurrentBlock);
-
-        return pageList;
+        return makePageList(pageStartNumber, lastPageNumberOfCurrentBlock);
     }
 
     public List<Integer> makePageList(int pageStartNumber, int pageLastNumber) {
