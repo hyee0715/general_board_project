@@ -67,8 +67,18 @@ public class BoardService {
     }
 
     @Transactional
-    public List<BoardSearchResponseDto> search(String keyword) {
-        List<Board> boardSearchList = boardRepository.findByTitleContaining(keyword);
+    public List<BoardSearchResponseDto> search(String keyword, String searchOption) {
+        List<Board> boardSearchList;
+        if (searchOption.equals("title")) {
+            boardSearchList = boardRepository.findByTitleContaining(keyword);
+        } else if (searchOption.equals("content")) {
+            boardSearchList = boardRepository.findByContentContaining(keyword);
+        } else if (searchOption.equals("writer")) {
+            boardSearchList = boardRepository.findByWriterContaining(keyword);
+        } else {
+            boardSearchList = boardRepository.findByAllOptionContaining(keyword);
+        }
+
         List<BoardSearchResponseDto> boardSearchDtoList = new ArrayList<>();
 
         if (boardSearchList.isEmpty())
