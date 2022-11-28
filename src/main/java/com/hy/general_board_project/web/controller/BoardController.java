@@ -25,12 +25,6 @@ public class BoardController {
         return "board/write";
     }
 
-    @PostMapping("/write")
-    public String write(BoardSaveRequestDto requestDto) {
-        boardService.save(requestDto);
-        return "redirect:/";
-    }
-
     @GetMapping("/detail/{no}")
     public String detail(@PathVariable("no") Long no, Model model) {
         BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(no);

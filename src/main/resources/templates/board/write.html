@@ -14,33 +14,33 @@
                 <br>
                 <p class="col-md-8 fs-4">
                 <div class="starter-template">
-                    <form class="form-horizontal" th:action="@{/board/write}" method="post">
+                    <form>
                         <div class="form-group">
                             <label style="float: left" for="title" class="col-sm-2 control-label">제목</label>
                             <div style="margin-top: 10px;">
-                                <input type="title" class="form-control" id="title" name="title"
-                                       placeholder="제목을 입력해 주세요."/>
+                                <input type="text" class="form-control" id="title" placeholder="제목을 입력해 주세요."/>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label style="float: left" for="writer" class="col-sm-2 control-label">작성자</label>
                             <div style="margin-top: 10px;">
-                                <input type="writer" class="form-control" id="writer" name="writer"
-                                       placeholder="작성자를 입력해 주세요."/>
+                                <input type="text" class="form-control" id="writer" placeholder="작성자를 입력해 주세요."/>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label style="float: left" for="content" class="col-sm-2 control-label">내용</label>
                             <div style="margin-top: 10px;">
-                                <textarea class="form-control" id="content" name="content" placeholder="내용을 입력해 주세요."
+                                <textarea class="form-control" id="content" placeholder="내용을 입력해 주세요."
                                           style="width: 100%; height: 15em; resize: none;"></textarea>
                             </div>
                         </div>
                         <div class="btn_wrap text-center" style="margin-top: 20px;">
                             <a th:href="@{/}" class="btn btn-outline-secondary">돌아가기</a>
-                            <button type="input" class="btn btn-outline-primary waves-effect waves-light">저장하기</button>
+                            <button type="button" class="btn btn-outline-primary waves-effect waves-light"
+                                    id="btn-save">등록하기
+                            </button>
                         </div>
                     </form>
                 </div>

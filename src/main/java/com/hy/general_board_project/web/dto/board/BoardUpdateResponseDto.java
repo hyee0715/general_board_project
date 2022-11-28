@@ -10,15 +10,13 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 public class BoardUpdateResponseDto {
-    private Long id;
     private String title;
     private String writer;
     private String content;
     private LocalDateTime modifiedDate;
 
     @Builder
-    public BoardUpdateResponseDto(Long id, String title, String writer, String content, LocalDateTime modifiedDate) {
-        this.id = id;
+    public BoardUpdateResponseDto(String title, String writer, String content, LocalDateTime modifiedDate) {
         this.title = title;
         this.writer = writer;
         this.content = content;
@@ -27,7 +25,6 @@ public class BoardUpdateResponseDto {
 
     public Board toEntity() {
         return Board.builder()
-                .id(id)
                 .title(title)
                 .writer(writer)
                 .content(content)
@@ -37,7 +34,6 @@ public class BoardUpdateResponseDto {
     // Entity -> BoardUpdateResponseDto로 변환
     public static BoardUpdateResponseDto convertBoardEntityToBoardUpdateResponseDto(Board board) {
         return BoardUpdateResponseDto.builder()
-                .id(board.getId())
                 .title(board.getTitle())
                 .writer(board.getWriter())
                 .content(board.getContent())
