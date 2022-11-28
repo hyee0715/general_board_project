@@ -2,9 +2,7 @@ package com.hy.general_board_project.web.controller;
 
 import com.hy.general_board_project.service.BoardService;
 import com.hy.general_board_project.web.dto.board.BoardDetailResponseDto;
-import com.hy.general_board_project.web.dto.board.BoardSaveRequestDto;
 import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
-import com.hy.general_board_project.web.dto.board.BoardUpdateResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -41,13 +39,6 @@ public class BoardController {
         model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
 
         return "board/update";
-    }
-
-    @PutMapping("/detail/update/{no}")
-    public String update(BoardUpdateResponseDto boardUpdateResponseDto) {
-        boardService.update(boardUpdateResponseDto);
-
-        return "redirect:/";
     }
 
     @DeleteMapping("/detail/{no}")

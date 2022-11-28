@@ -14,10 +14,8 @@
                 <br>
                 <p class="col-md-8 fs-4">
                 <div class="starter-template">
-                    <form role="update-form" th:action="@{'/board/detail/update/' + ${boardDetailResponseDto.id}}"
-                          method="post">
-                        <input type="hidden" name="_method" value="put"/>
-                        <input type="hidden" name="id" th:value="${boardDetailResponseDto.id}"/>
+                    <form>
+                        <input type="hidden" name="id" id="id" th:value="${boardDetailResponseDto.id}"/>
                         <div class="form-group">
                             <label style="float: left" for="title" class="col-sm-2 control-label">제목</label>
                             <div style="margin-top: 10px;">
@@ -44,7 +42,7 @@
                         </div>
                         <div class="btn_wrap text-center" style="margin-top: 20px;">
                             <a th:href="@{/}" class="btn btn-outline-secondary">돌아가기</a>
-                            <button type="input" class="btn btn-outline-primary waves-effect waves-light">수정하기</button>
+                            <button type="button" class="btn btn-outline-primary waves-effect waves-light" id="btn-update">수정하기</button>
                         </div>
                     </form>
                 </div>
