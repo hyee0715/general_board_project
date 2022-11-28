@@ -41,13 +41,6 @@ public class BoardController {
         return "board/update";
     }
 
-    @DeleteMapping("/detail/{no}")
-    public String delete(@PathVariable("no") Long no) {
-        boardService.delete(no);
-
-        return "redirect:/";
-    }
-
     @GetMapping("/search")
     public String search(@RequestParam(value="keyword") String keyword, Model model, @RequestParam(value="page", defaultValue = "1") int pageNum, @RequestParam(value="searchOption", required = false) String searchOption) {
         List<BoardSearchResponseDto> boardDtoList = boardService.search(keyword, pageNum, searchOption);

@@ -16,21 +16,4 @@ public class BoardUpdateRequestDto {
         this.title = title;
         this.content = content;
     }
-
-//    public Board toEntity() {
-//        return Board.builder()
-//                .title(title)
-//                .content(content)
-//                .build();
-//    }
-
-    // Entity -> BoardUpdateResponseDto로 변환
-//    public static BoardUpdateRequestDto convertBoardEntityToBoardUpdateResponseDto(Board board) {
-//        return BoardUpdateRequestDto.builder()
-//                .title(board.getTitle())
-//                .writer(board.getWriter())
-//                .content(board.getContent())
-//                .modifiedDate(board.getModifiedDate())
-//                .build();
-//    }
 }
