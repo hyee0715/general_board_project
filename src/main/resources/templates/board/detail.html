@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 
 <body>
@@ -14,52 +14,53 @@
                 <br>
                 <p class="col-md-8 fs-4">
                 <div class="starter-template">
-                <table class ="table table-bordered">
-                    <tbody>
-                    <tr>
-                        <th>제목</th>
-                        <td th:text="${boardDetailResponseDto.title}"></td>
-                    </tr>
-                    <tbody>
-                    <tr>
-                        <th>작성자</th>
-                        <td th:text="${boardDetailResponseDto.writer}"></td>
-                    </tr>
-                    <tr>
-                        <th>작성일</th>
-                        <td th:inline="text">[[${#temporals.format(boardDetailResponseDto.createdDate, 'yyyy-MM-dd HH:mm')}]]</td>
-                    </tr>
-                    <tr>
-                        <th>본문 내용</th>
-                        <td th:text="${boardDetailResponseDto.content}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+                    <table class="table table-bordered">
+                        <tbody>
+                        <tr>
+                            <th>제목</th>
+                            <td th:text="${boardDetailResponseDto.title}"></td>
+                        </tr>
+                        <tbody>
+                        <tr>
+                            <th>작성자</th>
+                            <td th:text="${boardDetailResponseDto.writer}"></td>
+                        </tr>
+                        <tr>
+                            <th>작성일</th>
+                            <td th:inline="text">[[${#temporals.format(boardDetailResponseDto.createdDate, 'yyyy-MM-dd
+                                HH:mm')}]]
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>본문 내용</th>
+                            <td th:text="${boardDetailResponseDto.content}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
 
-                <!-- 수정/삭제 -->
-                <div style="display: inline-block">
-                <a th:href="@{'/board/detail/update/' + ${boardDetailResponseDto.id}}">
-                    <button class="btn btn-outline-primary">수정</button>
-                </a>
-                </div>
-                <div style="display: inline-block">
-                <form id="delete-form" th:action="@{'/board/detail/' + ${boardDetailResponseDto.id}}" method="post">
-                    <input type="hidden" name="_method" value="delete"/>
-                    <button class="btn btn-outline-danger" id="delete-btn">삭제</button>
-                </form>
-                </div>
-                <div class="btn_wrap text-center">
-                    <a href="/" class="btn btn-outline-secondary">목록으로</a>
-                </div>
+                    <!-- 수정/삭제 -->
+                    <div style="display: inline-block">
+                        <a th:href="@{'/board/detail/update/' + ${boardDetailResponseDto.id}}">
+                            <button class="btn btn-outline-primary">수정</button>
+                        </a>
+                    </div>
+                    <div style="display: inline-block">
+                        <form id="delete-form" th:action="@{'/board/detail/' + ${boardDetailResponseDto.id}}"
+                              method="post">
+                            <input type="hidden" name="_method" value="delete"/>
+                            <button class="btn btn-outline-danger" id="delete-btn">삭제</button>
+                        </form>
+                    </div>
+                    <div class="btn_wrap text-center">
+                        <a href="/" class="btn btn-outline-secondary">목록으로</a>
+                    </div>
                 </div>
                 </p>
-
             </div>
         </div>
-
-        <div th:replace="fragments/footer :: footer" />
     </main>
 </div> <!-- /container -->
+<div th:replace="fragments/footer :: footer"/>
 
 </body>
 </html>

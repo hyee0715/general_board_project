@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 
 <body>
@@ -18,21 +18,24 @@
                         <div class="form-group">
                             <label style="float: left" for="title" class="col-sm-2 control-label">제목</label>
                             <div style="margin-top: 10px;">
-                                <input type="title" class="form-control" id="title" name="title" placeholder="제목을 입력해 주세요."/>
+                                <input type="title" class="form-control" id="title" name="title"
+                                       placeholder="제목을 입력해 주세요."/>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label style="float: left" for="writer" class="col-sm-2 control-label">작성자</label>
                             <div style="margin-top: 10px;">
-                                <input type="writer" class="form-control" id="writer" name="writer" placeholder="작성자를 입력해 주세요."/>
+                                <input type="writer" class="form-control" id="writer" name="writer"
+                                       placeholder="작성자를 입력해 주세요."/>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label style="float: left" for="content" class="col-sm-2 control-label">내용</label>
                             <div style="margin-top: 10px;">
-                                <textarea class="form-control" id="content" name="content" placeholder="내용을 입력해 주세요." style="width: 100%; height: 15em; resize: none;"></textarea>
+                                <textarea class="form-control" id="content" name="content" placeholder="내용을 입력해 주세요."
+                                          style="width: 100%; height: 15em; resize: none;"></textarea>
                             </div>
                         </div>
                         <div class="btn_wrap text-center" style="margin-top: 20px;">
@@ -42,13 +45,11 @@
                     </form>
                 </div>
                 </p>
-
             </div>
         </div>
-
-        <div th:replace="fragments/footer :: footer" />
     </main>
 </div> <!-- /container -->
+<div th:replace="fragments/footer :: footer"/>
 
 </body>
 </html>
