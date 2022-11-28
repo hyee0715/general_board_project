@@ -26,8 +26,7 @@ public class Board extends Time {
     private String content;
 
     @Builder
-    public Board(Long id, String title, String writer, String content) {
-        this.id = id;
+    public Board(String title, String writer, String content) {
         this.title = title;
         this.writer = writer;
         this.content = content;
