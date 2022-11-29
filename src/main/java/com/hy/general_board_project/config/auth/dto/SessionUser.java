@@ -1,6 +1,6 @@
 package com.hy.general_board_project.config.auth.dto;
 
-import com.hy.general_board_project.domain.user.SocialUser;
+import com.hy.general_board_project.domain.user.User;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -11,9 +11,9 @@ public class SessionUser implements Serializable {
     private String email;
     private String picture;
 
-    public SessionUser(SocialUser socialUser) {
-        this.name = socialUser.getName();
-        this.email = socialUser.getEmail();
-        this.picture = socialUser.getPicture();
+    public SessionUser(User user) {
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.picture = user.getPicture();
     }
 }

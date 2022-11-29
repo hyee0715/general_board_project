@@ -1,7 +1,7 @@
 package com.hy.general_board_project.config.auth.dto;
 
 import com.hy.general_board_project.domain.user.Role;
-import com.hy.general_board_project.domain.user.SocialUser;
+import com.hy.general_board_project.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -55,8 +55,8 @@ public class OAuthAttributes {
                 .build();
     }
 
-    public SocialUser toEntity() {
-        return SocialUser.builder()
+    public User toEntity() {
+        return User.builder()
                 .name(name)
                 .email(email)
                 .picture(picture)

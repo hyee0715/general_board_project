@@ -28,7 +28,7 @@ public class IndexController {
 
         List<Integer> pageList = boardService.getPageList(pageNum, totalLastPageNum);
 
-        SessionUser user = (SessionUser) httpSession.getAttribute("socialUser");
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
         if (user != null) {
             model.addAttribute("userName", user.getName());
