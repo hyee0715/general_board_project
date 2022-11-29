@@ -18,18 +18,23 @@
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
-                <li><a href="/board/detail" class="nav-link px-2 text-white">Detail</a></li>
-                <li><a href="/board/write" class="nav-link px-2 text-white">Write</a></li>
-                <li><a href="/board/update" class="nav-link px-2 text-white">Update</a></li>
             </ul>
 
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
-            </form>
-
-            <div class="text-end">
-                <button type="button" class="btn btn-outline-light me-2">Login</button>
-                <button type="button" class="btn btn-warning">Sign-up</button>
+            <div th:if="${not #strings.isEmpty(userName)}">
+                <div class="text-end">
+                    <div style="display: inline; margin-right: 10px;">
+                        <a th:text="${userName}">사용자</a> 님
+                    </div>
+                    <div style="display: inline;">
+                        <a href="/logout" class="btn btn-sm btn-outline-warning" role="button">Logout</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${#strings.isEmpty(userName)}">
+                <div class="text-end">
+                    <button onclick="location.href='/user/login'" type="button" class="btn btn-outline-light me-2">Login</button>
+                    <button type="button" class="btn btn-outline-warning">Sign-up</button>
+                </div>
             </div>
         </div>
     </div>
