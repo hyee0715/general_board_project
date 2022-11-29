@@ -10,19 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AccountController {
 
-    @GetMapping("/login")
+    @GetMapping("/user/login")
     public String account() {
         return "account/login";
     }
 
-    @GetMapping("/signUp")
+    @GetMapping("/user/signUp")
     public String signUp() {
         return "account/signUp";
     }
-
-    @GetMapping("/signUp2")
-    public String signUp2() {
-        return "account/ddd";
-    }
-
 }

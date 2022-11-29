@@ -31,4 +31,4 @@ spring:
                 BasicBinder: TRACE
 
   profiles:
-    active: personal
+    active: personal, oauth
