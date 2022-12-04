@@ -1,11 +1,11 @@
 package com.hy.general_board_project.web.controller;
 
-import com.hy.general_board_project.config.auth.PrincipalDetailsService;
-import com.hy.general_board_project.domain.user.User;
-import com.hy.general_board_project.domain.user.UserRepository;
+import com.hy.general_board_project.service.UserService;
+import com.hy.general_board_project.web.dto.user.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Slf4j
 @AllArgsConstructor
 @Controller
-public class AccountController {
-    private final UserRepository userRepository;
-    private final PrincipalDetailsService principalDetailsService;
+public class UserController {
+
+    private UserService userService;
 
     @GetMapping("/user/login")
     public String account() {
@@ -23,13 +23,15 @@ public class AccountController {
     }
 
     @GetMapping("/user/signUp")
-    public String signUp() {
+    public String signUp(Model model) {
+        model.addAttribute("userDto", new UserDto());
+
         return "account/signUp";
     }
 
     @PostMapping("/user/signUp")
-    public String signUp(@ModelAttribute User user) {
-        principalDetailsService.joinUser(user);
+    public String signUp(@ModelAttribute UserDto userDto) {
+        userService.joinUser(userDto);
 
         return "redirect:/";
     }

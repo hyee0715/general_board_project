@@ -2,13 +2,12 @@ package com.hy.general_board_project.domain.user;
 
 import com.hy.general_board_project.domain.Time;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
+@Getter
 @NoArgsConstructor
 @Entity
 public class User extends Time {
@@ -38,8 +37,10 @@ public class User extends Time {
     private String provider;
 
     @Builder
-    public User(String username, String nickname, String email, String picture, Role role, String provider) {
+    public User(Long id, String username, String password, String nickname, String email, String picture, Role role, String provider) {
+        this.id = id;
         this.username = username;
+        this.password = password;
         this.nickname = nickname;
         this.email = email;
         this.picture = picture;
