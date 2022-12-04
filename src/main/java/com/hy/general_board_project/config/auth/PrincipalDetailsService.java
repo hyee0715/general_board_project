@@ -13,22 +13,24 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class PrincipalDetailsService implements UserDetailsService {
+
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User userEntity = userRepository.findByUsername(username);
+        Optional<User> userEntity = userRepository.findByUsername(username);
 
-        if(userEntity != null) {
-            return new PrincipalDetails(userEntity);
+        if (userEntity.isEmpty()) {
+            throw new UsernameNotFoundException("User Not Found");
         }
 
-        return null;
+        return new PrincipalDetails(userEntity.get());
     }
 
     @Transactional

@@ -10,6 +10,7 @@ import java.util.Random;
 
 @Getter
 public class OAuthAttributes {
+
     private Map<String, Object> attributes;
     private String nameAttributeKey;
     private String name;
@@ -61,15 +62,23 @@ public class OAuthAttributes {
     }
 
     public User toEntity() {
-        int newNickname = new Random().nextInt() % 10000;
-
         return User.builder()
                 .username(name)
                 .email(email)
-                .nickname("user_" + (Integer.toString(newNickname < 0 ? newNickname * - 1 : newNickname)))
+                .nickname(makeDefaultRandomNickname())
                 .picture(picture)
                 .role(Role.USER)
                 .provider(provider)
                 .build();
+    }
+
+    public String makeDefaultRandomNickname() {
+        int newNickname = new Random().nextInt() % 10000;
+
+        if (newNickname < 0) {
+            newNickname = newNickname * -1;
+        }
+
+        return "user_" + Integer.toString(newNickname);
     }
 }
