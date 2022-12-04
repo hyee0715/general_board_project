@@ -8,10 +8,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 public class User extends Time {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,6 +21,9 @@ public class User extends Time {
     private String username;
 
     private String password;
+
+    @Column
+    private String nickname;
 
     @Column(nullable = false)
     private String email;
@@ -32,16 +36,15 @@ public class User extends Time {
     private Role role;
 
     private String provider;
-    private String providerId;
 
     @Builder
-    public User(String username, String email, String picture, Role role, String provider, String providerId) {
+    public User(String username, String nickname, String email, String picture, Role role, String provider) {
         this.username = username;
+        this.nickname = nickname;
         this.email = email;
         this.picture = picture;
         this.role = role;
         this.provider = provider;
-        this.providerId = providerId;
     }
 
     public User update(String name, String picture) {

@@ -34,14 +34,14 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-        // OAuth2 서비스 id (구글, 카카오, 네이버)
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        // OAuth2 서비스 id (구글 네이버)
+        String provider = userRequest.getClientRegistration().getRegistrationId();
 
         // OAuth2 로그인 진행 시 키가 되는 필드 값(PK)
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
         // OAuth2UserService
-        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+        OAuthAttributes attributes = OAuthAttributes.of(provider, userNameAttributeName, oAuth2User.getAttributes());
         User user = saveOrUpdate(attributes);
         httpSession.setAttribute("user", new SessionUser(user)); // SessionUser (직렬화된 dto 클래스 사용)
 
@@ -55,6 +55,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         User user = userRepository.findByEmail(attributes.getEmail())
                 .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
+
         return userRepository.save(user);
     }
 }
