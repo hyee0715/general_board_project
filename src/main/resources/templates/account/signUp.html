@@ -2,9 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 
 <head>
-    <meta charset="UTF-8">
+<!--    <meta charset="UTF-8">-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>회원가입</title>
 
     <!-- Bootstrap CSS -->
@@ -19,29 +20,22 @@
     <div class="signUp-block">
         <div class="input-form">
             <h2>Sign Up</h2>
-            <form action="/user/signUp" method="POST" class="validation-form" novalidate>
+<!--            <form action="/user/signUp" method="POST" class="validation-form" novalidate>-->
+            <form>
                 <div class="row" style="margin-top: 25px;">
                     <div class="signUp col-md-6 mb-3" style="margin-top: 10px;">
                         <label for="username" style="font-weight: bold;">Name</label>
-                        <input type="text" class="form-control" id="username" placeholder="아이디" value="" name="username" required>
+                        <input type="text" class="form-control" id="username" placeholder="username" value="" name="username" required>
                         <div class="invalid-feedback">
-                            이름을 입력해주세요.
+                            아이디를 입력해주세요.
                         </div>
                     </div>
                     <div class="signUp col-md-6 mb-3" style="margin-top: 10px;">
                         <label for="nickname" style="font-weight: bold;">Nickname</label>
-                        <input type="text" class="form-control" id="nickname" placeholder="" value="" name="nickname" required>
+                        <input type="text" class="form-control" id="nickname" placeholder="nickname" value="" name="nickname" required>
                         <div class="invalid-feedback">
                             닉네임을 입력해주세요.
                         </div>
-                    </div>
-                </div>
-
-                <div class="signUp mb-3" style="margin-top: 10px;">
-                    <label for="email" style="font-weight: bold;">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="you@example.com" name="email" required>
-                    <div class="invalid-feedback">
-                        이메일을 입력해주세요.
                     </div>
                 </div>
 
@@ -53,38 +47,20 @@
                     </div>
                 </div>
 
-                <!--                <div class="mb-3">-->
-                <!--                    <label for="address2">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>-->
-                <!--                    <input type="text" class="form-control" id="address2" placeholder="상세주소를 입력해주세요.">-->
-                <!--                </div>-->
-
-                <!--                <div class="row">-->
-                <!--                    <div class="col-md-8 mb-3">-->
-                <!--                        <label for="root">가입 경로</label>-->
-                <!--                        <select class="custom-select d-block w-100" id="root">-->
-                <!--                            <option value=""></option>-->
-                <!--                            <option>검색</option>-->
-                <!--                            <option>카페</option>-->
-                <!--                        </select>-->
-                <!--                        <div class="invalid-feedback">-->
-                <!--                            가입 경로를 선택해주세요.-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                    <div class="col-md-4 mb-3">-->
-                <!--                        <label for="code">추천인 코드</label>-->
-                <!--                        <input type="text" class="form-control" id="code" placeholder="" required>-->
-                <!--                        <div class="invalid-feedback">-->
-                <!--                            추천인 코드를 입력해주세요.-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                </div>-->
+                <div class="signUp mb-3" style="margin-top: 10px;">
+                    <label for="email" style="font-weight: bold;">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="you@example.com" name="email" required>
+                    <div class="invalid-feedback">
+                        이메일을 입력해주세요.
+                    </div>
+                </div>
                 <hr class="mb-4">
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="aggrement" required>
                     <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
                 </div>
                 <div class="mb-4"></div>
-                <button class="signup-button" type="submit">submit</button>
+                <button class="signup-button" type="button" id="btn-save">submit</button>
             </form>
 
         </div>
@@ -106,4 +82,11 @@
       });
     }, false);
   </script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!--index.js 추가-->
+<script src="/js/app/user.js"></script>
 </body>
+</html>

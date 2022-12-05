@@ -28,11 +28,4 @@ public class UserController {
 
         return "account/signUp";
     }
-
-    @PostMapping("/user/signUp")
-    public String signUp(@ModelAttribute UserDto userDto) {
-        userService.joinUser(userDto);
-
-        return "redirect:/";
-    }
 }
