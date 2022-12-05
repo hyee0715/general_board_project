@@ -24,8 +24,8 @@ class UserServiceTest {
         //        .role(Role.USER)
                 .build();
 
-        Long userId = userService.joinUser(requestDto);
+        //Long userId = userService.joinUser(requestDto);
 
-        System.out.println(userId);
+        //System.out.println(userId);
     }
 }
