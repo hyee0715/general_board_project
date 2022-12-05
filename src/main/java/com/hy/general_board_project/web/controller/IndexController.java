@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Controller
 public class IndexController {
+
     private BoardService boardService;
     private final HttpSession httpSession;
 

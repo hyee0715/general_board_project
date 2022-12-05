@@ -38,6 +38,11 @@ h2 {
   color: #6E4690;
   font-size: 2em;
 }
+
+.login_form {
+  width: 90%;
+}
+
 .login_sns {
   padding: 20px;
   display: flex;
@@ -63,6 +68,8 @@ h2 {
 .login_id {
   margin-top: 20px;
   width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .login_id input {
@@ -78,6 +85,8 @@ h2 {
 .login_pw {
   margin-top: 20px;
   width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .login_pw input {
@@ -92,17 +101,22 @@ h2 {
 
 .login_etc {
   padding: 10px;
+  margin-top: 20px;
   width: 80%;
   font-size: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .submit {
-  margin-top: 50px;
+  margin-top: 20px;
   width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 }
 .submit input {
   width: 100%;
