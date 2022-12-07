@@ -91,20 +91,4 @@ public class UserController {
         userService.joinUser(userSignUpRequestDto);
         return "redirect:/";
     }
-
-    /* 아이디, 닉네임, 이메일 중복 체크 */
-    @GetMapping("/auth/signUp/{username}/exists")
-    public ResponseEntity<Boolean> checkUsernameDuplicate(@PathVariable String username){
-        return ResponseEntity.ok(userService.checkUsernameDuplication(username));
-    }
-
-    @GetMapping("/auth/signUp/{nickname}/exists")
-    public ResponseEntity<Boolean> checkNicknameDuplicate(@PathVariable String nickname){
-        return ResponseEntity.ok(userService.checkUsernameDuplication(nickname));
-    }
-
-    @GetMapping("/auth/signUp/{email}/exists")
-    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email){
-        return ResponseEntity.ok(userService.checkUsernameDuplication(email));
-    }
 }
