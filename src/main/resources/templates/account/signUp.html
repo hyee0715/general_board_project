@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-<!--    <meta charset="UTF-8">-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -12,6 +11,21 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/account.css">
 
+    <style>
+    .field-error-form {
+        border-color: #dc3545;
+        color: #dc3545;
+        padding-left: 3px;
+    }
+
+    .field-error {
+        border-color: #dc3545;
+        color: #dc3545;
+        font-size: 12px;
+        padding-left: 3px;
+    }
+
+    </style>
 </head>
 
 <body>
@@ -19,73 +33,53 @@
     <div class="signUp-block">
         <div class="input-form">
             <h2>Sign Up</h2>
-<!--            <form action="/user/signUp" method="POST" class="validation-form" novalidate>-->
-            <form>
+            <form th:action="@{/user/signUp}" th:object="${userSignUpRequestDto}" method="POST" novalidate>
                 <div class="row" style="margin-top: 25px;">
                     <div class="signUp col-md-6 mb-3" style="margin-top: 10px;">
                         <label for="username" style="font-weight: bold;">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="username" value="" name="username" required>
-                        <div class="invalid-feedback">
-                            아이디를 입력해주세요.
+                        <input type="text" th:field="*{username}" th:errorclass="field-error-form" class="form-control"
+                               id="username" placeholder="username" value="" name="username" required>
+                        <div class="field-error" th:errors="*{username}">
+                            이름 오류
                         </div>
                     </div>
                     <div class="signUp col-md-6 mb-3" style="margin-top: 10px;">
                         <label for="nickname" style="font-weight: bold;">Nickname</label>
-                        <input type="text" class="form-control" id="nickname" placeholder="nickname" value="" name="nickname" required>
-                        <div class="invalid-feedback">
-                            닉네임을 입력해주세요.
+                        <input type="text" th:field="*{nickname}" th:errorclass="field-error-form" class="form-control"
+                               id="nickname" placeholder="nickname" value="" name="nickname" required>
+                        <div class="field-error" th:errors="*{nickname}">
+                            닉네임 오류
                         </div>
                     </div>
                 </div>
 
-                <div class="signUp mb-3" style="margin-top: 25px;">
+                <div class="signUp mb-3" style="margin-top: 19px;">
                     <label for="password" style="font-weight: bold;">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="password" name="password" required>
-                    <div class="invalid-feedback">
-                        비밀번호를 입력해주세요.
+                    <input type="password" th:field="*{password}" th:errorclass="field-error-form" class="form-control"
+                           id="password" placeholder="password" name="password" required>
+                    <div class="field-error" th:errors="*{password}">
+                        비밀번호 오류
                     </div>
                 </div>
 
-                <div class="signUp mb-3" style="margin-top: 10px;">
+                <div class="signUp mb-3" style="margin-top: 25px;">
                     <label for="email" style="font-weight: bold;">Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="you@example.com" name="email" required>
-                    <div class="invalid-feedback">
-                        이메일을 입력해주세요.
+                    <input type="email" th:field="*{email}" th:errorclass="field-error-form" class="form-control"
+                           id="email" placeholder="you@example.com" name="email" required>
+                    <div class="field-error" th:errors="*{email}">
+                        이메일 오류
                     </div>
                 </div>
-                <hr class="mb-4">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="aggrement" required>
-                    <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
-                </div>
                 <div class="mb-4"></div>
-                <button class="signup-button" type="button" id="btn-save">submit</button>
+                <button class="signup-button" type="submit" id="btn-save">submit</button>
             </form>
 
         </div>
     </div>
 </div>
-<script>
-    window.addEventListener('load', () => {
-      const forms = document.getElementsByClassName('validation-form');
-
-      Array.prototype.filter.call(forms, (form) => {
-        form.addEventListener('submit', function (event) {
-          if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
-
-          form.classList.add('was-validated');
-        }, false);
-      });
-    }, false);
-  </script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-<!--index.js 추가-->
-<script src="/js/app/user.js"></script>
 </body>
 </html>

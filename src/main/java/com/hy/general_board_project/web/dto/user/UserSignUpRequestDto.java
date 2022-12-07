@@ -2,20 +2,31 @@ package com.hy.general_board_project.web.dto.user;
 
 import com.hy.general_board_project.domain.user.Role;
 import com.hy.general_board_project.domain.user.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class UserSignUpRequestDto {
 
+    @NotBlank
     private String username;
+
+    @NotBlank
     private String nickname;
+
+    @NotBlank
     private String password;
+
+    @Email
+    @NotBlank
     private String email;
+
     private Role role;
 
     @Builder

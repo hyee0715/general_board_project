@@ -32,3 +32,6 @@ spring:
 
   profiles:
     active: personal, oauth
+
+  messages:
+    basename: errors
