@@ -2,11 +2,10 @@ package com.hy.general_board_project.service;
 
 import com.hy.general_board_project.domain.user.Role;
 import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserServiceTest {
@@ -24,8 +23,8 @@ class UserServiceTest {
         //        .role(Role.USER)
                 .build();
 
-        //Long userId = userService.joinUser(requestDto);
+        Long userId = userService.joinUser(requestDto);
 
-        //System.out.println(userId);
+        Assertions.assertThat(userId).isEqualTo(76);
     }
 }

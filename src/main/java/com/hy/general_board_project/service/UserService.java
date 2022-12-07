@@ -16,12 +16,12 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long joinUser(UserSignUpRequestDto requestDto) {
+    public Long joinUser(UserSignUpRequestDto userSignUpRequestDto) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        requestDto.setPassword(bCryptPasswordEncoder.encode(requestDto.getPassword()));
+        userSignUpRequestDto.setPassword(bCryptPasswordEncoder.encode(userSignUpRequestDto.getPassword()));
 
-        requestDto.setRole(Role.USER);
+        userSignUpRequestDto.setRole(Role.USER);
 
-        return userRepository.save(requestDto.toEntity()).getId();
+        return userRepository.save(userSignUpRequestDto.toEntity()).getId();
     }
 }

@@ -152,12 +152,12 @@ h2 {
 }
 
 .input-form {
-      max-width: 680px;
+      width: 90%;
       padding: 32px;
 }
 
 .signUp-block {
-  width: 30%;
+  width: 40%;
   height: 80%;
   background: white;
   border-radius: 20px;
