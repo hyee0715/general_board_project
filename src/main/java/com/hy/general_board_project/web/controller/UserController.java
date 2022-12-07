@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -36,7 +37,16 @@ public class UserController {
     }
 
     @GetMapping("/user/login")
-    public String account() {
+    public String account(HttpServletRequest request, Model model) {
+
+        /**
+         * 이전 페이지로 되돌아가기 위한 Referer 헤더값을 세션의 prevPage attribute로 저장
+         */
+        String uri = request.getHeader("Referer");
+        if (uri != null && !uri.contains("/user")) {
+            request.getSession().setAttribute("prevPage", uri);
+        }
+
         return "account/login";
     }
 
