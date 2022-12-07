@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -17,11 +19,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PrincipalOauth2UserService principalOauth2UserService;
     private final PrincipalDetailsService principalDetailsService;
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
-    // 해당 메서드의 리턴되는 오브젝트를 IoC로 등록해준다.
+    /***
+     * Service에서 비밀번호를 암호화 할 수 있도록 Bean으로 등록한다.
+     * @return 비밀번호 암호화 객체
+     */
     @Bean
     public BCryptPasswordEncoder encodePwd() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception
+    {
+        // static 디렉터리의 하위 파일 목록은 인증 무시
+        web.ignoring().antMatchers("/css/**", "/js/**");
     }
 
     @Override
@@ -31,13 +44,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/user/login", "/user/signUp", "/css/**", "/images/**", "/js/**").permitAll()
-                .antMatchers("/board/write", "/board/detail").hasRole(Role.USER.name())
+                .antMatchers("/board/write").hasRole(Role.USER.name())
+                .antMatchers("/**", "/board/detail", "/user/login", "/user/signUp").permitAll()
                 .anyRequest().authenticated()
                 .and() // 로그인 설정
                 .formLogin()
                 .loginPage("/user/login")
                 .defaultSuccessUrl("/")
+                .successHandler(authenticationSuccessHandler) // 로그인 성공 핸들러
                 .and()
                 .logout()
                 .logoutSuccessUrl("/")
