@@ -89,6 +89,6 @@ public class UserController {
         }
 
         userService.joinUser(userSignUpRequestDto);
-        return "redirect:/";
+        return "redirect:/user/login";
     }
 }
