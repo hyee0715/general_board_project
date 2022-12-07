@@ -1,18 +1,21 @@
 package com.hy.general_board_project.web.controller;
 
 import com.hy.general_board_project.service.UserService;
+import com.hy.general_board_project.validator.CheckEmailValidator;
+import com.hy.general_board_project.validator.CheckNicknameValidator;
+import com.hy.general_board_project.validator.CheckUsernameValidator;
 import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.regex.Pattern;
 
@@ -20,8 +23,17 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 @Controller
 public class UserController {
-
     private final UserService userService;
+    private final CheckUsernameValidator checkUsernameValidator;
+    private final CheckNicknameValidator checkNicknameValidator;
+    private final CheckEmailValidator checkEmailValidator;
+
+    @InitBinder
+    public void validatorBinder(WebDataBinder binder) {
+        binder.addValidators(checkUsernameValidator);
+        binder.addValidators(checkNicknameValidator);
+        binder.addValidators(checkEmailValidator);
+    }
 
     @GetMapping("/user/login")
     public String account() {
@@ -68,5 +80,21 @@ public class UserController {
 
         userService.joinUser(userSignUpRequestDto);
         return "redirect:/";
+    }
+
+    /* 아이디, 닉네임, 이메일 중복 체크 */
+    @GetMapping("/auth/signUp/{username}/exists")
+    public ResponseEntity<Boolean> checkUsernameDuplicate(@PathVariable String username){
+        return ResponseEntity.ok(userService.checkUsernameDuplication(username));
+    }
+
+    @GetMapping("/auth/signUp/{nickname}/exists")
+    public ResponseEntity<Boolean> checkNicknameDuplicate(@PathVariable String nickname){
+        return ResponseEntity.ok(userService.checkUsernameDuplication(nickname));
+    }
+
+    @GetMapping("/auth/signUp/{email}/exists")
+    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email){
+        return ResponseEntity.ok(userService.checkUsernameDuplication(email));
     }
 }
