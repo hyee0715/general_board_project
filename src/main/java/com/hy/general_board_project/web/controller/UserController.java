@@ -7,7 +7,6 @@ import com.hy.general_board_project.validator.CheckUsernameValidator;
 import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -24,6 +23,7 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 @Controller
 public class UserController {
+
     private final UserService userService;
     private final CheckUsernameValidator checkUsernameValidator;
     private final CheckNicknameValidator checkNicknameValidator;
@@ -37,7 +37,9 @@ public class UserController {
     }
 
     @GetMapping("/user/login")
-    public String account(HttpServletRequest request, Model model) {
+    public String login(@RequestParam(value = "error", required = false) String error,
+                        @RequestParam(value = "exception", required = false) String exception,
+                        HttpServletRequest request, Model model) {
 
         /**
          * 이전 페이지로 되돌아가기 위한 Referer 헤더값을 세션의 prevPage attribute로 저장
@@ -46,6 +48,9 @@ public class UserController {
         if (uri != null && !uri.contains("/user")) {
             request.getSession().setAttribute("prevPage", uri);
         }
+
+        model.addAttribute("error", error);
+        model.addAttribute("exception", exception);
 
         return "account/login";
     }
