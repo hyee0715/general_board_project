@@ -53,7 +53,7 @@
                     </div>
                 </div>
 
-                <div class="signUp mb-3" style="margin-top: 19px;">
+                <div class="signUp mb-3" style="margin-top: 13px;">
                     <label for="password" style="font-weight: bold;">Password</label>
                     <input type="password" th:field="*{password}" th:errorclass="field-error-form" class="form-control"
                            id="password" placeholder="password" name="password" required>
@@ -62,7 +62,7 @@
                     </div>
                 </div>
 
-                <div class="signUp mb-3" style="margin-top: 25px;">
+                <div class="signUp mb-3" style="margin-top: 30px;">
                     <label for="email" style="font-weight: bold;">Email</label>
                     <input type="email" th:field="*{email}" th:errorclass="field-error-form" class="form-control"
                            id="email" placeholder="you@example.com" name="email" required>
@@ -70,10 +70,13 @@
                         이메일 오류
                     </div>
                 </div>
-                <div class="mb-4"></div>
+                <div class="mb-4" style="margin-top: 30px;"></div>
                 <button class="signup-button" type="submit" id="btn-save">submit</button>
             </form>
 
+            <div class="sign-up-to-login">
+                <a href="/user/login" style="text-decoration:none; color: inherit;">Already have an account? Sign in here</a>
+            </div>
         </div>
     </div>
 </div>

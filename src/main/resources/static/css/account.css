@@ -100,7 +100,6 @@ h2 {
 }
 
 .login_etc {
-  padding: 10px;
   margin-top: 20px;
   width: 80%;
   font-size: 14px;
@@ -161,8 +160,8 @@ h2 {
 }
 
 .input-form {
-      width: 90%;
-      padding: 32px;
+  width: 90%;
+  padding: 32px;
 }
 
 .signUp-block {
@@ -174,4 +173,27 @@ h2 {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.sign-up-to-login {
+  margin-top: 25px;
+  font-size: 13px;
+  display: flex;
+  font-weight: bold;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-to-sign-up {
+  margin-top: 25px;
+  margin-bottom: 30px;
+  width: 80%;
+  font-size: 12px;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
 }
