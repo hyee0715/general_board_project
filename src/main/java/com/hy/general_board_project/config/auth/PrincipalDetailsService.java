@@ -18,12 +18,10 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userEntity = userRepository.findByUsername(username);
+        Optional<User> userEntityWrapper = userRepository.findByUsername(username);
 
-        if (userEntity.isEmpty()) {
-            throw new UsernameNotFoundException("User Not Found");
-        }
+        User userEntity = userEntityWrapper.get();
 
-        return new PrincipalDetails(userEntity.get());
+        return new PrincipalDetails(userEntity);
     }
 }

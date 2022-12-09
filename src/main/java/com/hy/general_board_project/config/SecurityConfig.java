@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final PrincipalOauth2UserService principalOauth2UserService;
     private final PrincipalDetailsService principalDetailsService;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final AuthenticationFailureHandler authenticationFailureHandler;
 
     /***
      * Service에서 비밀번호를 암호화 할 수 있도록 Bean으로 등록한다.
@@ -52,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/user/login")
                 .defaultSuccessUrl("/")
                 .successHandler(authenticationSuccessHandler) // 로그인 성공 핸들러
+                .failureHandler(authenticationFailureHandler) // 로그인 실패 핸들러
                 .and()
                 .logout()
                 .logoutSuccessUrl("/")
@@ -64,11 +67,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 로그인 인증 처리 메소드
-     * @param auth
-     * @throws Exception
      */
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(principalDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(principalDetailsService).passwordEncoder(encodePwd());
     }
 }

@@ -112,6 +112,15 @@ h2 {
   margin-right: auto;
 }
 
+.login_error {
+  margin-top: 20px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  color: #dc3545;
+  font-size: 13px;
+}
+
 .submit {
   margin-top: 20px;
   width: 80%;
