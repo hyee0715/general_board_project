@@ -1,5 +1,6 @@
 package com.hy.general_board_project.web.controller;
 
+import com.hy.general_board_project.config.auth.dto.SessionUser;
 import com.hy.general_board_project.service.BoardService;
 import com.hy.general_board_project.web.dto.board.BoardDetailResponseDto;
 import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Slf4j
@@ -17,9 +19,13 @@ import java.util.List;
 @RequestMapping("board")
 public class BoardController {
     private BoardService boardService;
+    private final HttpSession httpSession;
 
     @GetMapping("/write")
-    public String write() {
+    public String write(Model model) {
+
+        addSessionUserName(model);
+
         return "board/write";
     }
 
@@ -29,6 +35,8 @@ public class BoardController {
 
         model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
 
+        addSessionUserName(model);
+
         return "board/detail";
     }
 
@@ -37,6 +45,8 @@ public class BoardController {
         BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(no);
 
         model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
+
+        addSessionUserName(model);
 
         return "board/update";
     }
@@ -51,6 +61,8 @@ public class BoardController {
 
         List<Integer> pageList = boardService.getPageList(pageNum, totalLastPageNum);
 
+        addSessionUserName(model);
+
         model.addAttribute("boardList", boardDtoList);
         model.addAttribute("pageList", pageList);
         model.addAttribute("keyword", keyword);
@@ -59,5 +71,13 @@ public class BoardController {
         model.addAttribute("searchOption", searchOption);
 
         return "board/search";
+    }
+
+    public void addSessionUserName(Model model) {
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+        }
     }
 }
