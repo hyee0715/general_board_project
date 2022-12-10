@@ -25,23 +25,11 @@
                 <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
             </ul>
             <a sec:authorize="isAuthenticated()">
-                <div th:if="${not #strings.isEmpty(userName)}">
-                    <div class="text-end">
-                        <div style="display: inline; margin-right: 10px;">
-                            <a th:text="${userName}">사용자</a> 님
-                        </div>
-                        <div style="display: inline;">
-                            <a href="/logout" class="btn btn-sm btn-outline-warning" role="button">Logout</a>
-                        </div>
-                    </div>
+                <div style="display: inline; margin-right: 10px;">
+                    <a th:text="${nickname}">사용자</a> 님
                 </div>
-                <div th:if="${#strings.isEmpty(userName)}">
-                    <div style="display: inline; margin-right: 10px;">
-                        <a sec:authentication="name">사용자</a> 님
-                    </div>
-                    <div style="display: inline;">
-                        <a href="/logout" class="btn btn-sm btn-outline-warning" role="button">Logout</a>
-                    </div>
+                <div style="display: inline;">
+                    <a href="/logout" class="btn btn-sm btn-outline-warning" role="button">Logout</a>
                 </div>
             </a>
             <a sec:authorize="!isAuthenticated()">
