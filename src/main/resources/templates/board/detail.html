@@ -38,12 +38,12 @@
                     </table>
 
                     <!-- 수정/삭제 -->
-                    <div style="display: inline-block">
+                    <div th:if="${boardDetailResponseDto.writer == nickname}" style="display: inline-block">
                         <a th:href="@{'/board/detail/update/' + ${boardDetailResponseDto.id}}">
                             <button class="btn btn-outline-primary">수정</button>
                         </a>
                     </div>
-                    <div style="display: inline-block">
+                    <div th:if="${boardDetailResponseDto.writer == nickname}" style="display: inline-block">
                         <form>
                             <input type="hidden" name="id" id="id" th:value="${boardDetailResponseDto.id}"/>
                             <button type="button" class="btn btn-outline-danger" id="btn-delete">삭제</button>

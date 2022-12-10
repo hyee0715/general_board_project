@@ -43,6 +43,9 @@ public class BoardController {
         model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
         model.addAttribute("nickname", findUserNickname());
 
+        log.info("boardDetailResponseDto.writer = {}" , boardDetailResponseDto.getWriter());
+        log.info("nickname = {}" , findUserNickname());
+
         return "board/detail";
     }
 
