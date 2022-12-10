@@ -14,6 +14,37 @@ var main = {
         });
     },
     save : function () {
+        var isRight = true;
+
+        $("#write-validate").find("input[type=text]").each(function(index, item){
+        //띄어쓰기도 빈 값으로 체크함
+            if ($(this).val().trim() == '') {
+                alert("제목을 입력하세요.")
+                isRight = false;
+                return false;
+            }
+        });
+
+        if (!isRight) {
+            return;
+        }
+
+        $("#write-validate").find("textarea").each(function(index, item){
+        //띄어쓰기도 빈 값으로 체크함
+            if ($(this).val().trim() == '') {
+                alert("내용을 입력하세요.")
+                isRight = false;
+                return false;
+            }
+        });
+
+        if (!isRight) {
+            return;
+        }
+
+        $(this).prop("disabled", true);
+        $(this).prop("disabled", false);
+
         var data = {
             title: $('#title').val(),
             writer: $('#writer').val(),
@@ -34,6 +65,37 @@ var main = {
         });
     },
     update : function () {
+        var isRight = true;
+
+        $("#update-validate").find("input[type=text]").each(function(index, item){
+        //띄어쓰기도 빈 값으로 체크함
+            if ($(this).val().trim() == '') {
+                alert("제목을 입력하세요.")
+                isRight = false;
+                return false;
+            }
+        });
+
+        if (!isRight) {
+            return;
+        }
+
+        $("#update-validate").find("textarea").each(function(index, item){
+        //띄어쓰기도 빈 값으로 체크함
+            if ($(this).val().trim() == '') {
+                alert("내용을 입력하세요.")
+                isRight = false;
+                return false;
+            }
+        });
+
+        if (!isRight) {
+            return;
+        }
+
+        $(this).prop("disabled", true);
+        $(this).prop("disabled", false);
+
         var data = {
             title: $('#title').val(),
             content: $('#content').val()

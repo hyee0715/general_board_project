@@ -14,12 +14,12 @@
                 <br>
                 <p class="col-md-8 fs-4">
                 <div class="starter-template">
-                    <form>
+                    <form id="update-validate">
                         <input type="hidden" name="id" id="id" th:value="${boardDetailResponseDto.id}"/>
                         <div class="form-group">
                             <label style="float: left" for="title" class="col-sm-2 control-label">제목</label>
                             <div style="margin-top: 10px;">
-                                <input type="title" class="form-control" id="title" name="title"
+                                <input type="text" class="form-control" id="title" name="title"
                                        th:value="${boardDetailResponseDto.title}"/>
                             </div>
                         </div>
@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label style="float: left" for="writer" class="col-sm-2 control-label">작성자</label>
                             <div style="margin-top: 10px;">
-                                <input type="writer" class="form-control" id="writer" name="writer"
+                                <input type="text" class="form-control" id="writer" name="writer"
                                        th:value="${boardDetailResponseDto.writer}" readonly/>
                             </div>
                         </div>
@@ -42,7 +42,9 @@
                         </div>
                         <div class="btn_wrap text-center" style="margin-top: 20px;">
                             <a th:href="@{/}" class="btn btn-outline-secondary">돌아가기</a>
-                            <button type="button" class="btn btn-outline-primary waves-effect waves-light" id="btn-update">수정하기</button>
+                            <button type="button" class="btn btn-outline-primary waves-effect waves-light"
+                                    id="btn-update">수정하기
+                            </button>
                         </div>
                     </form>
                 </div>
