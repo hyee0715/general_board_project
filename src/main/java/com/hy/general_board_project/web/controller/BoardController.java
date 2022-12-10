@@ -30,11 +30,50 @@ public class BoardController {
     @GetMapping("/write")
     public String write(Model model) {
 
-        addSessionUserName(model);
-
         model.addAttribute("nickname", findUserNickname());
 
         return "board/write";
+    }
+
+    @GetMapping("/detail/{no}")
+    public String detail(@PathVariable("no") Long no, Model model) {
+        BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(no);
+
+        model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
+        model.addAttribute("nickname", findUserNickname());
+
+        return "board/detail";
+    }
+
+    @GetMapping("/detail/update/{no}")
+    public String update(@PathVariable("no") Long no, Model model) {
+        BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(no);
+
+        model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
+        model.addAttribute("nickname", findUserNickname());
+
+        return "board/update";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(value="keyword") String keyword, Model model, @RequestParam(value="page", defaultValue = "1") int pageNum, @RequestParam(value="searchOption", required = false) String searchOption) {
+        List<BoardSearchResponseDto> boardDtoList = boardService.search(keyword, pageNum, searchOption);
+
+        int searchPostTotalCount = boardService.getSearchPostTotalCount(keyword, searchOption);
+
+        int totalLastPageNum = boardService.getTotalLastSearchPageNum(searchPostTotalCount);
+
+        List<Integer> pageList = boardService.getPageList(pageNum, totalLastPageNum);
+
+        model.addAttribute("nickname", findUserNickname());
+        model.addAttribute("boardList", boardDtoList);
+        model.addAttribute("pageList", pageList);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("curPage", pageNum);
+        model.addAttribute("totalLastPageNum", totalLastPageNum);
+        model.addAttribute("searchOption", searchOption);
+
+        return "board/search";
     }
 
     public String findUserNickname() {
@@ -51,57 +90,5 @@ public class BoardController {
         Optional<User> user = userRepository.findByUsername(username);
 
         return user.get().getNickname();
-    }
-
-    @GetMapping("/detail/{no}")
-    public String detail(@PathVariable("no") Long no, Model model) {
-        BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(no);
-
-        model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
-
-        addSessionUserName(model);
-
-        return "board/detail";
-    }
-
-    @GetMapping("/detail/update/{no}")
-    public String update(@PathVariable("no") Long no, Model model) {
-        BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(no);
-
-        model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
-
-        addSessionUserName(model);
-
-        return "board/update";
-    }
-
-    @GetMapping("/search")
-    public String search(@RequestParam(value="keyword") String keyword, Model model, @RequestParam(value="page", defaultValue = "1") int pageNum, @RequestParam(value="searchOption", required = false) String searchOption) {
-        List<BoardSearchResponseDto> boardDtoList = boardService.search(keyword, pageNum, searchOption);
-
-        int searchPostTotalCount = boardService.getSearchPostTotalCount(keyword, searchOption);
-
-        int totalLastPageNum = boardService.getTotalLastSearchPageNum(searchPostTotalCount);
-
-        List<Integer> pageList = boardService.getPageList(pageNum, totalLastPageNum);
-
-        addSessionUserName(model);
-
-        model.addAttribute("boardList", boardDtoList);
-        model.addAttribute("pageList", pageList);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("curPage", pageNum);
-        model.addAttribute("totalLastPageNum", totalLastPageNum);
-        model.addAttribute("searchOption", searchOption);
-
-        return "board/search";
-    }
-
-    public void addSessionUserName(Model model) {
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
-
-        if (user != null) {
-            model.addAttribute("userName", user.getUsername());
-        }
     }
 }
