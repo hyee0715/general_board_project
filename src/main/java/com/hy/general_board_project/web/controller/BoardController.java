@@ -23,6 +23,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("board")
 public class BoardController {
+
     private final BoardService boardService;
     private final HttpSession httpSession;
     private final UserRepository userRepository;
@@ -78,6 +79,7 @@ public class BoardController {
 
     public String findUserNickname() {
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+
         if (sessionUser != null) {
             Optional<User> user = userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
 
@@ -85,6 +87,12 @@ public class BoardController {
         }
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (anonymousUserName.equals("anonymousUser")) {
+            return null;
+        }
+
         UserDetails userDetails = (UserDetails)principal;
         String username = userDetails.getUsername();
         Optional<User> user = userRepository.findByUsername(username);
