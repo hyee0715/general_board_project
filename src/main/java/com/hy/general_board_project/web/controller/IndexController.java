@@ -32,7 +32,7 @@ public class IndexController {
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
         if (user != null) {
-            model.addAttribute("userName", user.getName());
+            model.addAttribute("userName", user.getUsername());
         }
 
         model.addAttribute("boardList", boardList);
