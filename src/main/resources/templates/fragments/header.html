@@ -23,12 +23,13 @@
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
-                <li><a href="/setting/userInfo" class="nav-link px-2 text-secondary">My Page</a></li>
+<!--                <li><a href="/setting/userInfo" class="nav-link px-2 text-secondary">My Page</a></li>-->
             </ul>
             <a sec:authorize="isAuthenticated()">
                 <div style="display: inline; margin-right: 10px;">
                     <a th:text="${nickname}">사용자</a> 님
                 </div>
+                <a href="/setting/userInfo" class="btn btn-sm btn-outline-success" style="margin-right: 10px;" role="button">My Page</a>
                 <div style="display: inline;">
                     <a href="/logout" class="btn btn-sm btn-outline-warning" role="button">Logout</a>
                 </div>
