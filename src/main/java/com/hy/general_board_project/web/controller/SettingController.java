@@ -1,6 +1,7 @@
 package com.hy.general_board_project.web.controller;
 
 import com.hy.general_board_project.service.SettingService;
+import com.hy.general_board_project.validator.CheckNicknameValidator;
 import com.hy.general_board_project.web.dto.message.MessageDto;
 import com.hy.general_board_project.web.dto.user.UserInfoUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +12,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.regex.Pattern;
 
@@ -25,6 +23,12 @@ import java.util.regex.Pattern;
 public class SettingController {
 
     private final SettingService settingService;
+    private final CheckNicknameValidator checkNicknameValidator;
+
+    @InitBinder
+    public void validatorBinder(WebDataBinder binder) {
+        binder.addValidators(checkNicknameValidator);
+    }
 
     @GetMapping("/setting/userInfo")
     public String userInfo(Model model) {
@@ -35,7 +39,7 @@ public class SettingController {
     }
 
     @PostMapping("/setting/userInfo")
-    public String userInfoUpdate(@Validated @ModelAttribute UserInfoUpdateRequestDto userInfoUpdateRequestDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String userInfoUpdate(@Validated @ModelAttribute UserInfoUpdateRequestDto userInfoUpdateRequestDto, BindingResult bindingResult, Model model) {
 
         if (!StringUtils.hasText(userInfoUpdateRequestDto.getNickname())) {
             bindingResult.rejectValue("nickname", "required", "");

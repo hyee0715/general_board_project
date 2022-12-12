@@ -6,13 +6,12 @@ import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-public class UserSignUpRequestDto {
+public class UserSignUpRequestDto implements UserDto {
 
     @NotBlank
     private String username;

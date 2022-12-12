@@ -24,23 +24,4 @@ public class UserService {
 
         return userRepository.save(userSignUpRequestDto.toEntity()).getId();
     }
-
-    @Transactional
-    public boolean checkUsernameDuplication(String username) {
-        boolean usernameDuplicate = userRepository.existsByUsername(username);
-        return usernameDuplicate;
-    }
-
-    @Transactional
-    public boolean checkNicknameDuplication(String nickname) {
-        boolean nicknameDuplicate = userRepository.existsByNickname(nickname);
-        return nicknameDuplicate;
-
-    }
-
-    @Transactional
-    public boolean checkEmailDuplication(String email) {
-        boolean emailDuplicate = userRepository.existsByEmail(email);
-        return emailDuplicate;
-    }
 }
