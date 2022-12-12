@@ -1,15 +1,10 @@
 package com.hy.general_board_project.web.controller;
 
-import com.hy.general_board_project.config.auth.dto.SessionUser;
-import com.hy.general_board_project.domain.user.User;
-import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.service.SettingService;
+import com.hy.general_board_project.web.dto.message.MessageDto;
 import com.hy.general_board_project.web.dto.user.UserInfoUpdateRequestDto;
-import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -19,9 +14,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -34,14 +29,13 @@ public class SettingController {
     @GetMapping("/setting/userInfo")
     public String userInfo(Model model) {
         UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.findUserInfo();
-
         model.addAttribute("userInfoUpdateRequestDto", userInfoUpdateRequestDto);
 
         return "setting/userInfo";
     }
 
     @PostMapping("/setting/userInfo")
-    public String userInfoUpdate(@Validated @ModelAttribute UserInfoUpdateRequestDto userInfoUpdateRequestDto, BindingResult bindingResult) {
+    public String userInfoUpdate(@Validated @ModelAttribute UserInfoUpdateRequestDto userInfoUpdateRequestDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
         if (!StringUtils.hasText(userInfoUpdateRequestDto.getNickname())) {
             bindingResult.rejectValue("nickname", "required", "");
@@ -58,6 +52,13 @@ public class SettingController {
 
         settingService.updateUserNickname(userInfoUpdateRequestDto);
 
-        return "redirect:/setting/userInfo";
+        MessageDto message = new MessageDto("회원 정보 수정이 완료되었습니다.", "/setting/userInfo", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
+    }
+
+    // 사용자에게 메시지를 전달하고, 페이지를 리다이렉트 한다.
+    private String showMessageAndRedirect(final MessageDto params, Model model) {
+        model.addAttribute("params", params);
+        return "common/messageRedirect";
     }
 }
