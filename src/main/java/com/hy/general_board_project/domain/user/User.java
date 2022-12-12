@@ -55,6 +55,12 @@ public class User extends Time {
         return this;
     }
 
+    public User updateNickname(String nickname) {
+        this.nickname = nickname;
+
+        return this;
+    }
+
     public String getRoleKey() {
         return this.role.getKey();
     }
