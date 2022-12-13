@@ -72,4 +72,9 @@ public class SettingController {
         model.addAttribute("params", params);
         return "common/messageRedirect";
     }
+
+    @GetMapping("/setting/userList")
+    public String userList() {
+        return "/setting/userList";
+    }
 }
