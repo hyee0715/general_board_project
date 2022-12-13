@@ -36,4 +36,8 @@ public class Board extends Time {
         this.title = title;
         this.content = content;
     }
+
+    public void updateWriter(String writer) {
+        this.writer = writer;
+    }
 }

@@ -1,5 +1,6 @@
 package com.hy.general_board_project.web.controller;
 
+import com.hy.general_board_project.service.BoardService;
 import com.hy.general_board_project.service.SettingService;
 import com.hy.general_board_project.validator.CheckNicknameValidator;
 import com.hy.general_board_project.web.dto.message.MessageDto;
@@ -24,6 +25,7 @@ public class SettingController {
 
     private final SettingService settingService;
     private final CheckNicknameValidator checkNicknameValidator;
+    private final BoardService boardService;
 
     @InitBinder
     public void validatorBinder(WebDataBinder binder) {
@@ -54,7 +56,12 @@ public class SettingController {
             return "/setting/userInfo";
         }
 
-        settingService.updateUserNickname(userInfoUpdateRequestDto);
+        String originalUserNickname = settingService.findUserNickname(userInfoUpdateRequestDto);
+
+        String newUserNickname = settingService.updateUserNickname(userInfoUpdateRequestDto);
+
+        //해당 사용자의 모든 게시물 작성자 이름 수정
+        boardService.updateBoardWriter(originalUserNickname, newUserNickname);
 
         MessageDto message = new MessageDto("회원 정보 수정이 완료되었습니다.", "/setting/userInfo", RequestMethod.GET, null);
         return showMessageAndRedirect(message, model);
