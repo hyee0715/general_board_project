@@ -77,4 +77,9 @@ public class SettingController {
     public String userList() {
         return "/setting/userList";
     }
+
+    @GetMapping("/setting/userPassword")
+    public String userPasswordUpdate() {
+        return "/setting/userPassword";
+    }
 }
