@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class BoardService {
+
     private static final int PAGE_NUMBER_COUNT_OF_ONE_BLOCK = 8; // 한 블럭에 존재하는 페이지 번호 개수
     private static final int PAGE_NUMBER_HALF_COUNT_OF_ONE_BLOCK = PAGE_NUMBER_COUNT_OF_ONE_BLOCK / 2;
     private static final int POST_COUNT_OF_ONE_PAGE = 10; // 한 페이지에 존재하는 게시글 수
@@ -55,11 +56,6 @@ public class BoardService {
 
         return boardDetailResponseDto;
     }
-
-//    @Transactional
-//    public Long update(BoardUpdateRequestDto boardUpdateResponseDto) {
-//        return boardRepository.save(boardUpdateResponseDto.toEntity()).getId();
-//    }
 
     @Transactional
     public Long update(Long id, BoardUpdateRequestDto requestDto) {
@@ -203,5 +199,14 @@ public class BoardService {
         Integer totalLastSearchPageNum = (int) (Math.ceil((postsTotalCount / POST_COUNT_OF_ONE_PAGE)));
 
         return totalLastSearchPageNum;
+    }
+
+    @Transactional
+    public void updateBoardWriter(String originalWriterName, String newWriterName) {
+        List<Board> posts = boardRepository.findByWriter(originalWriterName);
+
+        for (Board post : posts) {
+            post.updateWriter(newWriterName);
+        }
     }
 }

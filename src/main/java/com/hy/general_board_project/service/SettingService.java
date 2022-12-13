@@ -24,16 +24,25 @@ public class SettingService {
 
     @Transactional
     public String updateUserNickname(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
+        User user = findUser(userInfoUpdateRequestDto);
 
+        user.updateNickname(userInfoUpdateRequestDto.getNickname());
+
+        return userInfoUpdateRequestDto.getNickname();
+    }
+
+    public User findUser(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
         Optional<User> user = userRepository.findByEmailAndProvider(userInfoUpdateRequestDto.getEmail(), userInfoUpdateRequestDto.getProvider());
 
         if (userInfoUpdateRequestDto.getProvider().isEmpty()) {
             user = userRepository.findByUsername(userInfoUpdateRequestDto.getUsername());
         }
 
-        user.get().updateNickname(userInfoUpdateRequestDto.getNickname());
+        return user.get();
+    }
 
-        return userInfoUpdateRequestDto.getNickname();
+    public String findUserNickname(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
+        return findUser(userInfoUpdateRequestDto).getNickname();
     }
 
     public UserInfoUpdateRequestDto findUserInfo() {
