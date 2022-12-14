@@ -113,10 +113,21 @@ public class SettingController {
         }
 
         if (!StringUtils.hasText(userPasswordUpdateRequestDto.getNewPassword())) {
-            bindingResult.rejectValue("password", "required", "");
+            bindingResult.rejectValue("newPassword", "required", "");
         } else {
-            if (!Pattern.matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}", userPasswordUpdateRequestDto.getNewPassword())) {
+            //현재 비밀번호와 동일한 비밀번호를 입력했을 경우
+            if (encoder.matches(userPasswordUpdateRequestDto.getNewPassword(), currentUser.getPassword())) {
+                bindingResult.addError(new FieldError("userPasswordUpdateRequestDto", "newPassword", userPasswordUpdateRequestDto.getNewPassword(), false, null, null, "기존과 동일한 비밀번호 입니다."));
+            } else if (!Pattern.matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}", userPasswordUpdateRequestDto.getNewPassword())) {
                 bindingResult.addError(new FieldError("userPasswordUpdateRequestDto", "newPassword", userPasswordUpdateRequestDto.getNewPassword(), false, null, null, "비밀번호는 영문 대소문자, 숫자, 특수기호 1개 이상 포함 8자 ~ 20자 제한입니다."));
+            }
+        }
+
+        if (!StringUtils.hasText(userPasswordUpdateRequestDto.getNewPasswordConfirm())) {
+            bindingResult.rejectValue("newPasswordConfirm", "required", "");
+        } else {
+            if (!userPasswordUpdateRequestDto.getNewPassword().equals(userPasswordUpdateRequestDto.getNewPasswordConfirm())) {
+                bindingResult.addError(new FieldError("userPasswordUpdateRequestDto", "newPasswordConfirm", userPasswordUpdateRequestDto.getNewPasswordConfirm(), false, null, null, "새 비밀번호와 일치하지 않습니다."));
             }
         }
 
