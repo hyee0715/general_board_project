@@ -61,6 +61,12 @@ public class User extends Time {
         return this;
     }
 
+    public User updatePassword(String password) {
+        this.password = password;
+
+        return this;
+    }
+
     public String getRoleKey() {
         return this.role.getKey();
     }

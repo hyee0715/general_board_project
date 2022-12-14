@@ -4,6 +4,7 @@ import com.hy.general_board_project.config.auth.dto.SessionUser;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.web.dto.user.UserInfoUpdateRequestDto;
+import com.hy.general_board_project.web.dto.user.UserPasswordUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,14 +25,14 @@ public class SettingService {
 
     @Transactional
     public String updateUserNickname(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
-        User user = findUser(userInfoUpdateRequestDto);
+        User user = findUserForInfoUpdate(userInfoUpdateRequestDto);
 
         user.updateNickname(userInfoUpdateRequestDto.getNickname());
 
         return userInfoUpdateRequestDto.getNickname();
     }
 
-    public User findUser(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
+    public User findUserForInfoUpdate(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
         Optional<User> user = userRepository.findByEmailAndProvider(userInfoUpdateRequestDto.getEmail(), userInfoUpdateRequestDto.getProvider());
 
         if (userInfoUpdateRequestDto.getProvider().isEmpty()) {
@@ -42,7 +43,7 @@ public class SettingService {
     }
 
     public String findUserNickname(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
-        return findUser(userInfoUpdateRequestDto).getNickname();
+        return findUserForInfoUpdate(userInfoUpdateRequestDto).getNickname();
     }
 
     public UserInfoUpdateRequestDto findUserInfo() {
@@ -70,5 +71,13 @@ public class SettingService {
         User user = userEntity.get();
 
         return new UserInfoUpdateRequestDto(user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider());
+    }
+
+    @Transactional
+    public User updateUserPassword(UserPasswordUpdateRequestDto userPasswordUpdateRequestDto, String encodedNewPassword) {
+        Optional<User> user = userRepository.findByUsername(userPasswordUpdateRequestDto.getUsername())
+                .map(entity -> entity.updatePassword(encodedNewPassword));
+
+        return userRepository.save(user.get());
     }
 }
