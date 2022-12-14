@@ -21,6 +21,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -98,7 +99,7 @@ public class SettingController {
     }
 
     @PostMapping("/setting/userPassword")
-    public String updateUserPassword(@Validated @ModelAttribute UserPasswordUpdateRequestDto userPasswordUpdateRequestDto, BindingResult bindingResult) {
+    public String updateUserPassword(@Validated @ModelAttribute UserPasswordUpdateRequestDto userPasswordUpdateRequestDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -140,7 +141,8 @@ public class SettingController {
 
         settingService.updateUserPassword(userPasswordUpdateRequestDto, encodedNewPassword);
 
-        return "redirect:/setting/userPassword";
+        MessageDto message = new MessageDto("비밀번호 변경이 완료되었습니다.", "/setting/userPassword", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
     }
 
     public User findUser() {
