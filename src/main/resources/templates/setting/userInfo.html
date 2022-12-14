@@ -47,13 +47,15 @@
                         </a>
                     </button>
                 </li>
-                <li>
-                    <button onclick="location.href='/setting/userPassword'" type="button" class="nav-link text-white" style="width: 100%;">
-                        <a style="margin-right: 65px;">
-                            비밀 번호 변경
-                        </a>
-                    </button>
-                </li>
+                <div th:if="${formUser == true}">
+                    <li>
+                        <button onclick="location.href='/setting/userPassword'" type="button" class="nav-link text-white" style="width: 100%;">
+                            <a style="margin-right: 65px;">
+                                비밀 번호 변경
+                            </a>
+                        </button>
+                    </li>
+                </div>
                 <li>
                     <button href="#" class="nav-link text-white collapsed" data-bs-toggle="collapse"
                             data-bs-target="#post-collapse" aria-expanded="false" style="width: 100%;">

@@ -46,6 +46,14 @@ public class SettingController {
         UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.findUserInfo();
         model.addAttribute("userInfoUpdateRequestDto", userInfoUpdateRequestDto);
 
+        boolean isFormUser = settingService.isFormUser();
+
+        if (isFormUser) {
+            model.addAttribute("formUser", true);
+            return "setting/userInfo";
+        }
+
+        model.addAttribute("formUser", false);
         return "setting/userInfo";
     }
 
@@ -83,8 +91,17 @@ public class SettingController {
     }
 
     @GetMapping("/setting/userList")
-    public String moveToUserList() {
-        return "/setting/userList";
+    public String moveToUserList(Model model) {
+
+        boolean isFormUser = settingService.isFormUser();
+
+        if (isFormUser) {
+            model.addAttribute("formUser", true);
+            return "setting/userList";
+        }
+
+        model.addAttribute("formUser", false);
+        return "setting/userList";
     }
 
     @GetMapping("/setting/userPassword")
@@ -93,9 +110,8 @@ public class SettingController {
         UserPasswordUpdateRequestDto userPasswordUpdateRequestDto = userInfoUpdateRequestDto.convertToPasswordUpdateDto();
 
         model.addAttribute("userPasswordUpdateRequestDto", userPasswordUpdateRequestDto);
-        log.info("userPasswordUpdateRequestDto.username = {}", userPasswordUpdateRequestDto.getUsername());
 
-        return "/setting/userPassword";
+        return "setting/userPassword";
     }
 
     @PostMapping("/setting/userPassword")

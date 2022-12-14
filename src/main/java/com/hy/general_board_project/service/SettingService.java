@@ -80,4 +80,14 @@ public class SettingService {
 
         return userRepository.save(user.get());
     }
+    
+    public boolean isFormUser() {
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+
+        if (user == null) {
+            return true;
+        }
+
+        return false;
+    }
 }
