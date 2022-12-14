@@ -100,6 +100,18 @@ public class SettingController {
     @PostMapping("/setting/userPassword")
     public String updateUserPassword(@Validated @ModelAttribute UserPasswordUpdateRequestDto userPasswordUpdateRequestDto, BindingResult bindingResult) {
 
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        User currentUser = findUser();
+
+        if (!StringUtils.hasText(userPasswordUpdateRequestDto.getCurrentPassword())) {
+            bindingResult.rejectValue("currentPassword", "required", "");
+        } else {
+            if (!encoder.matches(userPasswordUpdateRequestDto.getCurrentPassword(), currentUser.getPassword())) {
+                bindingResult.addError(new FieldError("userPasswordUpdateRequestDto", "currentPassword", userPasswordUpdateRequestDto.getCurrentPassword(), false, null, null, "비밀번호가 일치하지 않습니다."));
+            }
+        }
+
         if (!StringUtils.hasText(userPasswordUpdateRequestDto.getNewPassword())) {
             bindingResult.rejectValue("password", "required", "");
         } else {
@@ -113,12 +125,20 @@ public class SettingController {
             return "setting/userPassword";
         }
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
         String encodedNewPassword = encoder.encode(userPasswordUpdateRequestDto.getNewPassword());
 
         settingService.updateUserPassword(userPasswordUpdateRequestDto, encodedNewPassword);
 
         return "redirect:/setting/userPassword";
+    }
+
+    public User findUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        UserDetails userDetails = (UserDetails)principal;
+        String username = userDetails.getUsername();
+        Optional<User> userEntity = userRepository.findByUsername(username);
+
+        return userEntity.get();
     }
 }
