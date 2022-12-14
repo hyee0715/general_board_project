@@ -40,4 +40,13 @@ public class UserInfoUpdateRequestDto implements UserDto {
                 .provider(provider)
                 .build();
     }
+
+    public UserPasswordUpdateRequestDto convertToPasswordUpdateDto() {
+        return UserPasswordUpdateRequestDto.builder()
+                .username(username)
+                .currentPassword(null)
+                .newPassword(null)
+                .newPasswordConfirm(null)
+                .build();
+    }
 }

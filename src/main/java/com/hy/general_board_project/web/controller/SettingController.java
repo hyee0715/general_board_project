@@ -5,8 +5,10 @@ import com.hy.general_board_project.service.SettingService;
 import com.hy.general_board_project.validator.CheckNicknameValidator;
 import com.hy.general_board_project.web.dto.message.MessageDto;
 import com.hy.general_board_project.web.dto.user.UserInfoUpdateRequestDto;
+import com.hy.general_board_project.web.dto.user.UserPasswordUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -33,7 +35,7 @@ public class SettingController {
     }
 
     @GetMapping("/setting/userInfo")
-    public String userInfo(Model model) {
+    public String moveToUserInfo(Model model) {
         UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.findUserInfo();
         model.addAttribute("userInfoUpdateRequestDto", userInfoUpdateRequestDto);
 
@@ -41,7 +43,7 @@ public class SettingController {
     }
 
     @PostMapping("/setting/userInfo")
-    public String userInfoUpdate(@Validated @ModelAttribute UserInfoUpdateRequestDto userInfoUpdateRequestDto, BindingResult bindingResult, Model model) {
+    public String UpdateUserInfo(@Validated @ModelAttribute UserInfoUpdateRequestDto userInfoUpdateRequestDto, BindingResult bindingResult, Model model) {
 
         if (!StringUtils.hasText(userInfoUpdateRequestDto.getNickname())) {
             bindingResult.rejectValue("nickname", "required", "");
@@ -74,12 +76,29 @@ public class SettingController {
     }
 
     @GetMapping("/setting/userList")
-    public String userList() {
+    public String moveToUserList() {
         return "/setting/userList";
     }
 
     @GetMapping("/setting/userPassword")
-    public String userPasswordUpdate() {
+    public String moveToUserPassword(Model model) {
+        UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.findUserInfo();
+        UserPasswordUpdateRequestDto userPasswordUpdateRequestDto = userInfoUpdateRequestDto.convertToPasswordUpdateDto();
+
+        model.addAttribute("userPasswordUpdateRequestDto", userPasswordUpdateRequestDto);
+        log.info("userPasswordUpdateRequestDto.username = {}", userPasswordUpdateRequestDto.getUsername());
+
         return "/setting/userPassword";
+    }
+
+    @PostMapping("/setting/userPassword")
+    public String updateUserPassword(@ModelAttribute UserPasswordUpdateRequestDto userPasswordUpdateRequestDto) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        String encodedNewPassword = encoder.encode(userPasswordUpdateRequestDto.getNewPassword());
+
+        settingService.updateUserPassword(userPasswordUpdateRequestDto, encodedNewPassword);
+
+        return "redirect:/setting/userPassword";
     }
 }
