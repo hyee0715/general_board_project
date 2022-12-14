@@ -5,6 +5,7 @@ import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.service.BoardService;
 import com.hy.general_board_project.service.SettingService;
 import com.hy.general_board_project.validator.CheckNicknameValidator;
+import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
 import com.hy.general_board_project.web.dto.message.MessageDto;
 import com.hy.general_board_project.web.dto.user.UserInfoUpdateRequestDto;
 import com.hy.general_board_project.web.dto.user.UserPasswordUpdateRequestDto;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -92,6 +94,10 @@ public class SettingController {
 
     @GetMapping("/setting/userList")
     public String moveToUserList(Model model) {
+        String writerNickname = settingService.findUserInfo().getNickname();
+
+        List<BoardListResponseDto> userOwnBoardList = settingService.getUserOwnBoardList(writerNickname);
+        model.addAttribute("boardList", userOwnBoardList);
 
         boolean isFormUser = settingService.isFormUser();
 

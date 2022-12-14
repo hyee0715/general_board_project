@@ -1,8 +1,11 @@
 package com.hy.general_board_project.service;
 
 import com.hy.general_board_project.config.auth.dto.SessionUser;
+import com.hy.general_board_project.domain.board.Board;
+import com.hy.general_board_project.domain.board.BoardRepository;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
+import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
 import com.hy.general_board_project.web.dto.user.UserInfoUpdateRequestDto;
 import com.hy.general_board_project.web.dto.user.UserPasswordUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -21,6 +26,7 @@ import java.util.Optional;
 public class SettingService {
 
     private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
     private final HttpSession httpSession;
 
     @Transactional
@@ -89,5 +95,16 @@ public class SettingService {
         }
 
         return false;
+    }
+
+    @Transactional
+    public List<BoardListResponseDto> getUserOwnBoardList(String writer) {
+        List<Board> userBoardList = boardRepository.findByWriter(writer);
+        List<BoardListResponseDto> userBoardDtoList = new ArrayList<>();
+
+        for (Board board : userBoardList) {
+            userBoardDtoList.add(BoardListResponseDto.convertBoardEntityToBoardListResponseDto(board));
+        }
+        return userBoardDtoList;
     }
 }
