@@ -111,7 +111,7 @@
         </div>
     </div>
     <div style="display: inline-block; margin-left: 25px;">
-        <div class="d-flex flex-column flex-shrink-0" style="width: 900px; height: 600px;">
+        <div class="d-flex flex-column flex-shrink-0" style="width: 1000px; height: 600px;">
 
             <div class="container">
                 <main role="main" class="container">
@@ -134,12 +134,14 @@
 
                             <tbody>
                             <!-- CONTENTS !-->
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                            <tr th:each="board : ${boardList}">
+                                <td th:text="${board.id}" style="text-align: center"></td>
+                                <td><a th:href="'/board/detail/'+${board.id}" th:text="${board.title}"></a></td>
+                                <td th:text="${board.writer}" style="text-align: center"></td>
+                                <td th:text="${board.createdDate} ? ${#temporals.format(board.createdDate,'yyyy-MM-dd HH:mm')} : ${board.createdDate}"
+                                    style="text-align: center"></td>
+                                <td th:text="${board.modifiedDate} ? ${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')} : ${board.modifiedDate}"
+                                    style="text-align: center"></td>
                             </tr>
                             </tbody>
                         </table>
