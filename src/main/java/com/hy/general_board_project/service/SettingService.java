@@ -138,8 +138,17 @@ public class SettingService {
     }
 
     @Transactional
-    public List<BoardSearchResponseDto> search(String writer, String keyword) {
-        List<Board> boardSearchList = boardRepository.findByWriterAndTitleOptionContaining(writer, keyword);
+    public List<BoardSearchResponseDto> search(String writer, String keyword, String searchOption) {
+        List<Board> boardSearchList;
+
+        if (searchOption.equals("title")) {
+            boardSearchList = boardRepository.findByWriterAndTitleOptionContaining(writer, keyword);
+        } else if (searchOption.equals("content")) {
+            boardSearchList = boardRepository.findByWriterAndContentOptionContaining(writer, keyword);
+        } else {
+            boardSearchList = boardRepository.findByWriterAndTitleOptionOrContentOptionContaining(writer, keyword);
+        }
+
         List<BoardSearchResponseDto> boardSearchDtoList = new ArrayList<>();
 
         if (boardSearchList.isEmpty())
