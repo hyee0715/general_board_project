@@ -25,4 +25,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByAllOptionContaining(@Param("keyword") String keyword, Pageable pageable);
 
     List<Board> findByWriter(String writer);
+    List<Board> findByWriter(String writer, Pageable pageable);
 }
