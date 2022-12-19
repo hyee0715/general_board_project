@@ -93,11 +93,19 @@ public class SettingController {
     }
 
     @GetMapping("/setting/userList")
-    public String moveToUserList(Model model) {
+    public String moveToUserList(Model model, @RequestParam(value="page", defaultValue = "1") int pageNum) {
         String writerNickname = settingService.findUserInfo().getNickname();
 
-        List<BoardListResponseDto> userOwnBoardList = settingService.getUserOwnBoardList(writerNickname);
+        List<BoardListResponseDto> userOwnBoardList = settingService.getUserOwnBoardList(writerNickname, pageNum);
+
+        Integer totalLastPageNum = settingService.getTotalLastPageNum(writerNickname);
+
+        List<Integer> pageList = boardService.getPageList(pageNum, totalLastPageNum);
+
         model.addAttribute("boardList", userOwnBoardList);
+        model.addAttribute("pageList", pageList);
+        model.addAttribute("curPage", pageNum);
+        model.addAttribute("totalLastPageNum", totalLastPageNum);
 
         boolean isFormUser = settingService.isFormUser();
 
