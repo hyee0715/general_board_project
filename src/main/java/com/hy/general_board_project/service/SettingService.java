@@ -29,7 +29,7 @@ import java.util.Optional;
 public class SettingService {
 
     private static final int PAGE_NUMBER_COUNT_OF_ONE_BLOCK = 8; // 한 블럭에 존재하는 페이지 번호 개수
-    private static final int POST_COUNT_OF_ONE_PAGE = 8; // 한 페이지에 존재하는 게시글 수
+    private static final int POST_COUNT_OF_ONE_PAGE = 10; // 한 페이지에 존재하는 게시글 수
 
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
@@ -138,16 +138,8 @@ public class SettingService {
     }
 
     @Transactional
-    public List<BoardSearchResponseDto> search(String writer, String keyword, String searchOption) {
-        List<Board> boardSearchList;
-
-        if (searchOption.equals("title")) {
-            boardSearchList = boardRepository.findByWriterAndTitleOptionContaining(writer, keyword);
-        } else if (searchOption.equals("content")) {
-            boardSearchList = boardRepository.findByWriterAndContentOptionContaining(writer, keyword);
-        } else {
-            boardSearchList = boardRepository.findByWriterAndTitleOptionOrContentOptionContaining(writer, keyword);
-        }
+    public List<BoardSearchResponseDto> search(String writer, String keyword, int pageNum, String searchOption) {
+        List<Board> boardSearchList = makeUserOwnBoardSearchList(writer, keyword, pageNum, searchOption);
 
         List<BoardSearchResponseDto> boardSearchDtoList = new ArrayList<>();
 
@@ -159,5 +151,36 @@ public class SettingService {
                 .forEach(boardSearchDtoList::add);
 
         return boardSearchDtoList;
+    }
+
+    @Transactional
+    public List<Board> makeUserOwnBoardSearchList(String writer, String keyword, int pageNum, String searchOption) {
+        PageRequest pageRequest = PageRequest.of(
+                pageNum - 1, POST_COUNT_OF_ONE_PAGE, Sort.by(Sort.Direction.DESC, "createdDate"));
+
+        if (searchOption.equals("title")) {
+            return boardRepository.findByWriterAndTitleOptionContaining(writer, keyword, pageRequest);
+        } else if (searchOption.equals("content")) {
+            return boardRepository.findByWriterAndContentOptionContaining(writer, keyword, pageRequest);
+        }
+
+        return boardRepository.findByWriterAndTitleOptionOrContentOptionContaining(writer, keyword, pageRequest);
+    }
+
+    public int getSearchPostTotalCount(String writer, String keyword, String searchOption) {
+        List<Board> boardEntities;
+
+        if (searchOption.equals("title")) {
+            boardEntities = boardRepository.findByWriterAndTitleOptionContaining(writer, keyword);
+        } else if (searchOption.equals("content")) {
+            boardEntities = boardRepository.findByWriterAndContentOptionContaining(writer, keyword);
+        } else {
+            boardEntities = boardRepository.findByWriterAndTitleOptionOrContentOptionContaining(writer, keyword);
+        }
+
+        if (boardEntities.isEmpty())
+            return 0;
+
+        return boardEntities.size();
     }
 }
