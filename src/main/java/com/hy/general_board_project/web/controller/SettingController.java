@@ -187,13 +187,14 @@ public class SettingController {
     }
 
     @GetMapping("/setting/userList/search")
-    public String search(@RequestParam(value="keyword") String keyword, Model model) {
+    public String search(@RequestParam(value="keyword") String keyword, Model model, @RequestParam(value="searchOption", required = false) String searchOption) {
         String writerNickname = settingService.findUserInfo().getNickname();
 
-        List<BoardSearchResponseDto> boardSearchDtoList = settingService.search(writerNickname, keyword);
+        List<BoardSearchResponseDto> boardSearchDtoList = settingService.search(writerNickname, keyword, searchOption);
 
         model.addAttribute("boardList", boardSearchDtoList);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("searchOption", searchOption);
 
         boolean isFormUser = settingService.isFormUser();
 

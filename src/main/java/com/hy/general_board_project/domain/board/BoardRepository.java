@@ -32,4 +32,16 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("SELECT m FROM Board m WHERE m.writer = :writer and m.title LIKE %:keyword%")
     List<Board> findByWriterAndTitleOptionContaining(@Param("writer") String writer, @Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT m FROM Board m WHERE m.writer = :writer and m.content LIKE %:keyword%")
+    List<Board> findByWriterAndContentOptionContaining(@Param("writer") String writer, @Param("keyword") String keyword);
+
+    @Query("SELECT m FROM Board m WHERE m.writer = :writer and m.content LIKE %:keyword%")
+    List<Board> findByWriterAndContentOptionContaining(@Param("writer") String writer, @Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT m FROM Board m WHERE m.writer = :writer and (m.title LIKE %:keyword% or m.content LIKE %:keyword%)")
+    List<Board> findByWriterAndTitleOptionOrContentOptionContaining(@Param("writer") String writer, @Param("keyword") String keyword);
+
+    @Query("SELECT m FROM Board m WHERE m.writer = :writer and (m.title LIKE %:keyword% or m.content LIKE %:keyword%)")
+    List<Board> findByWriterAndTitleOptionOrContentOptionContaining(@Param("writer") String writer, @Param("keyword") String keyword, Pageable pageable);
 }
