@@ -6,6 +6,7 @@ import com.hy.general_board_project.domain.board.BoardRepository;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
+import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
 import com.hy.general_board_project.web.dto.user.UserInfoUpdateRequestDto;
 import com.hy.general_board_project.web.dto.user.UserPasswordUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -134,5 +135,20 @@ public class SettingService {
         Integer totalLastPageNum = (int) (Math.ceil((postsTotalCount / POST_COUNT_OF_ONE_PAGE)));
 
         return totalLastPageNum;
+    }
+
+    @Transactional
+    public List<BoardSearchResponseDto> search(String writer, String keyword) {
+        List<Board> boardSearchList = boardRepository.findByWriterAndTitleOptionContaining(writer, keyword);
+        List<BoardSearchResponseDto> boardSearchDtoList = new ArrayList<>();
+
+        if (boardSearchList.isEmpty())
+            return boardSearchDtoList;
+
+        boardSearchList.stream()
+                .map(BoardSearchResponseDto::convertBoardEntityToBoardSearchResponseDto)
+                .forEach(boardSearchDtoList::add);
+
+        return boardSearchDtoList;
     }
 }

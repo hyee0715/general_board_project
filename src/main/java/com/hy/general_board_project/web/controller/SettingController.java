@@ -6,6 +6,7 @@ import com.hy.general_board_project.service.BoardService;
 import com.hy.general_board_project.service.SettingService;
 import com.hy.general_board_project.validator.CheckNicknameValidator;
 import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
+import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
 import com.hy.general_board_project.web.dto.message.MessageDto;
 import com.hy.general_board_project.web.dto.user.UserInfoUpdateRequestDto;
 import com.hy.general_board_project.web.dto.user.UserPasswordUpdateRequestDto;
@@ -183,5 +184,25 @@ public class SettingController {
         Optional<User> userEntity = userRepository.findByUsername(username);
 
         return userEntity.get();
+    }
+
+    @GetMapping("/setting/userList/search")
+    public String search(@RequestParam(value="keyword") String keyword, Model model) {
+        String writerNickname = settingService.findUserInfo().getNickname();
+
+        List<BoardSearchResponseDto> boardSearchDtoList = settingService.search(writerNickname, keyword);
+
+        model.addAttribute("boardList", boardSearchDtoList);
+        model.addAttribute("keyword", keyword);
+
+        boolean isFormUser = settingService.isFormUser();
+
+        if (isFormUser) {
+            model.addAttribute("formUser", true);
+            return "setting/search";
+        }
+
+        model.addAttribute("formUser", false);
+        return "setting/search";
     }
 }
