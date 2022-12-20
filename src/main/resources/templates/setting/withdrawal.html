@@ -138,11 +138,10 @@
                           novalidate>
                         <input type="hidden" class="form-control" th:field="*{username}" th:readonly="readonly">
                         <input type="hidden" class="form-control" th:field="*{nickname}" th:readonly="readonly">
-                        <input type="hidden" class="form-control" th:field="*{password}" th:readonly="readonly">
 
                         <div class="mb-3">
                             <label for="requestPassword">비밀번호</label>
-                            <input type="requestPassword" class="form-control" id="requestPassword"
+                            <input type="password" class="form-control" id="requestPassword"
                                    th:field="*{requestPassword}" th:errorclass="field-error-form"
                                    placeholder="비밀번호를 입력해주세요."
                                    name="requestPassword" required>

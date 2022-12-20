@@ -200,7 +200,7 @@ public class SettingService {
 
         User user = userEntity.get();
 
-        return new FormUserWithdrawRequestDto(user.getUsername(), user.getNickname(), user.getPassword(), null);
+        return new FormUserWithdrawRequestDto(user.getUsername(), user.getNickname(), null);
     }
 
     public SocialUserWithdrawRequestDto findSocialUserInfoForWithdrawal() {
