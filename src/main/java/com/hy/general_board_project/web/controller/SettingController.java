@@ -251,11 +251,19 @@ public class SettingController {
     @PostMapping("/setting/withdrawal/password")
     public String checkWithdrawalPassword(@Validated @ModelAttribute FormUserWithdrawRequestDto formUserWithdrawRequestDto, BindingResult bindingResult, Model model) {
 
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        User currentUser = findUser();
+
+        String encodedRequestPassword = encoder.encode(formUserWithdrawRequestDto.getRequestPassword());
+
         if (!StringUtils.hasText(formUserWithdrawRequestDto.getRequestPassword())) {
             bindingResult.rejectValue("requestPassword", "required", "");
         } else {
             if (!Pattern.matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}", formUserWithdrawRequestDto.getRequestPassword())) {
                 bindingResult.addError(new FieldError("formUserWithdrawRequestDto", "requestPassword", formUserWithdrawRequestDto.getRequestPassword(), false, null, null, "비밀번호는 영문 대소문자, 숫자, 특수기호 1개 이상 포함 8자 ~ 20자 제한입니다."));
+            } else if (!encoder.matches(formUserWithdrawRequestDto.getRequestPassword(), currentUser.getPassword())) {
+                bindingResult.addError(new FieldError("formUserWithdrawRequestDto", "requestPassword", formUserWithdrawRequestDto.getRequestPassword(), false, null, null, "비밀번호가 일치하지 않습니다."));
             }
         }
 
@@ -271,6 +279,16 @@ public class SettingController {
 
     @PostMapping("/setting/withdrawal/email")
     public String checkWithdrawalEmail(@Validated @ModelAttribute SocialUserWithdrawRequestDto socialUserWithdrawRequestDto, BindingResult bindingResult, Model model) {
+
+        if (!StringUtils.hasText(socialUserWithdrawRequestDto.getRequestEmail())) {
+            bindingResult.rejectValue("requestEmail", "required", "");
+        } else {
+            if (!Pattern.matches("^(.+)@(.+)$", socialUserWithdrawRequestDto.getRequestEmail())) {
+                bindingResult.addError(new FieldError("socialUserWithdrawRequestDto", "requestEmail", socialUserWithdrawRequestDto.getRequestEmail(), false, null, null, "이메일 형식에 맞지 않습니다."));
+            } else if (!socialUserWithdrawRequestDto.getEmail().equals(socialUserWithdrawRequestDto.getRequestEmail())) {
+                bindingResult.addError(new FieldError("socialUserWithdrawRequestDto", "requestEmail", socialUserWithdrawRequestDto.getRequestEmail(), false, null, null, "이메일이 일치하지 않습니다."));
+            }
+        }
 
         if (bindingResult.hasErrors()) {
             log.info("errors = {}", bindingResult);

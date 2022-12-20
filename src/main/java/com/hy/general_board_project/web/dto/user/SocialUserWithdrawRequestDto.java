@@ -15,13 +15,11 @@ public class SocialUserWithdrawRequestDto implements UserDto {
     @NotBlank
     private String nickname;
 
-    @Email
     @NotBlank
     private String email;
 
     private String provider;
 
-    @Email
     @NotBlank
     private String requestEmail;
 

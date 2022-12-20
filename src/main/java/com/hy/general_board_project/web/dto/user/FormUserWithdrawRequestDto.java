@@ -19,16 +19,12 @@ public class FormUserWithdrawRequestDto implements UserDto {
     private String nickname;
 
     @NotBlank
-    private String password;
-
-    @NotBlank
     private String requestPassword;
 
     @Builder
-    public FormUserWithdrawRequestDto(String username, String nickname, String password, String requestPassword) {
+    public FormUserWithdrawRequestDto(String username, String nickname, String requestPassword) {
         this.username = username;
         this.nickname = nickname;
-        this.password = password;
         this.requestPassword = requestPassword;
     }
 
@@ -36,7 +32,6 @@ public class FormUserWithdrawRequestDto implements UserDto {
         return User.builder()
                 .username(username)
                 .nickname(nickname)
-                .password(password)
                 .build();
     }
 }
