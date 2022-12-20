@@ -255,8 +255,6 @@ public class SettingController {
 
         User currentUser = findUser();
 
-        String encodedRequestPassword = encoder.encode(formUserWithdrawRequestDto.getRequestPassword());
-
         if (!StringUtils.hasText(formUserWithdrawRequestDto.getRequestPassword())) {
             bindingResult.rejectValue("requestPassword", "required", "");
         } else {
@@ -273,7 +271,7 @@ public class SettingController {
 
             return "setting/withdrawal";
         }
-
+        
         return "redirect:/setting/withdrawal";
     }
 

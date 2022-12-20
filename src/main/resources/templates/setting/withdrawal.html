@@ -137,7 +137,6 @@
                           th:object="${formUserWithdrawRequestDto}"
                           novalidate>
                         <input type="hidden" class="form-control" th:field="*{username}" th:readonly="readonly">
-                        <input type="hidden" class="form-control" th:field="*{nickname}" th:readonly="readonly">
 
                         <div class="mb-3">
                             <label for="requestPassword">비밀번호</label>
@@ -161,7 +160,6 @@
                     <form th:action="@{/setting/withdrawal/email}" method="post"
                           th:object="${socialUserWithdrawRequestDto}"
                           novalidate>
-                        <input type="hidden" class="form-control" th:field="*{nickname}" th:readonly="readonly">
                         <input type="hidden" class="form-control" th:field="*{email}" th:readonly="readonly">
                         <input type="hidden" class="form-control" th:field="*{provider}" th:readonly="readonly">
 

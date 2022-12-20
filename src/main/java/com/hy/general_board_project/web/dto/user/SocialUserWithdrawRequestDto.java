@@ -13,9 +13,6 @@ import javax.validation.constraints.NotBlank;
 public class SocialUserWithdrawRequestDto implements UserDto {
 
     @NotBlank
-    private String nickname;
-
-    @NotBlank
     private String email;
 
     private String provider;
@@ -24,8 +21,7 @@ public class SocialUserWithdrawRequestDto implements UserDto {
     private String requestEmail;
 
     @Builder
-    public SocialUserWithdrawRequestDto(String nickname, String email, String provider, String requestEmail) {
-        this.nickname = nickname;
+    public SocialUserWithdrawRequestDto(String email, String provider, String requestEmail) {
         this.email = email;
         this.provider = provider;
         this.requestEmail = requestEmail;
@@ -33,7 +29,6 @@ public class SocialUserWithdrawRequestDto implements UserDto {
 
     public User toEntity() {
         return User.builder()
-                .nickname(nickname)
                 .email(email)
                 .provider(provider)
                 .build();
