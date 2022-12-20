@@ -130,8 +130,8 @@
                                     </label>
                                 </th>
                                 <th class="col-md-1">번호</th>
-                                <th class="col-md-4">제목</th>
-                                <th class="col-md-3">작성자</th>
+                                <th class="col-md-5">제목</th>
+                                <th class="col-md-2">작성자</th>
                                 <th class="col-md-2">작성일</th>
                                 <th class="col-md-2">수정일</th>
                             </tr>
@@ -142,7 +142,7 @@
                             <tr th:each="board : ${boardList}">
                                 <td>
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" name="chk" class="chk" onclick="chkClicked()" value="">
+                                        <input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${board.id}">
                                     </label>
                                 </td>
                                 <td th:text="${board.id}" style="text-align: center"></td>
@@ -227,10 +227,7 @@
                             </div>
 
                             <div style="display: inline-block; float: right;">
-                                <form>
-                                    <input type="hidden" name="id" id="id" value=""/>
-                                    <button type="button" class="btn btn-outline-danger" id="btn-delete">삭제</button>
-                                </form>
+                                <a href='javascript:boardDelete();' class="btn btn-outline-danger">삭제</a>
                             </div>
 
                             <div style="display: inline-block; float: right;"> <!-- 글쓰기 버튼 -->
@@ -315,6 +312,44 @@
         document.querySelectorAll(".chk").forEach(function(v, i) {
             v.checked = false;
         });
+    }
+
+    //글 삭제
+    function boardDelete(){
+        //체크박스 체크 된 항목
+        const query = 'input[name="chk"]:checked'
+        const selectedElements = document.querySelectorAll(query)
+
+        //체크박스 체크된 항목의 개수
+        const selectedElementsCnt = selectedElements.length;
+
+        if(selectedElementsCnt == 0){
+            alert("삭제할 항목을 선택해주세요.");
+            return false;
+        }
+
+        else{
+            if (confirm("선택한 게시물을 삭제하시겠습니까?")) {
+                const arr = new Array(selectedElementsCnt);
+
+                document.querySelectorAll('input[name="chk"]:checked').forEach(function(v, i) {
+                    arr[i] = v.value;
+                });
+
+                const form = document.createElement('form');
+                form.setAttribute('method', 'post');        //Post 메소드 적용
+                form.setAttribute('action', '/setting/userList/delete');
+
+                var input1 = document.createElement('input');
+                input1.setAttribute("type", "hidden");
+                input1.setAttribute("name", "boardIds");
+                input1.setAttribute("value", arr);
+                form.appendChild(input1);
+                console.log(form);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
     }
 </script>
 
