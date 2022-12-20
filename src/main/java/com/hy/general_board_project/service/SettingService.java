@@ -7,6 +7,8 @@ import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
 import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
+import com.hy.general_board_project.web.dto.user.FormUserWithdrawRequestDto;
+import com.hy.general_board_project.web.dto.user.SocialUserWithdrawRequestDto;
 import com.hy.general_board_project.web.dto.user.UserInfoUpdateRequestDto;
 import com.hy.general_board_project.web.dto.user.UserPasswordUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +78,7 @@ public class SettingService {
             return null;
         }
 
-        UserDetails userDetails = (UserDetails)principal;
+        UserDetails userDetails = (UserDetails) principal;
         String username = userDetails.getUsername();
         Optional<User> userEntity = userRepository.findByUsername(username);
 
@@ -92,7 +94,7 @@ public class SettingService {
 
         return userRepository.save(user.get());
     }
-    
+
     public boolean isFormUser() {
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
@@ -182,5 +184,36 @@ public class SettingService {
             return 0;
 
         return boardEntities.size();
+    }
+
+    public FormUserWithdrawRequestDto findFormUserInfoForWithdrawal() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (anonymousUserName.equals("anonymousUser")) {
+            return null;
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String username = userDetails.getUsername();
+        Optional<User> userEntity = userRepository.findByUsername(username);
+
+        User user = userEntity.get();
+
+        return new FormUserWithdrawRequestDto(user.getUsername(), user.getNickname(), user.getPassword(), null);
+    }
+
+    public SocialUserWithdrawRequestDto findSocialUserInfoForWithdrawal() {
+        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+
+        if (sessionUser != null) {
+            Optional<User> userEntity = userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
+
+            User user = userEntity.get();
+
+            return new SocialUserWithdrawRequestDto(user.getNickname(), user.getEmail(), user.getProvider(), null);
+        }
+
+        return null;
     }
 }

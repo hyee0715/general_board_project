@@ -28,6 +28,10 @@
         padding-left: 3px;
     }
 
+
+
+
+
     </style>
 </head>
 
@@ -41,7 +45,8 @@
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <button onclick="location.href='/setting/userInfo'" type="button"  class="nav-link active" aria-current="page" style="width: 100%;">
+                    <button onclick="location.href='/setting/userInfo'" type="button" class="nav-link text-white"
+                            aria-current="page" style="width: 100%;">
                         <a style="margin-right: 76px;">
                             내 정보 수정
                         </a>
@@ -49,7 +54,8 @@
                 </li>
                 <div th:if="${formUser == true}">
                     <li>
-                        <button onclick="location.href='/setting/userPassword'" type="button" class="nav-link text-white" style="width: 100%;">
+                        <button onclick="location.href='/setting/userPassword'" type="button"
+                                class="nav-link text-white" style="width: 100%;">
                             <a style="margin-right: 65px;">
                                 비밀 번호 변경
                             </a>
@@ -80,7 +86,8 @@
                     </div>
                 </li>
                 <li>
-                    <button onclick="location.href='/setting/withdrawal'" type="button" class="nav-link text-white" style="width: 100%;">
+                    <button href=onclick="location.href='/setting/withdrawal'" type="button"
+                            class="nav-link active text-white" style="width: 100%;">
                         <a style="margin-right: 98px;">
                             회원 탈퇴
                         </a>
@@ -112,39 +119,64 @@
         <div class="d-flex flex-column flex-shrink-0 p-3">
             <div class="input-form">
                 <br><br>
-                <h4 class="mb-3">내 정보 수정</h4>
+                <h4 class="mb-3">회원 탈퇴</h4>
                 <br>
 
-                <form th:action="@{/setting/userInfo}" method="post" th:object="${userInfoUpdateRequestDto}">
-                    <input type="hidden" class="form-control" th:field="*{provider}" th:readonly="readonly">
+                <p>
+                    회원 탈퇴를 하면
+                    서비스를 더 이상 이용하실 수 없습니다.
+                    <br>
+                    회원 탈퇴를 진행하시겠습니까?
+                </p>
+                <br>
 
-                    <div class="mb-3">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" th:field="*{username}"
-                               th:readonly="readonly" style=" background-color: #E6E6E6;" onfocus="this.blur();"
-                               tabindex="-1">
-                    </div>
+                <div th:if="${formUser == true}">
+                    <form th:action="@{/setting/withdrawal}" method="post" th:object="${formUserWithdrawRequestDto}"
+                          novalidate>
+                        <input type="hidden" class="form-control" th:field="*{username}" th:readonly="readonly">
+                        <input type="hidden" class="form-control" th:field="*{nickname}" th:readonly="readonly">
+                        <input type="hidden" class="form-control" th:field="*{password}" th:readonly="readonly">
 
-                    <div class="mb-3">
-                        <label for="nickname">Nickname</label>
-                        <input type="text" class="form-control" id="nickname" th:field="*{nickname}"
-                               th:errorclass="field-error-form" name="nickname" required>
-                        <div class="field-error" th:errors="*{nickname}">
-                            닉네임 오류
+                        <div class="mb-3">
+                            <label for="requestPassword">비밀번호</label>
+                            <input type="requestPassword" class="form-control" id="requestPassword"
+                                   th:field="*{requestPassword}" placeholder="비밀번호를 입력해주세요."
+                                   name="requestPassword" required>
+                            <!--                        <div class="field-error" th:errors="*{requestPassword}">-->
+                            <!--                            비밀번호 오류-->
+                            <!--                        </div>-->
                         </div>
-                    </div>
 
-                    <div class="mb-3">
-                        <label for="email">E-mail</label>
-                        <input type="email" class="form-control" id="email" th:field="*{email}" th:readonly="readonly"
-                               style=" background-color: #E6E6E6;" onfocus="this.blur();" tabindex="-1">
-                    </div>
+                        <hr class="mb-4" style="margin-top: 30px;">
 
-                    <hr class="mb-4" style="margin-top: 30px;">
+                        <button class="btn btn-primary btn-lg btn-block" type="submit" style="margin-top: 10px;">회원 탈퇴
+                        </button>
+                    </form>
+                </div>
 
-                    <button class="btn btn-primary btn-lg btn-block" type="submit" style="margin-top: 10px;">저장하기
-                    </button>
-                </form>
+                <div th:if="${formUser == false}">
+                    <form th:action="@{/setting/withdrawal}" method="post" th:object="${socialUserWithdrawRequestDto}"
+                          novalidate>
+                        <input type="hidden" class="form-control" th:field="*{nickname}" th:readonly="readonly">
+                        <input type="hidden" class="form-control" th:field="*{email}" th:readonly="readonly">
+                        <input type="hidden" class="form-control" th:field="*{provider}" th:readonly="readonly">
+
+                        <div class="mb-3">
+                            <label for="requestEmail">이메일</label>
+                            <input type="requestEmail" class="form-control" id="requestEmail"
+                                   th:field="*{requestEmail}" placeholder="이메일을 입력해주세요."
+                                   name="requestEmail" required>
+                            <!--                        <div class="field-error" th:errors="*{requestEmail}">-->
+                            <!--                            이메일 오류-->
+                            <!--                        </div>-->
+                        </div>
+
+                        <hr class="mb-4" style="margin-top: 30px;">
+
+                        <button class="btn btn-primary btn-lg btn-block" type="submit" style="margin-top: 10px;">회원 탈퇴
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

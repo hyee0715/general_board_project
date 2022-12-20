@@ -8,6 +8,8 @@ import com.hy.general_board_project.validator.CheckNicknameValidator;
 import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
 import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
 import com.hy.general_board_project.web.dto.message.MessageDto;
+import com.hy.general_board_project.web.dto.user.FormUserWithdrawRequestDto;
+import com.hy.general_board_project.web.dto.user.SocialUserWithdrawRequestDto;
 import com.hy.general_board_project.web.dto.user.UserInfoUpdateRequestDto;
 import com.hy.general_board_project.web.dto.user.UserPasswordUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -224,5 +225,45 @@ public class SettingController {
         }
 
         return "redirect:/setting/userList";
+    }
+
+    @GetMapping("/setting/withdrawal")
+    public String withdraw(Model model) {
+        boolean isFormUser = settingService.isFormUser();
+
+        if (isFormUser) {
+            model.addAttribute("formUser", true);
+
+            FormUserWithdrawRequestDto formUserWithdrawRequestDto = settingService.findFormUserInfoForWithdrawal();
+            model.addAttribute("formUserWithdrawRequestDto", formUserWithdrawRequestDto);
+
+
+            log.info("formUserWithdrawRequestDto.username = {}", formUserWithdrawRequestDto.getUsername());
+            log.info("formUserWithdrawRequestDto.nickname = {}", formUserWithdrawRequestDto.getNickname());
+            log.info("formUserWithdrawRequestDto.password = {}", formUserWithdrawRequestDto.getPassword());
+
+
+
+            return "setting/withdrawal";
+        }
+
+
+        model.addAttribute("formUser", false);
+
+        SocialUserWithdrawRequestDto socialUserWithdrawRequestDto = settingService.findSocialUserInfoForWithdrawal();
+        model.addAttribute("socialUserWithdrawRequestDto", socialUserWithdrawRequestDto);
+
+
+        log.info("socialUserWithdrawRequestDto.nickname = {}", socialUserWithdrawRequestDto.getNickname());
+        log.info("socialUserWithdrawRequestDto.email = {}", socialUserWithdrawRequestDto.getEmail());
+        log.info("socialUserWithdrawRequestDto.provider = {}", socialUserWithdrawRequestDto.getProvider());
+
+
+
+        return "setting/withdrawal";
+
+
+
+
     }
 }
