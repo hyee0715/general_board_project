@@ -130,7 +130,7 @@ public class SettingController {
     }
 
     @PostMapping("/setting/userPassword")
-    public String updateUserPassword(@Validated @ModelAttribute UserPasswordUpdateRequestDto userPasswordUpdateRequestDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String updateUserPassword(@Validated @ModelAttribute UserPasswordUpdateRequestDto userPasswordUpdateRequestDto, BindingResult bindingResult, Model model) {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
