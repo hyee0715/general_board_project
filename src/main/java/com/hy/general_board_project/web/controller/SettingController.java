@@ -95,7 +95,7 @@ public class SettingController {
     }
 
     @GetMapping("/setting/userList")
-    public String moveToUserList(Model model, @RequestParam(value="page", defaultValue = "1") int pageNum) {
+    public String moveToUserList(Model model, @RequestParam(value = "page", defaultValue = "1") int pageNum) {
         String writerNickname = settingService.findUserInfo().getNickname();
 
         List<BoardListResponseDto> userOwnBoardList = settingService.getUserOwnBoardList(writerNickname, pageNum);
@@ -180,7 +180,7 @@ public class SettingController {
     public User findUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserDetails userDetails = (UserDetails)principal;
+        UserDetails userDetails = (UserDetails) principal;
         String username = userDetails.getUsername();
         Optional<User> userEntity = userRepository.findByUsername(username);
 
@@ -188,7 +188,7 @@ public class SettingController {
     }
 
     @GetMapping("/setting/userList/search")
-    public String search(@RequestParam(value="keyword") String keyword, Model model, @RequestParam(value="searchOption", required = false) String searchOption, @RequestParam(value="page", defaultValue = "1") int pageNum) {
+    public String search(@RequestParam(value = "keyword") String keyword, Model model, @RequestParam(value = "searchOption", required = false) String searchOption, @RequestParam(value = "page", defaultValue = "1") int pageNum) {
         String writerNickname = settingService.findUserInfo().getNickname();
 
         List<BoardSearchResponseDto> boardSearchDtoList = settingService.search(writerNickname, keyword, pageNum, searchOption);
@@ -218,7 +218,7 @@ public class SettingController {
     }
 
     @PostMapping("/setting/userList/delete")
-    public String delete(@RequestParam List<String> boardIds){
+    public String delete(@RequestParam List<String> boardIds) {
         for (int i = 0; i < boardIds.size(); i++) {
             Long id = Long.valueOf(boardIds.get(i));
             boardService.delete(id);
@@ -237,33 +237,48 @@ public class SettingController {
             FormUserWithdrawRequestDto formUserWithdrawRequestDto = settingService.findFormUserInfoForWithdrawal();
             model.addAttribute("formUserWithdrawRequestDto", formUserWithdrawRequestDto);
 
-
-            log.info("formUserWithdrawRequestDto.username = {}", formUserWithdrawRequestDto.getUsername());
-            log.info("formUserWithdrawRequestDto.nickname = {}", formUserWithdrawRequestDto.getNickname());
-            log.info("formUserWithdrawRequestDto.password = {}", formUserWithdrawRequestDto.getPassword());
-
-
-
             return "setting/withdrawal";
         }
-
 
         model.addAttribute("formUser", false);
 
         SocialUserWithdrawRequestDto socialUserWithdrawRequestDto = settingService.findSocialUserInfoForWithdrawal();
         model.addAttribute("socialUserWithdrawRequestDto", socialUserWithdrawRequestDto);
 
-
-        log.info("socialUserWithdrawRequestDto.nickname = {}", socialUserWithdrawRequestDto.getNickname());
-        log.info("socialUserWithdrawRequestDto.email = {}", socialUserWithdrawRequestDto.getEmail());
-        log.info("socialUserWithdrawRequestDto.provider = {}", socialUserWithdrawRequestDto.getProvider());
-
-
-
         return "setting/withdrawal";
+    }
 
+    @PostMapping("/setting/withdrawal/password")
+    public String checkWithdrawalPassword(@Validated @ModelAttribute FormUserWithdrawRequestDto formUserWithdrawRequestDto, BindingResult bindingResult, Model model) {
 
+        if (!StringUtils.hasText(formUserWithdrawRequestDto.getRequestPassword())) {
+            bindingResult.rejectValue("requestPassword", "required", "");
+        } else {
+            if (!Pattern.matches("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}", formUserWithdrawRequestDto.getRequestPassword())) {
+                bindingResult.addError(new FieldError("formUserWithdrawRequestDto", "requestPassword", formUserWithdrawRequestDto.getRequestPassword(), false, null, null, "비밀번호는 영문 대소문자, 숫자, 특수기호 1개 이상 포함 8자 ~ 20자 제한입니다."));
+            }
+        }
 
+        if (bindingResult.hasErrors()) {
+            log.info("errors = {}", bindingResult);
+            model.addAttribute("formUser", true);
 
+            return "setting/withdrawal";
+        }
+
+        return "redirect:/setting/withdrawal";
+    }
+
+    @PostMapping("/setting/withdrawal/email")
+    public String checkWithdrawalEmail(@Validated @ModelAttribute SocialUserWithdrawRequestDto socialUserWithdrawRequestDto, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            log.info("errors = {}", bindingResult);
+            model.addAttribute("formUser", false);
+
+            return "setting/withdrawal";
+        }
+
+        return "redirect:/setting/withdrawal";
     }
 }
