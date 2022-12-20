@@ -215,4 +215,14 @@ public class SettingController {
         model.addAttribute("formUser", false);
         return "setting/search";
     }
+
+    @PostMapping("/setting/userList/delete")
+    public String delete(@RequestParam List<String> boardIds){
+        for (int i = 0; i < boardIds.size(); i++) {
+            Long id = Long.valueOf(boardIds.get(i));
+            boardService.delete(id);
+        }
+
+        return "redirect:/setting/userList";
+    }
 }
