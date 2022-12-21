@@ -1,6 +1,7 @@
 package com.hy.general_board_project.web.controller;
 
 import com.hy.general_board_project.config.auth.dto.SessionUser;
+import com.hy.general_board_project.domain.board.Board;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.service.BoardService;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
@@ -37,14 +41,38 @@ public class BoardController {
     }
 
     @GetMapping("/detail/{no}")
-    public String detail(@PathVariable("no") Long no, Model model) {
-        BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(no);
+    public String detail(@PathVariable("no") Long id, Model model, HttpServletRequest request, HttpServletResponse response) {
+        BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(id);
+
+        /* 조회수 로직 */
+        Cookie oldCookie = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("postView")) {
+                    oldCookie = cookie;
+                }
+            }
+        }
+
+        if (oldCookie != null) {
+            if (!oldCookie.getValue().contains("["+ id.toString() +"]")) {
+                boardService.updateView(id);
+                oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60 * 60 * 24); 							// 쿠키 시간
+                response.addCookie(oldCookie);
+            }
+        } else {
+            boardService.updateView(id);
+            Cookie newCookie = new Cookie("postView", "[" + id + "]");
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60 * 60 * 24); 								// 쿠키 시간
+            response.addCookie(newCookie);
+        }
 
         model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
         model.addAttribute("nickname", findUserNickname());
-
-        log.info("boardDetailResponseDto.writer = {}" , boardDetailResponseDto.getWriter());
-        log.info("nickname = {}" , findUserNickname());
 
         return "board/detail";
     }

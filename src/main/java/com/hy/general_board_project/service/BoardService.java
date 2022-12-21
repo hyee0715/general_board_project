@@ -209,4 +209,14 @@ public class BoardService {
             post.updateWriter(newWriterName);
         }
     }
+
+    @Transactional
+    public Integer updateView(Long id) {
+        return boardRepository.updateView(id);
+    }
+
+    @Transactional
+    public Board getBoard(Long id) {
+        return boardRepository.findById(id).get();
+    }
 }
