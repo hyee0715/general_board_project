@@ -216,4 +216,20 @@ public class SettingService {
 
         return null;
     }
+
+    @Transactional
+    public void deleteByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. username = " + username));
+
+        userRepository.delete(user);
+    }
+
+    @Transactional
+    public void deleteByEmailAndProvider(String email, String provider) {
+        User user = userRepository.findByEmailAndProvider(email, provider)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. email = " + email + " provider = " + provider));
+
+        userRepository.delete(user);
+    }
 }

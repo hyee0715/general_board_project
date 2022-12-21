@@ -271,8 +271,10 @@ public class SettingController {
 
             return "setting/withdrawal";
         }
-        
-        return "redirect:/setting/withdrawal";
+
+        settingService.deleteByUsername(formUserWithdrawRequestDto.getUsername());
+
+        return "redirect:/logout";
     }
 
     @PostMapping("/setting/withdrawal/email")
@@ -295,6 +297,8 @@ public class SettingController {
             return "setting/withdrawal";
         }
 
-        return "redirect:/setting/withdrawal";
+        settingService.deleteByEmailAndProvider(socialUserWithdrawRequestDto.getEmail(), socialUserWithdrawRequestDto.getProvider());
+
+        return "redirect:/logout";
     }
 }
