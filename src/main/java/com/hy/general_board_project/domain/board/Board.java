@@ -25,11 +25,15 @@ public class Board extends Time {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private Integer view;
+
     @Builder
-    public Board(String title, String writer, String content) {
+    public Board(String title, String writer, String content, Integer view) {
         this.title = title;
         this.writer = writer;
         this.content = content;
+        this.view = view;
     }
 
     public void update(String title, String content) {
