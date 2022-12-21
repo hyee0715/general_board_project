@@ -15,15 +15,17 @@ public class BoardDetailResponseDto {
     private String writer;
     private String content;
     private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
     private Integer view;
 
     @Builder
-    public BoardDetailResponseDto(Long id, String title, String writer, String content, LocalDateTime createdDate, Integer view) {
+    public BoardDetailResponseDto(Long id, String title, String writer, String content, LocalDateTime createdDate, LocalDateTime modifiedDate, Integer view) {
         this.id = id;
         this.title = title;
         this.writer = writer;
         this.content = content;
         this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
         this.view = view;
     }
 
@@ -35,6 +37,7 @@ public class BoardDetailResponseDto {
                 .writer(board.getWriter())
                 .content(board.getContent())
                 .createdDate(board.getCreatedDate())
+                .modifiedDate(board.getModifiedDate())
                 .view(board.getView())
                 .build();
     }
