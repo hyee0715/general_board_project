@@ -274,7 +274,8 @@ public class SettingController {
 
         settingService.deleteByUsername(formUserWithdrawRequestDto.getUsername());
 
-        return "redirect:/logout";
+        MessageDto message = new MessageDto("회원 탈퇴가 완료되었습니다.", "/logout", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
     }
 
     @PostMapping("/setting/withdrawal/email")
@@ -299,6 +300,7 @@ public class SettingController {
 
         settingService.deleteByEmailAndProvider(socialUserWithdrawRequestDto.getEmail(), socialUserWithdrawRequestDto.getProvider());
 
-        return "redirect:/logout";
+        MessageDto message = new MessageDto("회원 탈퇴가 완료되었습니다.", "/logout", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
     }
 }
