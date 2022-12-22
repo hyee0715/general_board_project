@@ -48,7 +48,8 @@ var main = {
         var data = {
             title: $('#title').val(),
             writer: $('#writer').val(),
-            content: $('#content').val()
+            content: $('#content').val(),
+            view: $('#view').val()
         };
 
         $.ajax({

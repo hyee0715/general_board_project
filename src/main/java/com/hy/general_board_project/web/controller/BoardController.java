@@ -36,6 +36,7 @@ public class BoardController {
     public String write(Model model) {
 
         model.addAttribute("nickname", findUserNickname());
+        model.addAttribute("view", 0);
 
         return "board/write";
     }
