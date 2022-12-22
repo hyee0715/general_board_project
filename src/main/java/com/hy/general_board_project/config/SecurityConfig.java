@@ -63,6 +63,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .oauth2Login()
                 .userInfoEndpoint()
                 .userService(principalOauth2UserService);
+
+        http.rememberMe()
+                .key("key")
+                .rememberMeParameter("remember-me")
+                .tokenValiditySeconds(86400 * 30)
+                .userDetailsService(principalDetailsService)
+                .authenticationSuccessHandler(authenticationSuccessHandler);
     }
 
     /**
