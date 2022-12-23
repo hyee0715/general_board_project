@@ -26,6 +26,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -98,9 +99,11 @@ public class SettingController {
     public String moveToUserList(Model model, @RequestParam(value = "page", defaultValue = "1") int pageNum) {
         String writerNickname = settingService.findUserInfo().getNickname();
 
-        List<BoardListResponseDto> userOwnBoardList = settingService.getUserOwnBoardList(writerNickname, pageNum);
+        Long writerId = userRepository.findByNickname(writerNickname).get().getId();
 
-        Integer totalLastPageNum = settingService.getTotalLastPageNum(writerNickname);
+        List<BoardListResponseDto> userOwnBoardList = settingService.getUserOwnBoardList(writerId, pageNum);
+
+        Integer totalLastPageNum = settingService.getTotalLastPageNum(writerId);
 
         List<Integer> pageList = boardService.getPageList(pageNum, totalLastPageNum);
 

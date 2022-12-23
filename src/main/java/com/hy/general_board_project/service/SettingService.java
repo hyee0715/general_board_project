@@ -106,11 +106,11 @@ public class SettingService {
     }
 
     @Transactional
-    public List<BoardListResponseDto> getUserOwnBoardList(String writer, int pageNum) {
+    public List<BoardListResponseDto> getUserOwnBoardList(Long writerId, int pageNum) {
         PageRequest pageRequest = PageRequest.of(
                 pageNum - 1, POST_COUNT_OF_ONE_PAGE, Sort.by(Sort.Direction.DESC, "createdDate"));
 
-        List<Board> userBoardList = boardRepository.findByWriter(writer, pageRequest);
+        List<Board> userBoardList = boardRepository.findByWriterId(writerId, pageRequest);
 
         List<BoardListResponseDto> userBoardDtoList = new ArrayList<>();
 
@@ -124,14 +124,14 @@ public class SettingService {
     }
 
     @Transactional
-    public Long getUserOwnBoardListCount(String writer) {
-        List<Board> userBoardList = boardRepository.findByWriter(writer);
+    public Long getUserOwnBoardListCount(Long writerId) {
+        List<Board> userBoardList = boardRepository.findByWriterId(writerId);
 
         return (long) userBoardList.size();
     }
 
-    public Integer getTotalLastPageNum(String writer) {
-        Double postsTotalCount = Double.valueOf(this.getUserOwnBoardListCount(writer));
+    public Integer getTotalLastPageNum(Long writerId) {
+        Double postsTotalCount = Double.valueOf(this.getUserOwnBoardListCount(writerId));
 
         // 총 게시글의 마지막 페이지 번호 계산 (올림으로 계산)
         Integer totalLastPageNum = (int) (Math.ceil((postsTotalCount / POST_COUNT_OF_ONE_PAGE)));
