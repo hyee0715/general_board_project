@@ -12,13 +12,15 @@ public class BoardSaveRequestDto {
     private String writer;
     private String content;
     private Integer view;
+    private Long writerId;
 
     @Builder
-    public BoardSaveRequestDto(String title, String content, String writer, Integer view) {
+    public BoardSaveRequestDto(String title, String content, String writer, Integer view, Long writerId) {
         this.title = title;
         this.writer = writer;
         this.content = content;
         this.view = view;
+        this.writerId = writerId;
     }
 
     public Board toEntity() {
@@ -27,6 +29,7 @@ public class BoardSaveRequestDto {
                 .writer(writer)
                 .content(content)
                 .view(view)
+                .writerId(writerId)
                 .build();
     }
 }

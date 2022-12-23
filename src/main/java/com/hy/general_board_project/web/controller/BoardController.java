@@ -34,9 +34,17 @@ public class BoardController {
 
     @GetMapping("/write")
     public String write(Model model) {
+        String nickname = findUserNickname();
 
-        model.addAttribute("nickname", findUserNickname());
+        model.addAttribute("nickname", nickname);
         model.addAttribute("view", 0);
+
+        Optional<User> user = userRepository.findByNickname(nickname);
+
+        if (user.isPresent()) {
+            Long writerId = user.get().getId();
+            model.addAttribute("writerId", writerId);
+        }
 
         return "board/write";
     }
@@ -73,7 +81,17 @@ public class BoardController {
         }
 
         model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
-        model.addAttribute("nickname", findUserNickname());
+
+        String nickname = findUserNickname();
+
+        model.addAttribute("nickname", nickname);
+
+        Optional<User> user = userRepository.findByNickname(nickname);
+
+        if (user.isPresent()) {
+            Long userId = user.get().getId();
+            model.addAttribute("userId", userId);
+        }
 
         return "board/detail";
     }

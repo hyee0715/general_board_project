@@ -17,9 +17,10 @@ public class BoardDetailResponseDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private Integer view;
+    private Long writerId;
 
     @Builder
-    public BoardDetailResponseDto(Long id, String title, String writer, String content, LocalDateTime createdDate, LocalDateTime modifiedDate, Integer view) {
+    public BoardDetailResponseDto(Long id, String title, String writer, String content, LocalDateTime createdDate, LocalDateTime modifiedDate, Integer view, Long writerId) {
         this.id = id;
         this.title = title;
         this.writer = writer;
@@ -27,6 +28,7 @@ public class BoardDetailResponseDto {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.view = view;
+        this.writerId = writerId;
     }
 
     // Entity -> BoardDetailResponseDto로 변환
@@ -39,6 +41,7 @@ public class BoardDetailResponseDto {
                 .createdDate(board.getCreatedDate())
                 .modifiedDate(board.getModifiedDate())
                 .view(board.getView())
+                .writerId(board.getWriterId())
                 .build();
     }
 }

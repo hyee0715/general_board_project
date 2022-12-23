@@ -28,12 +28,16 @@ public class Board extends Time {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private Integer view;
 
+    @Column
+    private Long writerId;
+
     @Builder
-    public Board(String title, String writer, String content, Integer view) {
+    public Board(String title, String writer, String content, Integer view, Long writerId) {
         this.title = title;
         this.writer = writer;
         this.content = content;
         this.view = view;
+        this.writerId = writerId;
     }
 
     public void update(String title, String content) {

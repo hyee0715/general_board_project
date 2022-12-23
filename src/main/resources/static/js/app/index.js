@@ -49,7 +49,8 @@ var main = {
             title: $('#title').val(),
             writer: $('#writer').val(),
             content: $('#content').val(),
-            view: $('#view').val()
+            view: $('#view').val(),
+            writerId: $('#writerId').val()
         };
 
         $.ajax({
