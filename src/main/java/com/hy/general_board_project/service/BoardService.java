@@ -2,6 +2,8 @@ package com.hy.general_board_project.service;
 
 import com.hy.general_board_project.domain.board.Board;
 import com.hy.general_board_project.domain.board.BoardRepository;
+import com.hy.general_board_project.domain.user.User;
+import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.web.dto.board.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,7 @@ public class BoardService {
     private static final int DEFAULT_START_PAGE_NUMBER = 1;
 
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long save(BoardSaveRequestDto requestDto) {
@@ -202,8 +205,11 @@ public class BoardService {
     }
 
     @Transactional
-    public void updateBoardWriter(String originalWriterName, String newWriterName) {
-        List<Board> posts = boardRepository.findByWriter(originalWriterName);
+    public void updateBoardWriter(String newWriterName) {
+        Optional<User> writer = userRepository.findByNickname(newWriterName);
+        Long writerId = writer.get().getId();
+
+        List<Board> posts = boardRepository.findByWriterId(writerId);
 
         for (Board post : posts) {
             post.updateWriter(newWriterName);

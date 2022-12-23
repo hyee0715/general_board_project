@@ -78,12 +78,10 @@ public class SettingController {
             return "/setting/userInfo";
         }
 
-        String originalUserNickname = settingService.findUserNickname(userInfoUpdateRequestDto);
-
         String newUserNickname = settingService.updateUserNickname(userInfoUpdateRequestDto);
 
         //해당 사용자의 모든 게시물 작성자 이름 수정
-        boardService.updateBoardWriter(originalUserNickname, newUserNickname);
+        boardService.updateBoardWriter(newUserNickname);
 
         MessageDto message = new MessageDto("회원 정보 수정이 완료되었습니다.", "/setting/userInfo", RequestMethod.GET, null);
         return showMessageAndRedirect(message, model);
