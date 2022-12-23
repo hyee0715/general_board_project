@@ -192,9 +192,11 @@ public class SettingController {
     public String search(@RequestParam(value = "keyword") String keyword, Model model, @RequestParam(value = "searchOption", required = false) String searchOption, @RequestParam(value = "page", defaultValue = "1") int pageNum) {
         String writerNickname = settingService.findUserInfo().getNickname();
 
-        List<BoardSearchResponseDto> boardSearchDtoList = settingService.search(writerNickname, keyword, pageNum, searchOption);
+        Long writerId = userRepository.findByNickname(writerNickname).get().getId();
 
-        int searchPostTotalCount = settingService.getSearchPostTotalCount(writerNickname, keyword, searchOption);
+        List<BoardSearchResponseDto> boardSearchDtoList = settingService.search(writerId, keyword, pageNum, searchOption);
+
+        int searchPostTotalCount = settingService.getSearchPostTotalCount(writerId, keyword, searchOption);
 
         int totalLastPageNum = boardService.getTotalLastSearchPageNum(searchPostTotalCount);
 

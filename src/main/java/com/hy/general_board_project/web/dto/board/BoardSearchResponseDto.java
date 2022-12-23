@@ -15,14 +15,16 @@ public class BoardSearchResponseDto {
     private String writer;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
+    private Long writerId;
 
     @Builder
-    public BoardSearchResponseDto(Long id, String title, String writer, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public BoardSearchResponseDto(Long id, String title, String writer, LocalDateTime createdDate, LocalDateTime modifiedDate, Long writerId) {
         this.id = id;
         this.writer = writer;
         this.title = title;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
+        this.writerId = writerId;
     }
 
     // Entity -> BoardSearchResponseDto로 변환
@@ -33,6 +35,7 @@ public class BoardSearchResponseDto {
                 .writer(board.getWriter())
                 .createdDate(board.getCreatedDate())
                 .modifiedDate(board.getModifiedDate())
+                .writerId(board.getWriterId())
                 .build();
     }
 }

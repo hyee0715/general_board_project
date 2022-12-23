@@ -25,29 +25,26 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT m FROM Board m WHERE m.title LIKE %:keyword% or m.content LIKE %:keyword% or m.writer LIKE %:keyword%")
     List<Board> findByAllOptionContaining(@Param("keyword") String keyword, Pageable pageable);
 
-    List<Board> findByWriter(String writer);
-    List<Board> findByWriter(String writer, Pageable pageable);
-
     List<Board> findByWriterId(Long writerId);
     List<Board> findByWriterId(Long writerId, Pageable pageable);
 
-    @Query("SELECT m FROM Board m WHERE m.writer = :writer and m.title LIKE %:keyword%")
-    List<Board> findByWriterAndTitleOptionContaining(@Param("writer") String writer, @Param("keyword") String keyword);
+    @Query("SELECT m FROM Board m WHERE m.writerId = :writerId and m.title LIKE %:keyword%")
+    List<Board> findByWriterIdAndTitleOptionContaining(@Param("writerId") Long writerId, @Param("keyword") String keyword);
 
-    @Query("SELECT m FROM Board m WHERE m.writer = :writer and m.title LIKE %:keyword%")
-    List<Board> findByWriterAndTitleOptionContaining(@Param("writer") String writer, @Param("keyword") String keyword, Pageable pageable);
+    @Query("SELECT m FROM Board m WHERE m.writerId = :writerId and m.title LIKE %:keyword%")
+    List<Board> findByWriterIdAndTitleOptionContaining(@Param("writerId") Long writerId, @Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT m FROM Board m WHERE m.writer = :writer and m.content LIKE %:keyword%")
-    List<Board> findByWriterAndContentOptionContaining(@Param("writer") String writer, @Param("keyword") String keyword);
+    @Query("SELECT m FROM Board m WHERE m.writerId = :writerId and m.content LIKE %:keyword%")
+    List<Board> findByWriterIdAndContentOptionContaining(@Param("writerId") Long writerId, @Param("keyword") String keyword);
 
-    @Query("SELECT m FROM Board m WHERE m.writer = :writer and m.content LIKE %:keyword%")
-    List<Board> findByWriterAndContentOptionContaining(@Param("writer") String writer, @Param("keyword") String keyword, Pageable pageable);
+    @Query("SELECT m FROM Board m WHERE m.writerId = :writerId and m.content LIKE %:keyword%")
+    List<Board> findByWriterIdAndContentOptionContaining(@Param("writerId") Long writerId, @Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT m FROM Board m WHERE m.writer = :writer and (m.title LIKE %:keyword% or m.content LIKE %:keyword%)")
-    List<Board> findByWriterAndTitleOptionOrContentOptionContaining(@Param("writer") String writer, @Param("keyword") String keyword);
+    @Query("SELECT m FROM Board m WHERE m.writerId = :writerId and (m.title LIKE %:keyword% or m.content LIKE %:keyword%)")
+    List<Board> findByWriterIdAndTitleOptionOrContentOptionContaining(@Param("writerId") Long writerId, @Param("keyword") String keyword);
 
-    @Query("SELECT m FROM Board m WHERE m.writer = :writer and (m.title LIKE %:keyword% or m.content LIKE %:keyword%)")
-    List<Board> findByWriterAndTitleOptionOrContentOptionContaining(@Param("writer") String writer, @Param("keyword") String keyword, Pageable pageable);
+    @Query("SELECT m FROM Board m WHERE m.writerId = :writerId and (m.title LIKE %:keyword% or m.content LIKE %:keyword%)")
+    List<Board> findByWriterIdAndTitleOptionOrContentOptionContaining(@Param("writerId") Long writerId, @Param("keyword") String keyword, Pageable pageable);
 
     @Modifying
     @Query("update Board q set q.view = q.view + 1 where q.id = :id")

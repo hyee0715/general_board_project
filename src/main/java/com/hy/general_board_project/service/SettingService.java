@@ -140,8 +140,8 @@ public class SettingService {
     }
 
     @Transactional
-    public List<BoardSearchResponseDto> search(String writer, String keyword, int pageNum, String searchOption) {
-        List<Board> boardSearchList = makeUserOwnBoardSearchList(writer, keyword, pageNum, searchOption);
+    public List<BoardSearchResponseDto> search(Long writerId, String keyword, int pageNum, String searchOption) {
+        List<Board> boardSearchList = makeUserOwnBoardSearchList(writerId, keyword, pageNum, searchOption);
 
         List<BoardSearchResponseDto> boardSearchDtoList = new ArrayList<>();
 
@@ -156,28 +156,28 @@ public class SettingService {
     }
 
     @Transactional
-    public List<Board> makeUserOwnBoardSearchList(String writer, String keyword, int pageNum, String searchOption) {
+    public List<Board> makeUserOwnBoardSearchList(Long writerId, String keyword, int pageNum, String searchOption) {
         PageRequest pageRequest = PageRequest.of(
                 pageNum - 1, POST_COUNT_OF_ONE_PAGE, Sort.by(Sort.Direction.DESC, "createdDate"));
 
         if (searchOption.equals("title")) {
-            return boardRepository.findByWriterAndTitleOptionContaining(writer, keyword, pageRequest);
+            return boardRepository.findByWriterIdAndTitleOptionContaining(writerId, keyword, pageRequest);
         } else if (searchOption.equals("content")) {
-            return boardRepository.findByWriterAndContentOptionContaining(writer, keyword, pageRequest);
+            return boardRepository.findByWriterIdAndContentOptionContaining(writerId, keyword, pageRequest);
         }
 
-        return boardRepository.findByWriterAndTitleOptionOrContentOptionContaining(writer, keyword, pageRequest);
+        return boardRepository.findByWriterIdAndTitleOptionOrContentOptionContaining(writerId, keyword, pageRequest);
     }
 
-    public int getSearchPostTotalCount(String writer, String keyword, String searchOption) {
+    public int getSearchPostTotalCount(Long writerId, String keyword, String searchOption) {
         List<Board> boardEntities;
 
         if (searchOption.equals("title")) {
-            boardEntities = boardRepository.findByWriterAndTitleOptionContaining(writer, keyword);
+            boardEntities = boardRepository.findByWriterIdAndTitleOptionContaining(writerId, keyword);
         } else if (searchOption.equals("content")) {
-            boardEntities = boardRepository.findByWriterAndContentOptionContaining(writer, keyword);
+            boardEntities = boardRepository.findByWriterIdAndContentOptionContaining(writerId, keyword);
         } else {
-            boardEntities = boardRepository.findByWriterAndTitleOptionOrContentOptionContaining(writer, keyword);
+            boardEntities = boardRepository.findByWriterIdAndTitleOptionOrContentOptionContaining(writerId, keyword);
         }
 
         if (boardEntities.isEmpty())
