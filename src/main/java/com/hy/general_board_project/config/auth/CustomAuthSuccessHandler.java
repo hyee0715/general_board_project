@@ -1,5 +1,8 @@
 package com.hy.general_board_project.config.auth;
 
+import com.hy.general_board_project.service.UserService;
+import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -21,6 +24,9 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
     private final RequestCache requestCache = new HttpSessionRequestCache();
     private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
+    @Autowired
+    public UserService userService;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
@@ -32,6 +38,14 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         String prevPage = (String) request.getSession().getAttribute("prevPage");
         if (prevPage != null) {
             request.getSession().removeAttribute("prevPage");
+        }
+
+        UserSignUpRequestDto userSignUpRequestDto = userService.getEmailCertifiedInfo();
+        String emailCertified = userSignUpRequestDto.getCertified();
+
+        if (!emailCertified.equals("Y")) {
+            redirectStrategy.sendRedirect(request, response, "/user/emailCertified");
+            return;
         }
 
         // 기본 URI

@@ -30,7 +30,7 @@ import java.util.Optional;
 @Service
 public class SettingService {
 
-    private static final int PAGE_NUMBER_COUNT_OF_ONE_BLOCK = 8; // 한 블럭에 존재하는 페이지 번호 개수
+//    private static final int PAGE_NUMBER_COUNT_OF_ONE_BLOCK = 8; // 한 블럭에 존재하는 페이지 번호 개수
     private static final int POST_COUNT_OF_ONE_PAGE = 10; // 한 페이지에 존재하는 게시글 수
 
     private final UserRepository userRepository;
@@ -54,10 +54,6 @@ public class SettingService {
         }
 
         return user.get();
-    }
-
-    public String findUserNickname(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
-        return findUserForInfoUpdate(userInfoUpdateRequestDto).getNickname();
     }
 
     public UserInfoUpdateRequestDto findUserInfo() {

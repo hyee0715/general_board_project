@@ -24,7 +24,6 @@
         font-size: 12px;
         padding-left: 3px;
     }
-
     </style>
 </head>
 
@@ -33,9 +32,11 @@
     <div class="signUp-block">
         <div class="input-form">
             <h2>Sign Up</h2>
-            <form th:action="@{/user/signUp}" th:object="${userSignUpRequestDto}" method="POST" novalidate>
+            <form id="signUpForm" th:action="@{/user/signUp}" th:object="${userSignUpRequestDto}" method="POST" novalidate>
                 <div class="row" style="margin-top: 25px;">
                     <div class="signUp col-md-6 mb-3" style="margin-top: 10px;">
+                        <input type="hidden" name="certified" id="certified"
+                               th:value="${userSignUpRequestDto.certified}"/>
                         <label for="username" style="font-weight: bold;">Username</label>
                         <input type="text" th:field="*{username}" th:errorclass="field-error-form" class="form-control"
                                id="username" placeholder="username" value="" name="username" required>
@@ -75,14 +76,12 @@
             </form>
 
             <div class="sign-up-to-login">
-                <a href="/user/login" style="text-decoration:none; color: inherit;">Already have an account? Sign in here</a>
+                <a href="/user/login" style="text-decoration:none; color: inherit;">Already have an account? Sign in
+                    here</a>
             </div>
         </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 </body>
 </html>

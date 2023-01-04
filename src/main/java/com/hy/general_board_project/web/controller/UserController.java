@@ -17,6 +17,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -93,7 +94,34 @@ public class UserController {
             return "account/signUp";
         }
 
+        userSignUpRequestDto.setCertified(certifiedKey());
+
         userService.joinUser(userSignUpRequestDto);
         return "redirect:/user/login";
+    }
+
+    private String certifiedKey() {
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        int num = 0;
+
+        do {
+            num = random.nextInt(75) + 48;
+            if ((num >= 48 && num <= 57) || (num >= 65 && num <= 90) || (num >= 97 && num <= 122)) {
+                sb.append((char) num);
+            } else {
+                continue;
+            }
+
+        } while (sb.length() < 10);
+        return sb.toString();
+    }
+
+    @GetMapping("/user/emailCertified")
+    public String certifyEmail(Model model) {
+        UserSignUpRequestDto emailAuthInfo = userService.getEmailCertifiedInfo();
+        model.addAttribute("userSignUpRequestDto", emailAuthInfo);
+
+        return "account/emailCertified";
     }
 }

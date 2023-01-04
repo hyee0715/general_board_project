@@ -28,13 +28,16 @@ public class UserSignUpRequestDto implements UserDto {
 
     private Role role;
 
+    private String certified;
+
     @Builder
-    public UserSignUpRequestDto(String username, String nickname, String password, String email, Role role) {
+    public UserSignUpRequestDto(String username, String nickname, String password, String email, Role role, String certified) {
         this.username = username;
         this.nickname = nickname;
         this.password = password;
         this.email = email;
         this.role = role;
+        this.certified = certified;
     }
 
     public User toEntity() {
@@ -44,6 +47,7 @@ public class UserSignUpRequestDto implements UserDto {
                 .password(password)
                 .email(email)
                 .role(role)
+                .certified(certified)
                 .build();
     }
 }

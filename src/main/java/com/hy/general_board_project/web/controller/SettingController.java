@@ -4,14 +4,12 @@ import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.service.BoardService;
 import com.hy.general_board_project.service.SettingService;
+import com.hy.general_board_project.service.UserService;
 import com.hy.general_board_project.validator.CheckNicknameValidator;
 import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
 import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
 import com.hy.general_board_project.web.dto.message.MessageDto;
-import com.hy.general_board_project.web.dto.user.FormUserWithdrawRequestDto;
-import com.hy.general_board_project.web.dto.user.SocialUserWithdrawRequestDto;
-import com.hy.general_board_project.web.dto.user.UserInfoUpdateRequestDto;
-import com.hy.general_board_project.web.dto.user.UserPasswordUpdateRequestDto;
+import com.hy.general_board_project.web.dto.user.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +24,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -40,6 +37,7 @@ public class SettingController {
     private final CheckNicknameValidator checkNicknameValidator;
     private final BoardService boardService;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @InitBinder
     public void validatorBinder(WebDataBinder binder) {
@@ -54,6 +52,10 @@ public class SettingController {
         boolean isFormUser = settingService.isFormUser();
 
         if (isFormUser) {
+            if (!isCertifiedUser()) {
+                return "redirect:/user/emailCertified";
+            }
+
             model.addAttribute("formUser", true);
             return "setting/userInfo";
         }
@@ -113,6 +115,10 @@ public class SettingController {
         boolean isFormUser = settingService.isFormUser();
 
         if (isFormUser) {
+            if (!isCertifiedUser()) {
+                return "redirect:/user/emailCertified";
+            }
+
             model.addAttribute("formUser", true);
             return "setting/userList";
         }
@@ -123,6 +129,10 @@ public class SettingController {
 
     @GetMapping("/setting/userPassword")
     public String moveToUserPassword(Model model) {
+        if (!isCertifiedUser()) {
+            return "redirect:/user/emailCertified";
+        }
+
         UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.findUserInfo();
         UserPasswordUpdateRequestDto userPasswordUpdateRequestDto = userInfoUpdateRequestDto.convertToPasswordUpdateDto();
 
@@ -212,6 +222,10 @@ public class SettingController {
         boolean isFormUser = settingService.isFormUser();
 
         if (isFormUser) {
+            if (!isCertifiedUser()) {
+                return "redirect:/user/emailCertified";
+            }
+
             model.addAttribute("formUser", true);
             return "setting/search";
         }
@@ -235,6 +249,10 @@ public class SettingController {
         boolean isFormUser = settingService.isFormUser();
 
         if (isFormUser) {
+            if (!isCertifiedUser()) {
+                return "redirect:/user/emailCertified";
+            }
+
             model.addAttribute("formUser", true);
 
             FormUserWithdrawRequestDto formUserWithdrawRequestDto = settingService.findFormUserInfoForWithdrawal();
@@ -305,5 +323,16 @@ public class SettingController {
 
         MessageDto message = new MessageDto("회원 탈퇴가 완료되었습니다.", "/logout", RequestMethod.GET, null);
         return showMessageAndRedirect(message, model);
+    }
+
+    public boolean isCertifiedUser() {
+        UserSignUpRequestDto userSignUpRequestDto = userService.getEmailCertifiedInfo();
+        String emailCertified = userSignUpRequestDto.getCertified();
+
+        if (!emailCertified.equals("Y")) {
+            return false;
+        }
+
+        return true;
     }
 }
