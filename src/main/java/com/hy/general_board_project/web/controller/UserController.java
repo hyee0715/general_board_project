@@ -124,4 +124,9 @@ public class UserController {
 
         return "account/emailCertified";
     }
+
+    @GetMapping("/user/findUsername")
+    public String findUsername() {
+        return "account/findUsername";
+    }
 }
