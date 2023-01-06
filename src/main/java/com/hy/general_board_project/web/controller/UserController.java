@@ -1,7 +1,7 @@
 package com.hy.general_board_project.web.controller;
 
 import com.hy.general_board_project.service.UserService;
-import com.hy.general_board_project.validator.CheckEmailValidator;
+import com.hy.general_board_project.validator.CheckEmailAndProviderValidator;
 import com.hy.general_board_project.validator.CheckNicknameValidator;
 import com.hy.general_board_project.validator.CheckUsernameValidator;
 import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
@@ -28,13 +28,13 @@ public class UserController {
     private final UserService userService;
     private final CheckUsernameValidator checkUsernameValidator;
     private final CheckNicknameValidator checkNicknameValidator;
-    private final CheckEmailValidator checkEmailValidator;
+    private final CheckEmailAndProviderValidator checkEmailAndProviderValidator;
 
     @InitBinder
     public void validatorBinder(WebDataBinder binder) {
         binder.addValidators(checkUsernameValidator);
         binder.addValidators(checkNicknameValidator);
-        binder.addValidators(checkEmailValidator);
+        binder.addValidators(checkEmailAndProviderValidator);
     }
 
     @GetMapping("/user/login")
