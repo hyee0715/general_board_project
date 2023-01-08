@@ -67,6 +67,7 @@ public class OAuthAttributes {
 
     public User toEntity() {
         return User.builder()
+                .realName(name)
                 .username(name)
                 .email(email)
                 .nickname(makeDefaultRandomNickname())

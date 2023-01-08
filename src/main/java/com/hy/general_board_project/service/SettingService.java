@@ -64,7 +64,7 @@ public class SettingService {
 
             User user = userEntity.get();
 
-            return new UserInfoUpdateRequestDto(user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider());
+            return new UserInfoUpdateRequestDto(user.getRealName(), user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider());
         }
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -80,7 +80,7 @@ public class SettingService {
 
         User user = userEntity.get();
 
-        return new UserInfoUpdateRequestDto(user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider());
+        return new UserInfoUpdateRequestDto(user.getRealName(), user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider());
     }
 
     @Transactional

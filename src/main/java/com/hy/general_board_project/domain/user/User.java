@@ -17,6 +17,9 @@ public class User extends Time {
     private Long id;
 
     @Column(nullable = false)
+    private String realName;
+
+    @Column(nullable = false)
     private String username;
 
     private String password;
@@ -39,8 +42,9 @@ public class User extends Time {
     private String certified;
 
     @Builder
-    public User(Long id, String username, String password, String nickname, String email, String picture, Role role, String provider, String certified) {
+    public User(Long id, String realName, String username, String password, String nickname, String email, String picture, Role role, String provider, String certified) {
         this.id = id;
+        this.realName = realName;
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -51,8 +55,8 @@ public class User extends Time {
         this.certified = certified;
     }
 
-    public User update(String name, String picture) {
-        this.username = name;
+    public User update(String username, String picture) {
+        this.username = username;
         this.picture = picture;
 
         return this;

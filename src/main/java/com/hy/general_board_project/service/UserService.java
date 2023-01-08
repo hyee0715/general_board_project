@@ -59,6 +59,6 @@ public class UserService {
 
         User user = userEntity.get();
 
-        return new UserSignUpRequestDto(user.getUsername(), user.getNickname(), user.getPassword(), user.getEmail(), user.getRole(), user.getCertified());
+        return new UserSignUpRequestDto(user.getRealName(), user.getUsername(), user.getNickname(), user.getPassword(), user.getEmail(), user.getRole(), user.getCertified());
     }
 }

@@ -13,6 +13,9 @@ import javax.validation.constraints.NotBlank;
 public class UserInfoUpdateRequestDto implements UserDto {
 
     @NotBlank
+    private String realName;
+
+    @NotBlank
     private String username;
 
     @NotBlank
@@ -25,7 +28,8 @@ public class UserInfoUpdateRequestDto implements UserDto {
     private String provider;
 
     @Builder
-    public UserInfoUpdateRequestDto(String username, String nickname, String email, String provider) {
+    public UserInfoUpdateRequestDto(String realName, String username, String nickname, String email, String provider) {
+        this.realName = realName;
         this.username = username;
         this.nickname = nickname;
         this.email = email;
@@ -34,6 +38,7 @@ public class UserInfoUpdateRequestDto implements UserDto {
 
     public User toEntity() {
         return User.builder()
+                .realName(realName)
                 .username(username)
                 .nickname(nickname)
                 .email(email)
