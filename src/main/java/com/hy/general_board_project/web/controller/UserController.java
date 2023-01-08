@@ -64,6 +64,13 @@ public class UserController {
 
     @PostMapping("/user/signUp")
     public String signUp(@Validated @ModelAttribute UserSignUpRequestDto userSignUpRequestDto, BindingResult bindingResult) {
+        if (!StringUtils.hasText(userSignUpRequestDto.getRealName())) {
+            bindingResult.rejectValue("realName", "required", "");
+        } else {
+            if (!Pattern.matches("^[가-힣]{2,6}$", userSignUpRequestDto.getRealName())) {
+                bindingResult.addError(new FieldError("userSignUpRequestDto", "realName", userSignUpRequestDto.getRealName(), false, null, null, "이름은 한글로 구성된 2~6자리 제한입니다."));
+            }
+        }
 
         if (!StringUtils.hasText(userSignUpRequestDto.getUsername())) {
             bindingResult.rejectValue("username", "required", "");

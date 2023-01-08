@@ -33,18 +33,27 @@
         <div class="input-form">
             <h2>Sign Up</h2>
             <form id="signUpForm" th:action="@{/user/signUp}" th:object="${userSignUpRequestDto}" method="POST" novalidate>
+                <input type="hidden" name="certified" id="certified"
+                       th:value="${userSignUpRequestDto.certified}"/>
+
                 <div class="row" style="margin-top: 25px;">
-                    <div class="signUp col-md-6 mb-3" style="margin-top: 10px;">
-                        <input type="hidden" name="certified" id="certified"
-                               th:value="${userSignUpRequestDto.certified}"/>
+                    <div class="signUp col-md-6 mb-3" style="">
+                        <label for="realName" style="font-weight: bold;">이름</label>
+                        <input type="text" th:field="*{realName}" th:errorclass="field-error-form" class="form-control"
+                               id="realName" placeholder="이름" value="" name="realName" required>
+                        <div class="field-error" th:errors="*{realName}">
+                            이름 오류
+                        </div>
+                    </div>
+                    <div class="signUp col-md-6 mb-3" style="">
                         <label for="username" style="font-weight: bold;">Username</label>
                         <input type="text" th:field="*{username}" th:errorclass="field-error-form" class="form-control"
                                id="username" placeholder="username" value="" name="username" required>
                         <div class="field-error" th:errors="*{username}">
-                            이름 오류
+                            아이디 오류
                         </div>
                     </div>
-                    <div class="signUp col-md-6 mb-3" style="margin-top: 10px;">
+                    <div class="signUp col-md-6 mb-3" style="">
                         <label for="nickname" style="font-weight: bold;">Nickname</label>
                         <input type="text" th:field="*{nickname}" th:errorclass="field-error-form" class="form-control"
                                id="nickname" placeholder="nickname" value="" name="nickname" required>
@@ -54,7 +63,7 @@
                     </div>
                 </div>
 
-                <div class="signUp mb-3" style="margin-top: 13px;">
+                <div class="signUp mb-3" style="">
                     <label for="password" style="font-weight: bold;">Password</label>
                     <input type="password" th:field="*{password}" th:errorclass="field-error-form" class="form-control"
                            id="password" placeholder="password" name="password" required>
@@ -63,7 +72,7 @@
                     </div>
                 </div>
 
-                <div class="signUp mb-3" style="margin-top: 30px;">
+                <div class="signUp mb-3" style="">
                     <label for="email" style="font-weight: bold;">Email</label>
                     <input type="email" th:field="*{email}" th:errorclass="field-error-form" class="form-control"
                            id="email" placeholder="you@example.com" name="email" required>
