@@ -4,6 +4,7 @@ import com.hy.general_board_project.service.UserService;
 import com.hy.general_board_project.validator.CheckEmailAndProviderValidator;
 import com.hy.general_board_project.validator.CheckNicknameValidator;
 import com.hy.general_board_project.validator.CheckUsernameValidator;
+import com.hy.general_board_project.web.dto.user.FindUsernameDto;
 import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -130,10 +131,5 @@ public class UserController {
         model.addAttribute("userSignUpRequestDto", emailAuthInfo);
 
         return "account/emailCertified";
-    }
-
-    @GetMapping("/user/findUsername")
-    public String findUsername() {
-        return "account/findUsername";
     }
 }

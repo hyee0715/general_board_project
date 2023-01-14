@@ -31,7 +31,7 @@
 <div class="wrap">
     <div class="signUp-block">
         <div class="input-form">
-            <h2>Sign Up</h2>
+            <h2>회원가입</h2>
             <form id="signUpForm" th:action="@{/user/signUp}" th:object="${userSignUpRequestDto}" method="POST" novalidate>
                 <input type="hidden" name="certified" id="certified"
                        th:value="${userSignUpRequestDto.certified}"/>

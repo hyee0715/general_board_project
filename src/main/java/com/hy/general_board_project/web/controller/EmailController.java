@@ -5,6 +5,7 @@ import com.hy.general_board_project.service.UserService;
 import com.hy.general_board_project.web.dto.message.MessageDto;
 import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class EmailController {
