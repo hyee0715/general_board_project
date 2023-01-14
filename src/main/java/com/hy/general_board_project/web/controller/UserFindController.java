@@ -3,6 +3,7 @@ package com.hy.general_board_project.web.controller;
 import com.hy.general_board_project.service.EmailService;
 import com.hy.general_board_project.service.UserFindService;
 import com.hy.general_board_project.web.dto.message.MessageDto;
+import com.hy.general_board_project.web.dto.user.FindPasswordDto;
 import com.hy.general_board_project.web.dto.user.FindUsernameDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,5 +94,11 @@ public class UserFindController {
     private String showMessageAndRedirect(final MessageDto params, Model model) {
         model.addAttribute("params", params);
         return "common/messageRedirect";
+    }
+
+    @GetMapping("/user/findPassword")
+    public String findPassword(Model model) {
+        model.addAttribute("findPasswordDto", new FindPasswordDto());
+        return "account/findPassword";
     }
 }
