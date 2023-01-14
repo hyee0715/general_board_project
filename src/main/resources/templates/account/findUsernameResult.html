@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <title>GENERAL BOARD</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/account.css">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@200&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'IBM Plex Sans KR', sans-serif;
+        }
+
+        .find-result-button {
+            width: 150px;
+            height: 60px;
+            border: 0;
+            outline: none;
+            border-radius: 40px;
+            background: rgb(80, 80, 80);
+            color: white;
+            font-size: 15px;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="signUp-block">
+        <div style="text-align:center;">
+            <a href="/" style="font-size: 40px; color: #6E4690; text-decoration-line: none;">General Board</a>
+        </div>
+
+        <div class="input-form" style="text-align:center;">
+            <h3>아이디 찾기</h3>
+            <br><br>
+            <div>
+                <div style="font-size: 20px;">
+                    <div th:text="${findUsernameDto.email}">유저 이메일</div>과 연결되어 있는 아이디는
+                    <div th:text="${findUsernameDto.username}" style="font-size: 35px; color: #6E4690">유저 아이디</div>
+                    <div>입니다.</div>
+                </div>
+                <br><br>
+                <div style="display: inline-block; margin-top: 40px;">
+                    <button class="find-result-button" style="display: inline-block; margin-left: 10px;">로그인 하기</button>
+                    <button class="find-result-button" style="display: inline-block; margin-left: 10px;">비밀번호 찾기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
