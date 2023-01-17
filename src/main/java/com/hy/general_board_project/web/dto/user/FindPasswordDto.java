@@ -20,16 +20,13 @@ public class FindPasswordDto implements UserDto {
     @NotBlank
     private String email;
 
-    private String originalPassword;
-
     private String tempPassword;
 
     @Builder
-    public FindPasswordDto(String realName, String username, String email, String originalPassword, String tempPassword) {
+    public FindPasswordDto(String realName, String username, String email, String tempPassword) {
         this.realName = realName;
         this.username = username;
         this.email = email;
-        this.originalPassword = originalPassword;
         this.tempPassword = tempPassword;
     }
 
