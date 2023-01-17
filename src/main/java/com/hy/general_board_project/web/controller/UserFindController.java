@@ -7,6 +7,7 @@ import com.hy.general_board_project.web.dto.user.FindPasswordDto;
 import com.hy.general_board_project.web.dto.user.FindUsernameDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -100,5 +101,63 @@ public class UserFindController {
     public String findPassword(Model model) {
         model.addAttribute("findPasswordDto", new FindPasswordDto());
         return "account/findPassword";
+    }
+
+    @PostMapping("/user/findPassword")
+    public String findPassword(@Validated @ModelAttribute FindPasswordDto findPasswordDto, BindingResult bindingResult, Model model) throws MessagingException {
+        boolean globalErrorCheck = true;
+
+        if (!StringUtils.hasText(findPasswordDto.getRealName())) {
+            bindingResult.rejectValue("realName", "required", "");
+        } else {
+            if (!Pattern.matches("^[가-힣]{2,6}$", findPasswordDto.getRealName())) {
+                bindingResult.addError(new FieldError("findPasswordDto", "realName", findPasswordDto.getRealName(), false, null, null, "이름은 한글로 구성된 2~6자리 제한입니다."));
+            }
+        }
+
+        if (!StringUtils.hasText(findPasswordDto.getUsername())) {
+            bindingResult.rejectValue("username", "required", "");
+        } else {
+            if (!Pattern.matches("^[a-z0-9]{4,20}$", findPasswordDto.getUsername())) {
+                bindingResult.addError(new FieldError("findPasswordDto", "username", findPasswordDto.getUsername(), false, null, null, "아이디는 영어 소문자, 숫자 포함 4~20자리 제한입니다."));
+            }
+        }
+
+        if (!StringUtils.hasText(findPasswordDto.getEmail())) {
+            bindingResult.rejectValue("email", "required", "");
+        } else {
+            if (!Pattern.matches("^(.+)@(.+)$", findPasswordDto.getEmail())) {
+                bindingResult.addError(new FieldError("findPasswordDto", "email", findPasswordDto.getEmail(), false, null, null, "이메일 형식에 맞지 않습니다."));
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            globalErrorCheck = false;
+        }
+
+        if (globalErrorCheck && !userFindService.existsUserByRealNameAndUsernameAndEmail(findPasswordDto.getRealName(), findPasswordDto.getUsername(), findPasswordDto.getEmail())) {
+            bindingResult.reject("noUser", "입력하신 정보와 일치하는 계정이 존재하지 않습니다.");
+        }
+
+        if (bindingResult.hasErrors()) {
+            log.info("errors = {}", bindingResult);
+            return "account/findPassword";
+        }
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        String tempPassword = userFindService.makeTempPassword();
+        findPasswordDto.setTempPassword(tempPassword);
+
+        String encodedTempPassword = encoder.encode(findPasswordDto.getTempPassword());
+
+        userFindService.updateUserPasswordToTempPassword(findPasswordDto, encodedTempPassword);
+
+        String emailContent = emailService.makeEmailContentForPassword(findPasswordDto);
+
+        emailService.sendMail(findPasswordDto.getEmail(), "[GENERAL BOARD 임시 비밀번호 안내]", emailContent);
+
+        MessageDto message = new MessageDto("임시 비밀번호가 이메일로 전송되었습니다.", "/user/findPassword", RequestMethod.GET, null);
+        return showMessageAndRedirect(message, model);
     }
 }
