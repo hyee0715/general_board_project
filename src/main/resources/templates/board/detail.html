@@ -14,7 +14,9 @@
                 <div class="border-bottom">
                     <h2 class="mb-3" th:text="${boardDetailResponseDto.title}" style="font-size: 40px;">제목</h2>
                     <p class="fst-italic" style="margin-top:30px; font-size: 13px;">
-                        <a th:text="${boardDetailResponseDto.writer}">Mark</a>
+                        <img th:src="|/images/${writerProfileImageStoreName}|" alt="" width="32" height="32"
+                             class="rounded-circle" onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
+                        <a th:text="${boardDetailResponseDto.writer}">작성자</a>
                         / 작성일 <a
                             th:text="${boardDetailResponseDto.createdDate} ? ${#temporals.format(boardDetailResponseDto.createdDate,'yyyy-MM-dd HH:mm')} : ${boardDetailResponseDto.createdDate}">작성일</a>
                         / 수정일 <a

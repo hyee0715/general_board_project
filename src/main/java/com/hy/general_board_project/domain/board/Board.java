@@ -19,6 +19,8 @@ public class Board extends Time {
     @Column(length = 500, nullable = false)
     private String title;
 
+    private String profileImage;
+
     @Column(length = 10, nullable = false)
     private String writer;
 

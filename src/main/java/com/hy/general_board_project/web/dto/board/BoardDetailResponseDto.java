@@ -13,6 +13,7 @@ public class BoardDetailResponseDto {
     private Long id;
     private String title;
     private String writer;
+    private String profileImage;
     private String content;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
@@ -20,10 +21,11 @@ public class BoardDetailResponseDto {
     private Long writerId;
 
     @Builder
-    public BoardDetailResponseDto(Long id, String title, String writer, String content, LocalDateTime createdDate, LocalDateTime modifiedDate, Integer view, Long writerId) {
+    public BoardDetailResponseDto(Long id, String title, String writer, String profileImage, String content, LocalDateTime createdDate, LocalDateTime modifiedDate, Integer view, Long writerId) {
         this.id = id;
         this.title = title;
         this.writer = writer;
+        this.profileImage = profileImage;
         this.content = content;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
@@ -37,6 +39,7 @@ public class BoardDetailResponseDto {
                 .id(board.getId())
                 .title(board.getTitle())
                 .writer(board.getWriter())
+                .profileImage(board.getProfileImage())
                 .content(board.getContent())
                 .createdDate(board.getCreatedDate())
                 .modifiedDate(board.getModifiedDate())

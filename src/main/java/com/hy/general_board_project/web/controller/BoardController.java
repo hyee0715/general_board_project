@@ -97,8 +97,16 @@ public class BoardController {
             model.addAttribute("userId", userId);
         }
 
+        //현재 접속한 사용자의 프로필 사진 불러오기
         String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
         model.addAttribute("profileImageStoreName", profileImageStoreName);
+
+        //각 게시물 글쓴이의 프로필 사진 불러오기
+        Long writerId = boardDetailResponseDto.getWriterId();
+        User writer = userRepository.findById(writerId).get();
+
+        String writerProfileImageStoreName = boardService.getWriterProfileImageStoreName(writer);
+        model.addAttribute("writerProfileImageStoreName", writerProfileImageStoreName);
 
         return "board/detail";
     }
