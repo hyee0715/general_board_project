@@ -103,13 +103,19 @@ public class BoardController {
 
         //각 게시물 글쓴이의 프로필 사진 불러오기
         Long writerId = boardDetailResponseDto.getWriterId();
-        User writer = userRepository.findById(writerId).get();
+        Optional<User> writerWrapper = userRepository.findById(writerId);
 
-        String writerProfileImageStoreName = boardService.getWriterProfileImageStoreName(writer);
+        if (writerWrapper.isPresent()) {
+            String writerProfileImageStoreName = boardService.getWriterProfileImageStoreName(writerWrapper.get());
 
-        if (writerProfileImageStoreName != null) {
-            model.addAttribute("writerProfileImageStoreName", writerProfileImageStoreName);
+            if (writerProfileImageStoreName != null) {
+                model.addAttribute("writerProfileImageStoreName", writerProfileImageStoreName);
+            }
+
+            return "board/detail";
         }
+
+        model.addAttribute("writerProfileImageStoreName", null);
 
         return "board/detail";
     }
