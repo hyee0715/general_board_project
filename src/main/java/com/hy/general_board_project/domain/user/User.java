@@ -1,6 +1,7 @@
 package com.hy.general_board_project.domain.user;
 
 import com.hy.general_board_project.domain.Time;
+import com.hy.general_board_project.domain.profileImage.ProfileImage;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,9 +31,6 @@ public class User extends Time {
     @Column(nullable = false)
     private String email;
 
-    @Column
-    private String picture;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -41,23 +39,27 @@ public class User extends Time {
 
     private String certified;
 
+    @OneToOne
+    @JoinColumn(name = "PROFILE_IMAGE_ID")
+    private ProfileImage profileImage;
+
     @Builder
-    public User(Long id, String realName, String username, String password, String nickname, String email, String picture, Role role, String provider, String certified) {
+    public User(Long id, String realName, String username, String password, String nickname, String email, Role role, String provider, String certified, ProfileImage profileImage) {
         this.id = id;
         this.realName = realName;
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.email = email;
-        this.picture = picture;
         this.role = role;
         this.provider = provider;
         this.certified = certified;
+        this.profileImage = profileImage;
     }
 
-    public User update(String username, String picture) {
+    public User updateForSocial(String username, String email) {
         this.username = username;
-        this.picture = picture;
+        this.email = email;
 
         return this;
     }
@@ -82,5 +84,11 @@ public class User extends Time {
 
     public String getRoleKey() {
         return this.role.getKey();
+    }
+
+    public User updateProfileImage(ProfileImage profileImage) {
+        this.profileImage = profileImage;
+
+        return this;
     }
 }

@@ -2,6 +2,7 @@ package com.hy.general_board_project.web.dto.user;
 
 import com.hy.general_board_project.domain.user.User;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,8 @@ import javax.validation.constraints.NotBlank;
 @ToString
 @NoArgsConstructor
 public class UserInfoUpdateRequestDto implements UserDto {
+
+    private Long id;
 
     @NotBlank
     private String realName;
@@ -27,8 +30,11 @@ public class UserInfoUpdateRequestDto implements UserDto {
 
     private String provider;
 
+    private MultipartFile profileImage;
+
     @Builder
-    public UserInfoUpdateRequestDto(String realName, String username, String nickname, String email, String provider) {
+    public UserInfoUpdateRequestDto(Long id, String realName, String username, String nickname, String email, String provider) {
+        this.id = id;
         this.realName = realName;
         this.username = username;
         this.nickname = nickname;

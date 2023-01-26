@@ -29,9 +29,9 @@
                 <div style="display: inline; margin-right: 10px;">
                     <a th:text="${nickname}">사용자</a> 님
                 </div>
-                <a href="/setting/userInfo" class="btn btn-sm btn-outline-success" style="margin-right: 10px;" role="button">My Page</a>
+                <a href="/setting/userInfo" class="btn btn-sm btn-outline-success" style="margin-right: 10px;" role="button">마이페이지</a>
                 <div style="display: inline;">
-                    <a href="/logout" class="btn btn-sm btn-outline-warning" role="button">Logout</a>
+                    <a href="/logout" class="btn btn-sm btn-outline-warning" role="button">로그아웃</a>
                 </div>
             </a>
             <a sec:authorize="!isAuthenticated()">

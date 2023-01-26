@@ -28,6 +28,10 @@
         padding-left: 3px;
     }
 
+    #profileImage {
+        display: none;
+    }
+
     </style>
 </head>
 
@@ -40,8 +44,9 @@
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <button onclick="location.href='/setting/userInfo'" type="button"  class="nav-link active" aria-current="page" style="width: 100%;">
+                <li class="nav-profileImage">
+                    <button onclick="location.href='/setting/userInfo'" type="button" class="nav-link active"
+                            aria-current="page" style="width: 100%;">
                         <a style="margin-right: 76px;">
                             내 정보 수정
                         </a>
@@ -49,7 +54,8 @@
                 </li>
                 <div th:if="${formUser == true}">
                     <li>
-                        <button onclick="location.href='/setting/userPassword'" type="button" class="nav-link text-white" style="width: 100%;">
+                        <button onclick="location.href='/setting/userPassword'" type="button"
+                                class="nav-link text-white" style="width: 100%;">
                             <a style="margin-right: 65px;">
                                 비밀 번호 변경
                             </a>
@@ -80,7 +86,8 @@
                     </div>
                 </li>
                 <li>
-                    <button onclick="location.href='/setting/withdrawal'" type="button" class="nav-link text-white" style="width: 100%;">
+                    <button onclick="location.href='/setting/withdrawal'" type="button" class="nav-link text-white"
+                            style="width: 100%;">
                         <a style="margin-right: 98px;">
                             회원 탈퇴
                         </a>
@@ -97,13 +104,13 @@
                     <strong>hyeminguri</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                    <li><a class="dropdown-item" href="/">게시판</a></li>
-                    <li><a class="dropdown-item" href="/board/write">글쓰기</a></li>
-                    <li><a class="dropdown-item" href="/setting/userInfo">마이 페이지</a></li>
+                    <li><a class="dropdown-profileImage" href="/">게시판</a></li>
+                    <li><a class="dropdown-profileImage" href="/board/write">글쓰기</a></li>
+                    <li><a class="dropdown-profileImage" href="/setting/userInfo">마이 페이지</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item" href="#">로그아웃</a></li>
+                    <li><a class="dropdown-profileImage" href="#">로그아웃</a></li>
                 </ul>
             </div>
         </div>
@@ -115,7 +122,34 @@
                 <h4 class="mb-3">내 정보 수정</h4>
                 <br>
 
-                <form th:action="@{/setting/userInfo}" method="post" th:object="${userInfoUpdateRequestDto}">
+                <form th:action="@{/setting/userInfo}" method="post" th:object="${userInfoUpdateRequestDto}"
+                      enctype="multipart/form-data">
+
+                    <div style="text-align:center; margin-bottom=15px;">
+<!--                        <div th:if="${profileImageStoreName == null}">-->
+<!--                            <img src="/image/defaultProfileImage.png" alt="" width="130" height="130"-->
+<!--                                 class="rounded-circle me-2" id="preview">-->
+<!--                        </div>-->
+
+<!--                        <div th:if="${profileImageStoreName != null}">-->
+<!--                            <img th:src="|/images/${profileImageStoreName}|" alt="" width="130" height="130"-->
+<!--                                 class="rounded-circle me-2" id="preview">-->
+<!--                        </div>-->
+
+
+                            <img th:src="|/images/${profileImageStoreName}|" alt="" width="130" height="130"
+                                 class="rounded-circle me-2" id="preview" onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
+
+                        <div style="margin-top: 7px;">
+                            <label for="profileImage">
+                                <div class="btn btn-sm btn-outline-secondary">프로필 사진 변경하기</div>
+                            </label>
+                            <input type="file" name="profileImage" id="profileImage" onchange="readURL(this);">
+                        </div>
+                    </div>
+
+                    <input type="hidden" class="form-control" th:field="*{id}" th:readonly="readonly">
+
                     <input type="hidden" class="form-control" th:field="*{provider}" th:readonly="readonly">
 
                     <div class="mb-3">
@@ -162,6 +196,20 @@
 </div>
 
 <div th:replace="fragments/settingFooter :: settingFooter"/>
+
+<script>
+      function readURL(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			document.getElementById('preview').src = e.target.result;
+		};
+		reader.readAsDataURL(input.files[0]);
+	} else {
+		document.getElementById('preview').src = "";
+	}
+}
+    </script>
 
 </body>
 </html>

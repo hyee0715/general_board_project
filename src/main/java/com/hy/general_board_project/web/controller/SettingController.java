@@ -1,17 +1,22 @@
 package com.hy.general_board_project.web.controller;
 
+import com.hy.general_board_project.domain.profileImage.ProfileImage;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.service.BoardService;
+import com.hy.general_board_project.service.FileStoreService;
 import com.hy.general_board_project.service.SettingService;
 import com.hy.general_board_project.service.UserService;
-import com.hy.general_board_project.validator.CheckNicknameValidator;
+import com.hy.general_board_project.validator.CheckNicknameModificationValidator;
 import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
 import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
 import com.hy.general_board_project.web.dto.message.MessageDto;
+import com.hy.general_board_project.web.dto.profileImage.ProfileImageDto;
 import com.hy.general_board_project.web.dto.user.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,6 +29,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -34,20 +41,26 @@ import java.util.regex.Pattern;
 public class SettingController {
 
     private final SettingService settingService;
-    private final CheckNicknameValidator checkNicknameValidator;
+    private final CheckNicknameModificationValidator checkNicknameModificationValidator;
     private final BoardService boardService;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final FileStoreService fileStoreService;
 
     @InitBinder
     public void validatorBinder(WebDataBinder binder) {
-        binder.addValidators(checkNicknameValidator);
+        binder.addValidators(checkNicknameModificationValidator);
     }
 
     @GetMapping("/setting/userInfo")
     public String moveToUserInfo(Model model) {
         UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.findUserInfo();
+
         model.addAttribute("userInfoUpdateRequestDto", userInfoUpdateRequestDto);
+
+        String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+
+        model.addAttribute("profileImageStoreName", profileImageStoreName);
 
         boolean isFormUser = settingService.isFormUser();
 
@@ -65,7 +78,7 @@ public class SettingController {
     }
 
     @PostMapping("/setting/userInfo")
-    public String UpdateUserInfo(@Validated @ModelAttribute UserInfoUpdateRequestDto userInfoUpdateRequestDto, BindingResult bindingResult, Model model) {
+    public String UpdateUserInfo(@Validated @ModelAttribute UserInfoUpdateRequestDto userInfoUpdateRequestDto, BindingResult bindingResult, Model model) throws IOException {
 
         if (!StringUtils.hasText(userInfoUpdateRequestDto.getNickname())) {
             bindingResult.rejectValue("nickname", "required", "");
@@ -85,8 +98,37 @@ public class SettingController {
         //해당 사용자의 모든 게시물 작성자 이름 수정
         boardService.updateBoardWriter(newUserNickname);
 
+        if(!userInfoUpdateRequestDto.getProfileImage().isEmpty()) {
+
+            //현재 사용자 프로필 사진 번호 가져와서 삭제하기
+
+            Long currentUserProfileImageId = settingService.getCurrentUserProfileImageId();
+            log.info("현재 사용자 프로필 사진 id 번호 = {}", currentUserProfileImageId);
+
+            userService.deleteProfileImage(userInfoUpdateRequestDto.getId());
+
+            if (currentUserProfileImageId != null) {
+                fileStoreService.deleteStoredFile(currentUserProfileImageId);
+                settingService.deleteProfileImage(currentUserProfileImageId);
+            }
+
+            //프로필 사진 수정
+            ProfileImageDto profileImageDto = fileStoreService.storeFile(userInfoUpdateRequestDto.getProfileImage());
+
+            ProfileImage profileImage = fileStoreService.save(profileImageDto);
+
+            settingService.updateUserProfileImage(userInfoUpdateRequestDto, profileImage);
+        }
+
         MessageDto message = new MessageDto("회원 정보 수정이 완료되었습니다.", "/setting/userInfo", RequestMethod.GET, null);
         return showMessageAndRedirect(message, model);
+    }
+
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource downloadImage(@PathVariable String filename) throws
+            MalformedURLException {
+        return new UrlResource("file:///" + fileStoreService.getFullPath(filename));
     }
 
     // 사용자에게 메시지를 전달하고, 페이지를 리다이렉트 한다.

@@ -3,6 +3,8 @@ package com.hy.general_board_project.service;
 import com.hy.general_board_project.config.auth.dto.SessionUser;
 import com.hy.general_board_project.domain.board.Board;
 import com.hy.general_board_project.domain.board.BoardRepository;
+import com.hy.general_board_project.domain.profileImage.ProfileImage;
+import com.hy.general_board_project.domain.profileImage.ProfileImageRepository;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
@@ -30,11 +32,11 @@ import java.util.Optional;
 @Service
 public class SettingService {
 
-//    private static final int PAGE_NUMBER_COUNT_OF_ONE_BLOCK = 8; // 한 블럭에 존재하는 페이지 번호 개수
     private static final int POST_COUNT_OF_ONE_PAGE = 10; // 한 페이지에 존재하는 게시글 수
 
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
+    private final ProfileImageRepository profileImageRepository;
     private final HttpSession httpSession;
 
     @Transactional
@@ -44,6 +46,13 @@ public class SettingService {
         user.updateNickname(userInfoUpdateRequestDto.getNickname());
 
         return userInfoUpdateRequestDto.getNickname();
+    }
+
+    @Transactional
+    public void updateUserProfileImage(UserInfoUpdateRequestDto userInfoUpdateRequestDto, ProfileImage profileImage) {
+        User user = findUserForInfoUpdate(userInfoUpdateRequestDto);
+
+        user.updateProfileImage(profileImage);
     }
 
     public User findUserForInfoUpdate(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
@@ -64,7 +73,7 @@ public class SettingService {
 
             User user = userEntity.get();
 
-            return new UserInfoUpdateRequestDto(user.getRealName(), user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider());
+            return new UserInfoUpdateRequestDto(user.getId(), user.getRealName(), user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider());
         }
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -80,7 +89,7 @@ public class SettingService {
 
         User user = userEntity.get();
 
-        return new UserInfoUpdateRequestDto(user.getRealName(), user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider());
+        return new UserInfoUpdateRequestDto(user.getId(), user.getRealName(), user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider());
     }
 
     @Transactional
@@ -227,5 +236,83 @@ public class SettingService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. email = " + email + " provider = " + provider));
 
         userRepository.delete(user);
+    }
+
+    public Long getCurrentUserProfileImageId() {
+        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+
+        if (sessionUser != null) {
+            Optional<User> userEntity = userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
+
+            User user = userEntity.get();
+
+            if (user.getProfileImage() == null) {
+                return null;
+            }
+
+            return user.getProfileImage().getId();
+        }
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (anonymousUserName.equals("anonymousUser")) {
+            return null;
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String username = userDetails.getUsername();
+        Optional<User> userEntity = userRepository.findByUsername(username);
+
+        User user = userEntity.get();
+
+        if (user.getProfileImage() == null) {
+            return null;
+        }
+
+        return user.getProfileImage().getId();
+    }
+
+    public String getCurrentUserProfileImageStoreName() {
+        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+
+        if (sessionUser != null) {
+            Optional<User> userEntity = userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
+
+            User user = userEntity.get();
+
+            if (user.getProfileImage() == null) {
+                return null;
+            }
+
+            return user.getProfileImage().getStoreName();
+        }
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (anonymousUserName.equals("anonymousUser")) {
+            return null;
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String username = userDetails.getUsername();
+        Optional<User> userEntity = userRepository.findByUsername(username);
+
+        User user = userEntity.get();
+
+        if (user.getProfileImage() == null) {
+            return null;
+        }
+
+        return user.getProfileImage().getStoreName();
+    }
+
+    @Transactional
+    public void deleteProfileImage(Long profileImageId) {
+        ProfileImage profileImage = profileImageRepository.findById(profileImageId)
+                .orElseThrow(() -> new IllegalArgumentException("프로필 사진이 존재하지 않습니다. id = " + profileImageId));
+
+        profileImageRepository.delete(profileImage);
     }
 }

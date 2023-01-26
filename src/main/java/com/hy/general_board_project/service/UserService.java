@@ -61,4 +61,11 @@ public class UserService {
 
         return new UserSignUpRequestDto(user.getRealName(), user.getUsername(), user.getNickname(), user.getPassword(), user.getEmail(), user.getRole(), user.getCertified());
     }
+
+    @Transactional
+    public void deleteProfileImage(Long userId) {
+        User user = userRepository.findById(userId).get();
+
+        user.updateProfileImage(null);
+    }
 }
