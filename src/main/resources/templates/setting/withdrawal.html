@@ -129,6 +129,7 @@
                     <form th:action="@{/setting/withdrawal/password}" method="post"
                           th:object="${formUserWithdrawRequestDto}"
                           novalidate>
+                        <input type="hidden" class="form-control" th:field="*{id}" th:readonly="readonly">
                         <input type="hidden" class="form-control" th:field="*{username}" th:readonly="readonly">
 
                         <div class="mb-3">
@@ -153,6 +154,7 @@
                     <form th:action="@{/setting/withdrawal/email}" method="post"
                           th:object="${socialUserWithdrawRequestDto}"
                           novalidate>
+                        <input type="hidden" class="form-control" th:field="*{id}" th:readonly="readonly">
                         <input type="hidden" class="form-control" th:field="*{email}" th:readonly="readonly">
                         <input type="hidden" class="form-control" th:field="*{provider}" th:readonly="readonly">
 

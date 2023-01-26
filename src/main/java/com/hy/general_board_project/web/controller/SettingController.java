@@ -357,6 +357,15 @@ public class SettingController {
             return "setting/withdrawal";
         }
 
+        Long currentUserProfileImageId = settingService.getCurrentUserProfileImageId();
+
+        userService.deleteProfileImage(formUserWithdrawRequestDto.getId());
+
+        if (currentUserProfileImageId != null) {
+            fileStoreService.deleteStoredFile(currentUserProfileImageId);
+            settingService.deleteProfileImage(currentUserProfileImageId);
+        }
+
         settingService.deleteByUsername(formUserWithdrawRequestDto.getUsername());
 
         MessageDto message = new MessageDto("회원 탈퇴가 완료되었습니다.", "/logout", RequestMethod.GET, null);
@@ -381,6 +390,15 @@ public class SettingController {
             model.addAttribute("formUser", false);
 
             return "setting/withdrawal";
+        }
+
+        Long currentUserProfileImageId = settingService.getCurrentUserProfileImageId();
+
+        userService.deleteProfileImage(socialUserWithdrawRequestDto.getId());
+
+        if (currentUserProfileImageId != null) {
+            fileStoreService.deleteStoredFile(currentUserProfileImageId);
+            settingService.deleteProfileImage(currentUserProfileImageId);
         }
 
         settingService.deleteByEmailAndProvider(socialUserWithdrawRequestDto.getEmail(), socialUserWithdrawRequestDto.getProvider());

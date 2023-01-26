@@ -3,7 +3,6 @@ package com.hy.general_board_project.web.dto.user;
 import com.hy.general_board_project.domain.user.User;
 import lombok.*;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
@@ -12,6 +11,8 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class FormUserWithdrawRequestDto implements UserDto {
 
+    private Long id;
+
     @NotBlank
     private String username;
 
@@ -19,7 +20,8 @@ public class FormUserWithdrawRequestDto implements UserDto {
     private String requestPassword;
 
     @Builder
-    public FormUserWithdrawRequestDto(String username, String requestPassword) {
+    public FormUserWithdrawRequestDto(Long id, String username, String requestPassword) {
+        this.id = id;
         this.username = username;
         this.requestPassword = requestPassword;
     }

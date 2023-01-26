@@ -3,7 +3,6 @@ package com.hy.general_board_project.web.dto.user;
 import com.hy.general_board_project.domain.user.User;
 import lombok.*;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
@@ -11,6 +10,8 @@ import javax.validation.constraints.NotBlank;
 @ToString
 @NoArgsConstructor
 public class SocialUserWithdrawRequestDto implements UserDto {
+
+    private Long id;
 
     @NotBlank
     private String email;
@@ -21,7 +22,8 @@ public class SocialUserWithdrawRequestDto implements UserDto {
     private String requestEmail;
 
     @Builder
-    public SocialUserWithdrawRequestDto(String email, String provider, String requestEmail) {
+    public SocialUserWithdrawRequestDto(Long id, String email, String provider, String requestEmail) {
+        this.id = id;
         this.email = email;
         this.provider = provider;
         this.requestEmail = requestEmail;

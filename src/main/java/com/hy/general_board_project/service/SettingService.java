@@ -205,7 +205,7 @@ public class SettingService {
 
         User user = userEntity.get();
 
-        return new FormUserWithdrawRequestDto(user.getUsername(), null);
+        return new FormUserWithdrawRequestDto(user.getId(), user.getUsername(), null);
     }
 
     public SocialUserWithdrawRequestDto findSocialUserInfoForWithdrawal() {
@@ -216,7 +216,7 @@ public class SettingService {
 
             User user = userEntity.get();
 
-            return new SocialUserWithdrawRequestDto(user.getEmail(), user.getProvider(), null);
+            return new SocialUserWithdrawRequestDto(user.getId(), user.getEmail(), user.getProvider(), null);
         }
 
         return null;
