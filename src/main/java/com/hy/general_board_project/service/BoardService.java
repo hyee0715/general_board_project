@@ -230,6 +230,10 @@ public class BoardService {
     public String getWriterProfileImageStoreName(User writer) {
         ProfileImage profileImage = writer.getProfileImage();
 
+        if (profileImage == null) {
+            return null;
+        }
+
         return profileImage.getStoreName();
     }
 }

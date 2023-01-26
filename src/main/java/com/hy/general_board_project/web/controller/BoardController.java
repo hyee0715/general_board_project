@@ -106,7 +106,10 @@ public class BoardController {
         User writer = userRepository.findById(writerId).get();
 
         String writerProfileImageStoreName = boardService.getWriterProfileImageStoreName(writer);
-        model.addAttribute("writerProfileImageStoreName", writerProfileImageStoreName);
+
+        if (writerProfileImageStoreName != null) {
+            model.addAttribute("writerProfileImageStoreName", writerProfileImageStoreName);
+        }
 
         return "board/detail";
     }
