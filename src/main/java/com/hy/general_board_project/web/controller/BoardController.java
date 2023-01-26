@@ -1,10 +1,10 @@
 package com.hy.general_board_project.web.controller;
 
 import com.hy.general_board_project.config.auth.dto.SessionUser;
-import com.hy.general_board_project.domain.board.Board;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.service.BoardService;
+import com.hy.general_board_project.service.SettingService;
 import com.hy.general_board_project.web.dto.board.BoardDetailResponseDto;
 import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
 import lombok.AllArgsConstructor;
@@ -31,6 +31,7 @@ public class BoardController {
     private final BoardService boardService;
     private final HttpSession httpSession;
     private final UserRepository userRepository;
+    private final SettingService settingService;
 
     @GetMapping("/write")
     public String write(Model model) {
@@ -45,6 +46,9 @@ public class BoardController {
             Long writerId = user.get().getId();
             model.addAttribute("writerId", writerId);
         }
+
+        String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+        model.addAttribute("profileImageStoreName", profileImageStoreName);
 
         return "board/write";
     }
@@ -93,6 +97,9 @@ public class BoardController {
             model.addAttribute("userId", userId);
         }
 
+        String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+        model.addAttribute("profileImageStoreName", profileImageStoreName);
+
         return "board/detail";
     }
 
@@ -102,6 +109,9 @@ public class BoardController {
 
         model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
         model.addAttribute("nickname", findUserNickname());
+
+        String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+        model.addAttribute("profileImageStoreName", profileImageStoreName);
 
         return "board/update";
     }
@@ -123,6 +133,9 @@ public class BoardController {
         model.addAttribute("curPage", pageNum);
         model.addAttribute("totalLastPageNum", totalLastPageNum);
         model.addAttribute("searchOption", searchOption);
+
+        String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+        model.addAttribute("profileImageStoreName", profileImageStoreName);
 
         return "board/search";
     }

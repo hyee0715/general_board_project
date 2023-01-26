@@ -27,6 +27,7 @@
         font-size: 12px;
         padding-left: 3px;
     }
+
     </style>
 </head>
 
@@ -82,7 +83,8 @@
                     </div>
                 </li>
                 <li>
-                    <button onclick="location.href='/setting/withdrawal'" type="button" class="nav-link text-white" style="width: 100%;">
+                    <button onclick="location.href='/setting/withdrawal'" type="button" class="nav-link text-white"
+                            style="width: 100%;">
                         <a style="margin-right: 98px;">
                             회원 탈퇴
                         </a>
@@ -94,9 +96,9 @@
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/hyee0715.png" alt="" width="32" height="32"
-                         class="rounded-circle me-2">
-                    <strong>hyeminguri</strong>
+                    <img th:src="|/images/${profileImageStoreName}|" alt="" width="32" height="32"
+                         class="rounded-circle me-2" onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
+                    <strong th:text="${nickname}">닉네임</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                     <li><a class="dropdown-item" href="/">게시판</a></li>
@@ -105,7 +107,7 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li><a class="dropdown-item" href="#">로그아웃</a></li>
+                    <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
                 </ul>
             </div>
         </div>
@@ -142,7 +144,8 @@
                             <tr th:each="board : ${boardList}">
                                 <td>
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${board.id}">
+                                        <input type="checkbox" name="chk" class="chk" onclick="chkClicked()"
+                                               th:value="${board.id}">
                                     </label>
                                 </td>
                                 <td th:text="${board.id}" style="text-align: center"></td>
@@ -350,6 +353,7 @@
             }
         }
     }
+
 </script>
 
 </body>

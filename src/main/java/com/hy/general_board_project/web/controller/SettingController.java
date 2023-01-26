@@ -154,6 +154,10 @@ public class SettingController {
         model.addAttribute("curPage", pageNum);
         model.addAttribute("totalLastPageNum", totalLastPageNum);
 
+        String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+        model.addAttribute("profileImageStoreName", profileImageStoreName);
+        model.addAttribute("nickname", writerNickname);
+
         boolean isFormUser = settingService.isFormUser();
 
         if (isFormUser) {
@@ -179,6 +183,12 @@ public class SettingController {
         UserPasswordUpdateRequestDto userPasswordUpdateRequestDto = userInfoUpdateRequestDto.convertToPasswordUpdateDto();
 
         model.addAttribute("userPasswordUpdateRequestDto", userPasswordUpdateRequestDto);
+
+        String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+        model.addAttribute("profileImageStoreName", profileImageStoreName);
+
+        String nickname = settingService.getUserNickname();
+        model.addAttribute("nickname", nickname);
 
         return "setting/userPassword";
     }
@@ -300,6 +310,12 @@ public class SettingController {
             FormUserWithdrawRequestDto formUserWithdrawRequestDto = settingService.findFormUserInfoForWithdrawal();
             model.addAttribute("formUserWithdrawRequestDto", formUserWithdrawRequestDto);
 
+            String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+            model.addAttribute("profileImageStoreName", profileImageStoreName);
+
+            String nickname = settingService.getUserNickname();
+            model.addAttribute("nickname", nickname);
+
             return "setting/withdrawal";
         }
 
@@ -307,6 +323,12 @@ public class SettingController {
 
         SocialUserWithdrawRequestDto socialUserWithdrawRequestDto = settingService.findSocialUserInfoForWithdrawal();
         model.addAttribute("socialUserWithdrawRequestDto", socialUserWithdrawRequestDto);
+
+        String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+        model.addAttribute("profileImageStoreName", profileImageStoreName);
+
+        String nickname = settingService.getUserNickname();
+        model.addAttribute("nickname", nickname);
 
         return "setting/withdrawal";
     }

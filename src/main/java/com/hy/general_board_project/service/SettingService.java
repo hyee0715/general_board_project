@@ -315,4 +315,31 @@ public class SettingService {
 
         profileImageRepository.delete(profileImage);
     }
+
+    public String getUserNickname() {
+        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+
+        if (sessionUser != null) {
+            Optional<User> userEntity = userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
+
+            User user = userEntity.get();
+
+            return user.getNickname();
+        }
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (anonymousUserName.equals("anonymousUser")) {
+            return null;
+        }
+
+        UserDetails userDetails = (UserDetails) principal;
+        String username = userDetails.getUsername();
+        Optional<User> userEntity = userRepository.findByUsername(username);
+
+        User user = userEntity.get();
+
+        return user.getNickname();
+    }
 }

@@ -4,6 +4,7 @@ import com.hy.general_board_project.config.auth.dto.SessionUser;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.service.BoardService;
+import com.hy.general_board_project.service.SettingService;
 import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class IndexController {
     private BoardService boardService;
     private final HttpSession httpSession;
     private final UserRepository userRepository;
+    private final SettingService settingService;
 
     @GetMapping({"/", "/board/list"})
     public String index(Model model, @RequestParam(value="page", defaultValue = "1") Integer pageNum) {
@@ -40,6 +42,9 @@ public class IndexController {
         model.addAttribute("pageList", pageList);
         model.addAttribute("curPage", pageNum);
         model.addAttribute("totalLastPageNum", totalLastPageNum);
+
+        String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+        model.addAttribute("profileImageStoreName", profileImageStoreName);
 
         return "index";
     }
