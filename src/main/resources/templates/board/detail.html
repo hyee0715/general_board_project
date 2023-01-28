@@ -15,7 +15,8 @@
                     <h2 class="mb-3" th:text="${boardDetailResponseDto.title}" style="font-size: 40px;">제목</h2>
                     <p class="fst-italic" style="margin-top:30px; font-size: 13px;">
                         <img th:src="|/images/${writerProfileImageStoreName}|" alt="" width="32" height="32"
-                             class="rounded-circle" onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
+                             class="rounded-circle"
+                             onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
                         <a th:text="${boardDetailResponseDto.writer}">작성자</a>
                         / 작성일 <a
                             th:text="${boardDetailResponseDto.createdDate} ? ${#temporals.format(boardDetailResponseDto.createdDate,'yyyy-MM-dd HH:mm')} : ${boardDetailResponseDto.createdDate}">작성일</a>
@@ -25,17 +26,19 @@
                     </p>
                 </div>
 
-                <p th:text="${boardDetailResponseDto.content}" style="font-size: 25px;">본문</p>
+                <p th:text="${boardDetailResponseDto.content}" style="font-size: 20px; margin-top: 20px;">본문</p>
 
-                <p class="col-md-8 fs-4">
+                <p class="border-bottom" style="margin-top: 100px;">
                 <div class="starter-template">
                     <!-- 수정/삭제 -->
-                    <div th:if="${boardDetailResponseDto.writer == nickname && boardDetailResponseDto.writerId == userId}" style="display: inline-block">
+                    <div th:if="${boardDetailResponseDto.writer == nickname && boardDetailResponseDto.writerId == userId}"
+                         style="display: inline-block">
                         <a th:href="@{'/board/detail/update/' + ${boardDetailResponseDto.id}}">
                             <button class="btn btn-outline-primary">수정</button>
                         </a>
                     </div>
-                    <div th:if="${boardDetailResponseDto.writer == nickname && boardDetailResponseDto.writerId == userId}" style="display: inline-block">
+                    <div th:if="${boardDetailResponseDto.writer == nickname && boardDetailResponseDto.writerId == userId}"
+                         style="display: inline-block">
                         <form>
                             <input type="hidden" name="id" id="id" th:value="${boardDetailResponseDto.id}"/>
                             <button type="button" class="btn btn-outline-danger" id="btn-delete">삭제</button>
