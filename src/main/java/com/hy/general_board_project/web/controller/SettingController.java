@@ -288,10 +288,24 @@ public class SettingController {
             }
 
             model.addAttribute("formUser", true);
+
+            String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+            model.addAttribute("profileImageStoreName", profileImageStoreName);
+
+            String nickname = settingService.getUserNickname();
+            model.addAttribute("nickname", nickname);
+
             return "setting/search";
         }
 
         model.addAttribute("formUser", false);
+
+        String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+        model.addAttribute("profileImageStoreName", profileImageStoreName);
+
+        String nickname = settingService.getUserNickname();
+        model.addAttribute("nickname", nickname);
+
         return "setting/search";
     }
 
