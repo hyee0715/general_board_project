@@ -39,7 +39,6 @@ public class BoardDetailResponseDto {
                 .id(board.getId())
                 .title(board.getTitle())
                 .writer(board.getWriter())
-                .profileImage(board.getProfileImage())
                 .content(board.getContent())
                 .createdDate(board.getCreatedDate())
                 .modifiedDate(board.getModifiedDate())
