@@ -55,11 +55,9 @@ public class SettingController {
     @GetMapping("/setting/userInfo")
     public String moveToUserInfo(Model model) {
         UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.findUserInfo();
-
         model.addAttribute("userInfoUpdateRequestDto", userInfoUpdateRequestDto);
 
         String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
-
         model.addAttribute("profileImageStoreName", profileImageStoreName);
 
         boolean isFormUser = settingService.isFormUser();
@@ -98,12 +96,9 @@ public class SettingController {
         //해당 사용자의 모든 게시물 작성자 이름 수정
         boardService.updateBoardWriter(newUserNickname);
 
-        if(!userInfoUpdateRequestDto.getProfileImage().isEmpty()) {
-
-            //현재 사용자 프로필 사진 번호 가져와서 삭제하기
-
+        //프로필 사진 설정 되어 있는 상태에서 기본 프로필 사진으로 돌아가는 경우
+        if (userInfoUpdateRequestDto.getProfileImageId() != null && userInfoUpdateRequestDto.getProfileImageId() == -1) {
             Long currentUserProfileImageId = settingService.getCurrentUserProfileImageId();
-            log.info("현재 사용자 프로필 사진 id 번호 = {}", currentUserProfileImageId);
 
             userService.deleteProfileImage(userInfoUpdateRequestDto.getId());
 
@@ -112,9 +107,23 @@ public class SettingController {
                 settingService.deleteProfileImage(currentUserProfileImageId);
             }
 
-            //프로필 사진 수정
-            ProfileImageDto profileImageDto = fileStoreService.storeFile(userInfoUpdateRequestDto.getProfileImage());
+            MessageDto message = new MessageDto("회원 정보 수정이 완료되었습니다.", "/setting/userInfo", RequestMethod.GET, null);
+            return showMessageAndRedirect(message, model);
+        }
 
+        //프로필 사진 설정 되어 있는 상태에서 다른 사진으로 변경하는 경우
+        if(!userInfoUpdateRequestDto.getProfileImage().isEmpty()) {
+            Long currentUserProfileImageId = settingService.getCurrentUserProfileImageId();
+
+            userService.deleteProfileImage(userInfoUpdateRequestDto.getId());
+
+            if (currentUserProfileImageId != null) {
+                fileStoreService.deleteStoredFile(currentUserProfileImageId);
+                settingService.deleteProfileImage(currentUserProfileImageId);
+            }
+
+            //새 프로필 사진 저장
+            ProfileImageDto profileImageDto = fileStoreService.storeFile(userInfoUpdateRequestDto.getProfileImage());
             ProfileImage profileImage = fileStoreService.save(profileImageDto);
 
             settingService.updateUserProfileImage(userInfoUpdateRequestDto, profileImage);

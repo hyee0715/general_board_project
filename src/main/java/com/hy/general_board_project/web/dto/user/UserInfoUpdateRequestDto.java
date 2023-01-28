@@ -32,14 +32,17 @@ public class UserInfoUpdateRequestDto implements UserDto {
 
     private MultipartFile profileImage;
 
+    private Long profileImageId;
+
     @Builder
-    public UserInfoUpdateRequestDto(Long id, String realName, String username, String nickname, String email, String provider) {
+    public UserInfoUpdateRequestDto(Long id, String realName, String username, String nickname, String email, String provider, Long profileImageId) {
         this.id = id;
         this.realName = realName;
         this.username = username;
         this.nickname = nickname;
         this.email = email;
         this.provider = provider;
+        this.profileImageId = profileImageId;
     }
 
     public User toEntity() {
