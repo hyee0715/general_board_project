@@ -18,7 +18,7 @@ public class CheckNicknameModificationValidator extends AbstractValidator<UserDt
     @Override
     protected void doValidate(UserDto userDto, Errors errors) {
 
-        UserInfoUpdateRequestDto currentUserInfo = settingService.findUserInfo();
+        UserInfoUpdateRequestDto currentUserInfo = settingService.getCurrentUserInfoUpdateRequestDto();
         String currentUserInfoNickname = currentUserInfo.getNickname();
 
         if (!currentUserInfoNickname.equals(userDto.toEntity().getNickname()) && userRepository.existsByNickname(userDto.toEntity().getNickname())) {

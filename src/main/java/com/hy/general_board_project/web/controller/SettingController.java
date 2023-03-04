@@ -54,7 +54,7 @@ public class SettingController {
 
     @GetMapping("/setting/userInfo")
     public String moveToUserInfo(Model model) {
-        UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.findUserInfo();
+        UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.getCurrentUserInfoUpdateRequestDto();
         model.addAttribute("userInfoUpdateRequestDto", userInfoUpdateRequestDto);
 
         String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
@@ -148,11 +148,11 @@ public class SettingController {
 
     @GetMapping("/setting/userList")
     public String moveToUserList(Model model, @RequestParam(value = "page", defaultValue = "1") int pageNum) {
-        String writerNickname = settingService.findUserInfo().getNickname();
+        String writerNickname = settingService.getCurrentUserInfoUpdateRequestDto().getNickname();
 
         Long writerId = userRepository.findByNickname(writerNickname).get().getId();
 
-        List<BoardListResponseDto> userOwnBoardList = settingService.getUserOwnBoardList(writerId, pageNum);
+        List<BoardListResponseDto> userOwnBoardList = settingService.getUserBoardListResponseDto(writerId, pageNum);
 
         Integer totalLastPageNum = settingService.getTotalLastPageNum(writerId);
 
@@ -188,7 +188,7 @@ public class SettingController {
             return "redirect:/user/emailCertified";
         }
 
-        UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.findUserInfo();
+        UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.getCurrentUserInfoUpdateRequestDto();
         UserPasswordUpdateRequestDto userPasswordUpdateRequestDto = userInfoUpdateRequestDto.convertToPasswordUpdateDto();
 
         model.addAttribute("userPasswordUpdateRequestDto", userPasswordUpdateRequestDto);
@@ -261,7 +261,7 @@ public class SettingController {
 
     @GetMapping("/setting/userList/search")
     public String search(@RequestParam(value = "keyword") String keyword, Model model, @RequestParam(value = "searchOption", required = false) String searchOption, @RequestParam(value = "page", defaultValue = "1") int pageNum) {
-        String writerNickname = settingService.findUserInfo().getNickname();
+        String writerNickname = settingService.getCurrentUserInfoUpdateRequestDto().getNickname();
 
         Long writerId = userRepository.findByNickname(writerNickname).get().getId();
 

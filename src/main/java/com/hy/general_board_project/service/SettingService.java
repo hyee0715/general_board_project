@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class SettingService {
 
     @Transactional
     public String updateUserNickname(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
-        User user = findUserForInfoUpdate(userInfoUpdateRequestDto);
+        User user = getUserByUserInfoUpdateRequestDto(userInfoUpdateRequestDto);
 
         user.updateNickname(userInfoUpdateRequestDto.getNickname());
 
@@ -50,12 +51,13 @@ public class SettingService {
 
     @Transactional
     public void updateUserProfileImage(UserInfoUpdateRequestDto userInfoUpdateRequestDto, ProfileImage profileImage) {
-        User user = findUserForInfoUpdate(userInfoUpdateRequestDto);
+        User user = getUserByUserInfoUpdateRequestDto(userInfoUpdateRequestDto);
 
         user.updateProfileImage(profileImage);
     }
 
-    public User findUserForInfoUpdate(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
+    @Transactional
+    public User getUserByUserInfoUpdateRequestDto(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
         Optional<User> user = userRepository.findByEmailAndProvider(userInfoUpdateRequestDto.getEmail(), userInfoUpdateRequestDto.getProvider());
 
         if (userInfoUpdateRequestDto.getProvider().isEmpty()) {
@@ -65,39 +67,10 @@ public class SettingService {
         return user.get();
     }
 
-    public UserInfoUpdateRequestDto findUserInfo() {
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+    public UserInfoUpdateRequestDto getCurrentUserInfoUpdateRequestDto() {
+        User user = getCurrentUser();
 
-        if (sessionUser != null) {
-            Optional<User> userEntity = userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
-
-            User user = userEntity.get();
-
-            if (user.getProfileImage() != null) {
-                return new UserInfoUpdateRequestDto(user.getId(), user.getRealName(), user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider(), user.getProfileImage().getId());
-            }
-
-            return new UserInfoUpdateRequestDto(user.getId(), user.getRealName(), user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider(), null);
-        }
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        if (anonymousUserName.equals("anonymousUser")) {
-            return null;
-        }
-
-        UserDetails userDetails = (UserDetails) principal;
-        String username = userDetails.getUsername();
-        Optional<User> userEntity = userRepository.findByUsername(username);
-
-        User user = userEntity.get();
-
-        if (user.getProfileImage() != null) {
-            return new UserInfoUpdateRequestDto(user.getId(), user.getRealName(), user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider(), user.getProfileImage().getId());
-        }
-
-        return new UserInfoUpdateRequestDto(user.getId(), user.getRealName(), user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider(), null);
+        return makeUserInfoUpdateRequestDto(user);
     }
 
     @Transactional
@@ -108,6 +81,13 @@ public class SettingService {
         return userRepository.save(user.get());
     }
 
+    /***
+     * 현재 접속한 유저가 Form을 통해 로그인 한 유저인지
+     * 소셜 로그인 한 유저인지 확인
+     *
+     * @return true : Form 로그인 유저
+     *         false : 소셜 로그인 유저
+     */
     public boolean isFormUser() {
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
@@ -118,22 +98,70 @@ public class SettingService {
         return false;
     }
 
+    public User getCurrentUser() {
+        if (!isFormUser()) {
+            return getUserForSocialUser().get();
+        }
+
+        UserDetails userDetails = getUserDetailsForFormUser();
+        if (userDetails == null) {
+            return null;
+        }
+
+        return getUserByUserDetailsForFormUser(userDetails).get();
+    }
+
     @Transactional
-    public List<BoardListResponseDto> getUserOwnBoardList(Long writerId, int pageNum) {
-        PageRequest pageRequest = PageRequest.of(
-                pageNum - 1, POST_COUNT_OF_ONE_PAGE, Sort.by(Sort.Direction.DESC, "createdDate"));
+    Optional<User> getUserForSocialUser() {
+        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
 
-        List<Board> userBoardList = boardRepository.findByWriterId(writerId, pageRequest);
+        return userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
+    }
 
-        List<BoardListResponseDto> userBoardDtoList = new ArrayList<>();
+    UserDetails getUserDetailsForFormUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        if (userBoardList.isEmpty()) return userBoardDtoList;
+        if (anonymousUserName.equals("anonymousUser")) {
+            return null;
+        }
 
-        userBoardList.stream()
+        return (UserDetails) principal;
+    }
+
+    @Transactional
+    Optional<User> getUserByUserDetailsForFormUser(UserDetails userDetails) {
+        String username = userDetails.getUsername();
+
+        return userRepository.findByUsername(username);
+    }
+
+    UserInfoUpdateRequestDto makeUserInfoUpdateRequestDto(User user) {
+        if (user.getProfileImage() != null) {
+            return new UserInfoUpdateRequestDto(user.getId(), user.getRealName(), user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider(), user.getProfileImage().getId());
+        }
+
+        return new UserInfoUpdateRequestDto(user.getId(), user.getRealName(), user.getUsername(), user.getNickname(), user.getEmail(), user.getProvider(), null);
+    }
+
+    @Transactional
+    public List<Board> getUserBoardList(Long writerId, int pageNum) {
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, POST_COUNT_OF_ONE_PAGE, Sort.by(Sort.Direction.DESC, "createdDate"));
+
+        return boardRepository.findByWriterId(writerId, pageRequest);
+    }
+
+    @Transactional
+    public List<BoardListResponseDto> getUserBoardListResponseDto(Long writerId, int pageNum) {
+        List<Board> userBoardList = getUserBoardList(writerId, pageNum);
+
+        if (userBoardList.isEmpty()) {
+            return new ArrayList<BoardListResponseDto>();
+        }
+
+        return userBoardList.stream()
                 .map(BoardListResponseDto::convertBoardEntityToBoardListResponseDto)
-                .forEach(userBoardDtoList::add);
-
-        return userBoardDtoList;
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -154,80 +182,66 @@ public class SettingService {
 
     @Transactional
     public List<BoardSearchResponseDto> search(Long writerId, String keyword, int pageNum, String searchOption) {
-        List<Board> boardSearchList = makeUserOwnBoardSearchList(writerId, keyword, pageNum, searchOption);
+        List<Board> boardSearchList = searchPostsUsingSort(writerId, keyword, pageNum, searchOption);
 
-        List<BoardSearchResponseDto> boardSearchDtoList = new ArrayList<>();
+        if (boardSearchList.isEmpty()) {
+            return new ArrayList<BoardSearchResponseDto>();
+        }
 
-        if (boardSearchList.isEmpty())
-            return boardSearchDtoList;
-
-        boardSearchList.stream()
+        return boardSearchList.stream()
                 .map(BoardSearchResponseDto::convertBoardEntityToBoardSearchResponseDto)
-                .forEach(boardSearchDtoList::add);
-
-        return boardSearchDtoList;
+                .collect(Collectors.toList());
     }
 
     @Transactional
-    public List<Board> makeUserOwnBoardSearchList(Long writerId, String keyword, int pageNum, String searchOption) {
-        PageRequest pageRequest = PageRequest.of(
-                pageNum - 1, POST_COUNT_OF_ONE_PAGE, Sort.by(Sort.Direction.DESC, "createdDate"));
+    public List<Board> searchPostsUsingSort(Long writerId, String keyword, int pageNum, String searchOption) {
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, POST_COUNT_OF_ONE_PAGE, Sort.by(Sort.Direction.DESC, "createdDate"));
 
         if (searchOption.equals("title")) {
             return boardRepository.findByWriterIdAndTitleOptionContaining(writerId, keyword, pageRequest);
-        } else if (searchOption.equals("content")) {
+        }
+
+        if (searchOption.equals("content")) {
             return boardRepository.findByWriterIdAndContentOptionContaining(writerId, keyword, pageRequest);
         }
 
         return boardRepository.findByWriterIdAndTitleOptionOrContentOptionContaining(writerId, keyword, pageRequest);
     }
 
-    public int getSearchPostTotalCount(Long writerId, String keyword, String searchOption) {
-        List<Board> boardEntities;
-
+    @Transactional
+    public List<Board> searchPosts(Long writerId, String keyword, String searchOption) {
         if (searchOption.equals("title")) {
-            boardEntities = boardRepository.findByWriterIdAndTitleOptionContaining(writerId, keyword);
-        } else if (searchOption.equals("content")) {
-            boardEntities = boardRepository.findByWriterIdAndContentOptionContaining(writerId, keyword);
-        } else {
-            boardEntities = boardRepository.findByWriterIdAndTitleOptionOrContentOptionContaining(writerId, keyword);
+            return boardRepository.findByWriterIdAndTitleOptionContaining(writerId, keyword);
         }
 
-        if (boardEntities.isEmpty())
+        if (searchOption.equals("content")) {
+            return boardRepository.findByWriterIdAndContentOptionContaining(writerId, keyword);
+        }
+
+        return boardRepository.findByWriterIdAndTitleOptionOrContentOptionContaining(writerId, keyword);
+    }
+
+    public int getSearchPostTotalCount(Long writerId, String keyword, String searchOption) {
+        List<Board> boardEntities = searchPosts(writerId, keyword, searchOption);
+
+        if (boardEntities.isEmpty()) {
             return 0;
+        }
 
         return boardEntities.size();
     }
 
     public FormUserWithdrawRequestDto findFormUserInfoForWithdrawal() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        if (anonymousUserName.equals("anonymousUser")) {
-            return null;
-        }
-
-        UserDetails userDetails = (UserDetails) principal;
-        String username = userDetails.getUsername();
-        Optional<User> userEntity = userRepository.findByUsername(username);
-
-        User user = userEntity.get();
+        UserDetails userDetails = getUserDetailsForFormUser();
+        User user = getUserByUserDetailsForFormUser(userDetails).get();
 
         return new FormUserWithdrawRequestDto(user.getId(), user.getUsername(), null);
     }
 
     public SocialUserWithdrawRequestDto findSocialUserInfoForWithdrawal() {
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+        User user = getUserForSocialUser().get();
 
-        if (sessionUser != null) {
-            Optional<User> userEntity = userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
-
-            User user = userEntity.get();
-
-            return new SocialUserWithdrawRequestDto(user.getId(), user.getEmail(), user.getProvider(), null);
-        }
-
-        return null;
+        return new SocialUserWithdrawRequestDto(user.getId(), user.getEmail(), user.getProvider(), null);
     }
 
     @Transactional
@@ -247,33 +261,12 @@ public class SettingService {
     }
 
     public Long getCurrentUserProfileImageId() {
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
+        User user = getCurrentUser();
 
-        if (sessionUser != null) {
-            Optional<User> userEntity = userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
+        return getProfileImageIdByUser(user);
+    }
 
-            User user = userEntity.get();
-
-            if (user.getProfileImage() == null) {
-                return null;
-            }
-
-            return user.getProfileImage().getId();
-        }
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        if (anonymousUserName.equals("anonymousUser")) {
-            return null;
-        }
-
-        UserDetails userDetails = (UserDetails) principal;
-        String username = userDetails.getUsername();
-        Optional<User> userEntity = userRepository.findByUsername(username);
-
-        User user = userEntity.get();
-
+    public Long getProfileImageIdByUser(User user) {
         if (user.getProfileImage() == null) {
             return null;
         }
@@ -281,39 +274,22 @@ public class SettingService {
         return user.getProfileImage().getId();
     }
 
-    public String getCurrentUserProfileImageStoreName() {
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-
-        if (sessionUser != null) {
-            Optional<User> userEntity = userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
-
-            User user = userEntity.get();
-
-            if (user.getProfileImage() == null) {
-                return null;
-            }
-
-            return user.getProfileImage().getStoreName();
-        }
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        if (anonymousUserName.equals("anonymousUser")) {
-            return null;
-        }
-
-        UserDetails userDetails = (UserDetails) principal;
-        String username = userDetails.getUsername();
-        Optional<User> userEntity = userRepository.findByUsername(username);
-
-        User user = userEntity.get();
-
+    public String getUserProfileImageStoreNameByUser(User user) {
         if (user.getProfileImage() == null) {
             return null;
         }
 
         return user.getProfileImage().getStoreName();
+    }
+
+    public String getCurrentUserProfileImageStoreName() {
+        User user = getCurrentUser();
+
+        if (user == null) {
+            return null;
+        }
+
+        return getUserProfileImageStoreNameByUser(user);
     }
 
     @Transactional
@@ -325,28 +301,7 @@ public class SettingService {
     }
 
     public String getUserNickname() {
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-
-        if (sessionUser != null) {
-            Optional<User> userEntity = userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
-
-            User user = userEntity.get();
-
-            return user.getNickname();
-        }
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        if (anonymousUserName.equals("anonymousUser")) {
-            return null;
-        }
-
-        UserDetails userDetails = (UserDetails) principal;
-        String username = userDetails.getUsername();
-        Optional<User> userEntity = userRepository.findByUsername(username);
-
-        User user = userEntity.get();
+        User user = getCurrentUser();
 
         return user.getNickname();
     }
