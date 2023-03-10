@@ -33,7 +33,7 @@ public class IndexController {
     public String index(Model model, @RequestParam(value="page", defaultValue = "1") Integer pageNum) {
         List<BoardListResponseDto> boardList = boardService.getBoardList(pageNum);
 
-        Integer totalLastPageNum = boardService.getTotalLastPageNum();
+        int totalLastPageNum = boardService.getTotalLastPageNum();
 
         List<Integer> pageList = boardService.getPageList(pageNum, totalLastPageNum);
 

@@ -44,11 +44,9 @@ public class BoardService {
 
         List<Board> boardList = page.getContent();
 
-        List<BoardListResponseDto> boardDtoList = boardList.stream()
+        return boardList.stream()
                 .map(BoardListResponseDto::convertBoardEntityToBoardListResponseDto)
                 .collect(Collectors.toList());
-
-        return boardDtoList;
     }
 
     @Transactional
@@ -56,9 +54,7 @@ public class BoardService {
         Optional<Board> boardWrapper = boardRepository.findById(id);
         Board board = boardWrapper.get();
 
-        BoardDetailResponseDto boardDetailResponseDto = BoardDetailResponseDto.convertBoardEntityToBoardDetailResponseDto(board);
-
-        return boardDetailResponseDto;
+        return BoardDetailResponseDto.convertBoardEntityToBoardDetailResponseDto(board);
     }
 
     @Transactional
@@ -80,10 +76,7 @@ public class BoardService {
     }
 
     @Transactional
-    public List<Board> makeBoardSearchList(String keyword, int pageNum, String searchOption) {
-        PageRequest pageRequest = PageRequest.of(
-                pageNum - 1, POST_COUNT_OF_ONE_PAGE, Sort.by(Sort.Direction.DESC, "createdDate"));
-
+    public List<Board> getPostsWithSearchOptionAndPageRequest(String keyword, String searchOption, PageRequest pageRequest) {
         if (searchOption.equals("title")) {
             return boardRepository.findByTitleContaining(keyword, pageRequest);
         }
@@ -100,21 +93,26 @@ public class BoardService {
     }
 
     @Transactional
+    public List<Board> searchPostsUsingSort(String keyword, int pageNum, String searchOption) {
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, POST_COUNT_OF_ONE_PAGE, Sort.by(Sort.Direction.DESC, "createdDate"));
+
+        return getPostsWithSearchOptionAndPageRequest(keyword, searchOption, pageRequest);
+    }
+
+    @Transactional
     public Long getBoardCount() {
         return boardRepository.count();
     }
 
     /***
-     *
      * @return 총 게시물의 마지막 페이지 번호
      */
-    public Integer getTotalLastPageNum() {
+    public int getTotalLastPageNum() {
         Double postsTotalCount = Double.valueOf(this.getBoardCount());
 
         // 총 게시글의 마지막 페이지 번호 계산 (올림으로 계산)
-        Integer totalLastPageNum = (int) (Math.ceil((postsTotalCount / POST_COUNT_OF_ONE_PAGE)));
 
-        return totalLastPageNum;
+        return (int) (Math.ceil((postsTotalCount / POST_COUNT_OF_ONE_PAGE)));
     }
 
     public List<Integer> getPageList(int curPageNum, int totalLastPageNum) {
@@ -144,11 +142,10 @@ public class BoardService {
         }
 
         int calculatedCurrentLastPageNumber = curPageNum + PAGE_NUMBER_HALF_COUNT_OF_ONE_BLOCK;
-        //현재 페이지에 띄울 마지막 페이지 번호가 총 페이지 번호를 넘지 않는다면 업데이트
-        if (calculatedCurrentLastPageNumber < totalLastPageNum) {
+
+        if (calculatedCurrentLastPageNumber < totalLastPageNum) { //현재 페이지에 띄울 마지막 페이지 번호가 총 페이지 번호를 넘지 않는다면 업데이트
             return calculatedCurrentLastPageNumber;
         }
-
         return totalLastPageNum;
     }
 
@@ -167,42 +164,48 @@ public class BoardService {
 
     @Transactional
     public List<BoardSearchResponseDto> search(String keyword, int pageNum, String searchOption) {
-        List<Board> boardSearchList = makeBoardSearchList(keyword, pageNum, searchOption);
+        List<Board> boardSearchList = searchPostsUsingSort(keyword, pageNum, searchOption);
 
-        List<BoardSearchResponseDto> boardSearchDtoList = new ArrayList<>();
+        if (boardSearchList.isEmpty()) {
+            return new ArrayList<BoardSearchResponseDto>();
+        }
 
-        if (boardSearchList.isEmpty()) return boardSearchDtoList;
-
-        boardSearchList.stream()
+        return boardSearchList.stream()
                 .map(BoardSearchResponseDto::convertBoardEntityToBoardSearchResponseDto)
-                .forEach(boardSearchDtoList::add);
+                .collect(Collectors.toList());
+    }
 
-        return boardSearchDtoList;
+    @Transactional
+    public List<Board> searchPostsWithSearchOption(String keyword, String searchOption) {
+        if (searchOption.equals("title")) {
+            return boardRepository.findByTitleContaining(keyword);
+        }
+
+        if (searchOption.equals("content")) {
+            return boardRepository.findByContentContaining(keyword);
+        }
+
+        if (searchOption.equals("writer")) {
+            return boardRepository.findByWriterContaining(keyword);
+        }
+
+        return boardRepository.findByAllOptionContaining(keyword);
     }
 
     public int getSearchPostTotalCount(String keyword, String searchOption) {
-        List<Board> boardEntities;
+        List<Board> boardEntities = searchPostsWithSearchOption(keyword, searchOption);
 
-        if (searchOption.equals("title")) {
-            boardEntities = boardRepository.findByTitleContaining(keyword);
-        } else if (searchOption.equals("content")) {
-            boardEntities = boardRepository.findByContentContaining(keyword);
-        } else if (searchOption.equals("writer")) {
-            boardEntities = boardRepository.findByWriterContaining(keyword);
-        } else {
-            boardEntities = boardRepository.findByAllOptionContaining(keyword);
+        if (boardEntities.isEmpty()) {
+            return 0;
         }
 
-        if (boardEntities.isEmpty()) return 0;
         return boardEntities.size();
     }
 
-    public Integer getTotalLastSearchPageNum(Integer searchPostTotalCount) {
+    public int getTotalLastSearchPageNum(Integer searchPostTotalCount) {
         Double postsTotalCount = Double.valueOf(searchPostTotalCount);
 
-        Integer totalLastSearchPageNum = (int) (Math.ceil((postsTotalCount / POST_COUNT_OF_ONE_PAGE)));
-
-        return totalLastSearchPageNum;
+        return (int) (Math.ceil((postsTotalCount / POST_COUNT_OF_ONE_PAGE)));
     }
 
     @Transactional
@@ -220,11 +223,6 @@ public class BoardService {
     @Transactional
     public Integer updateView(Long id) {
         return boardRepository.updateView(id);
-    }
-
-    @Transactional
-    public Board getBoard(Long id) {
-        return boardRepository.findById(id).get();
     }
 
     public String getWriterProfileImageStoreName(User writer) {

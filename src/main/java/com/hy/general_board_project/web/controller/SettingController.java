@@ -154,7 +154,7 @@ public class SettingController {
 
         List<BoardListResponseDto> userOwnBoardList = settingService.getUserBoardListResponseDto(writerId, pageNum);
 
-        Integer totalLastPageNum = settingService.getTotalLastPageNum(writerId);
+        int totalLastPageNum = settingService.getTotalLastPageNum(writerId);
 
         List<Integer> pageList = boardService.getPageList(pageNum, totalLastPageNum);
 

@@ -171,13 +171,12 @@ public class SettingService {
         return (long) userBoardList.size();
     }
 
-    public Integer getTotalLastPageNum(Long writerId) {
+    public int getTotalLastPageNum(Long writerId) {
         Double postsTotalCount = Double.valueOf(this.getUserOwnBoardListCount(writerId));
 
         // 총 게시글의 마지막 페이지 번호 계산 (올림으로 계산)
-        Integer totalLastPageNum = (int) (Math.ceil((postsTotalCount / POST_COUNT_OF_ONE_PAGE)));
 
-        return totalLastPageNum;
+        return (int) (Math.ceil((postsTotalCount / POST_COUNT_OF_ONE_PAGE)));
     }
 
     @Transactional
