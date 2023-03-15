@@ -6,7 +6,6 @@ import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final SettingService settingService;
 
     @Transactional
     public Long joinUser(UserSignUpRequestDto userSignUpRequestDto) {
@@ -46,18 +46,12 @@ public class UserService {
     }
 
     public UserSignUpRequestDto getEmailCertifiedInfo() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        if (anonymousUserName.equals("anonymousUser")) {
+        UserDetails userDetails = settingService.getUserDetailsForFormUser();
+        if (userDetails == null) {
             return null;
         }
 
-        UserDetails userDetails = (UserDetails) principal;
-        String username = userDetails.getUsername();
-        Optional<User> userEntity = userRepository.findByUsername(username);
-
-        User user = userEntity.get();
+        User user = settingService.getUserByUserDetailsForFormUser(userDetails).get();
 
         return new UserSignUpRequestDto(user.getRealName(), user.getUsername(), user.getNickname(), user.getPassword(), user.getEmail(), user.getRole(), user.getCertified());
     }
