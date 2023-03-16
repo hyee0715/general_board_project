@@ -23,11 +23,7 @@ public class UserFindService {
     public boolean existsUserByRealNameAndEmail(String realName, String email) {
         Optional<User> user = userRepository.findByEmailAndProvider(email, null);
 
-        if (user.isEmpty()) {
-            return false;
-        }
-
-        if (!user.get().getRealName().equals(realName)) {
+        if (user.isEmpty() || !user.get().getRealName().equals(realName)) {
             return false;
         }
 
@@ -49,38 +45,35 @@ public class UserFindService {
     public boolean existsUserByRealNameAndUsernameAndEmail(String realName, String username, String email) {
         Optional<User> user = userRepository.findByEmailAndProvider(email, null);
 
-        if (user.isEmpty()) {
-            return false;
-        }
-
-        if (!user.get().getRealName().equals(realName)) {
-            return false;
-        }
-
-        if (!user.get().getUsername().equals(username)) {
+        if (user.isEmpty() || !user.get().getRealName().equals(realName) || !user.get().getUsername().equals(username)) {
             return false;
         }
 
         return true;
     }
 
-    public String makeTempPassword() {
+    public String makeRandomCharacters() {
         Random random = new Random();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
-        do {
-            sb.setLength(0);
-            int num = 0;
-
-            while (sb.length() < 18) {
-                num = random.nextInt(90) + 33;
-                if ((num >= 33 && num <= 46) || (num >= 48 && num <= 57) || (num >= 65 && num <= 90) || (num >= 97 && num <= 122)) {
-                    sb.append((char) num);
-                }
+        while (sb.length() < 18) {
+            int num = random.nextInt(90) + 33;
+            if ((num >= 33 && num <= 46) || (num >= 48 && num <= 57) || (num >= 65 && num <= 90) || (num >= 97 && num <= 122)) {
+                sb.append((char) num);
             }
-        } while (!validatePasswordFormat(sb.toString()));
+        }
 
         return sb.toString();
+    }
+
+    public String makeTempPassword() {
+        String tempPassword;
+
+        do {
+            tempPassword = makeRandomCharacters();
+        } while (!validatePasswordFormat(tempPassword));
+
+        return tempPassword;
     }
 
     public boolean validatePasswordFormat(String password) {
@@ -113,17 +106,29 @@ public class UserFindService {
         return false;
     }
 
-    public boolean validatePasswordFormatContainsLetters(Set<Character> set) {
+    public boolean validatePasswordFormatContainsUpperCaseLetters(Set<Character> set) {
         for (int i = 65; i <= 90; i++) {
             if (set.contains((char) i)) {
                 return true;
             }
         }
 
+        return false;
+    }
+
+    public boolean validatePasswordFormatContainsLowerCaseLetters(Set<Character> set) {
         for (int i = 97; i <= 122; i++) {
             if (set.contains((char) i)) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    public boolean validatePasswordFormatContainsLetters(Set<Character> set) {
+        if (validatePasswordFormatContainsUpperCaseLetters(set) || validatePasswordFormatContainsLowerCaseLetters(set)) {
+            return true;
         }
 
         return false;
