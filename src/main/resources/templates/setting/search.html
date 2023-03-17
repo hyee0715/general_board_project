@@ -27,6 +27,7 @@
         font-size: 12px;
         padding-left: 3px;
     }
+
     </style>
 </head>
 
@@ -82,7 +83,8 @@
                     </div>
                 </li>
                 <li>
-                    <button href="#" class="nav-link text-white" style="width: 100%;">
+                    <button onclick="location.href='/setting/withdrawal'" type="button" class="nav-link text-white"
+                            style="width: 100%;">
                         <a style="margin-right: 98px;">
                             회원 탈퇴
                         </a>
@@ -95,8 +97,9 @@
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                    data-bs-toggle="dropdown" aria-expanded="false">
                     <img th:src="|/images/${profileImageStoreName}|" alt="" width="32" height="32"
-                         class="rounded-circle me-2" onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
-                    <strong th:text="${nickname}">닉네임</strong>
+                         class="rounded-circle me-2"
+                         onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
+                    <strong th:text="${currentNickname}">닉네임</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                     <li><a class="dropdown-item" href="/">게시판</a></li>
@@ -351,6 +354,7 @@
             }
         }
     }
+
 
 </script>
 

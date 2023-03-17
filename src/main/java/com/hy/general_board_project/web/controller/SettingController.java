@@ -54,6 +54,8 @@ public class SettingController {
 
     @GetMapping("/setting/userInfo")
     public String moveToUserInfo(Model model) {
+        model.addAttribute("currentNickname", settingService.getUserNickname());
+
         UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.getCurrentUserInfoUpdateRequestDto();
         model.addAttribute("userInfoUpdateRequestDto", userInfoUpdateRequestDto);
 
@@ -88,7 +90,18 @@ public class SettingController {
 
         if (bindingResult.hasErrors()) {
             log.info("errors ={}", bindingResult);
-            return "/setting/userInfo";
+
+            String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+            model.addAttribute("profileImageStoreName", profileImageStoreName);
+            model.addAttribute("currentNickname", settingService.getUserNickname());
+
+            if (settingService.isFormUser()) {
+                model.addAttribute("formUser", true);
+                return "setting/userInfo";
+            }
+
+            model.addAttribute("formUser", false);
+            return "setting/userInfo";
         }
 
         String newUserNickname = settingService.updateUserNickname(userInfoUpdateRequestDto);
@@ -112,7 +125,7 @@ public class SettingController {
         }
 
         //프로필 사진 설정 되어 있는 상태에서 다른 사진으로 변경하는 경우
-        if(!userInfoUpdateRequestDto.getProfileImage().isEmpty()) {
+        if (!userInfoUpdateRequestDto.getProfileImage().isEmpty()) {
             Long currentUserProfileImageId = settingService.getCurrentUserProfileImageId();
 
             userService.deleteProfileImage(userInfoUpdateRequestDto.getId());
@@ -148,6 +161,8 @@ public class SettingController {
 
     @GetMapping("/setting/userList")
     public String moveToUserList(Model model, @RequestParam(value = "page", defaultValue = "1") int pageNum) {
+        model.addAttribute("currentNickname", settingService.getUserNickname());
+
         String writerNickname = settingService.getCurrentUserInfoUpdateRequestDto().getNickname();
 
         Long writerId = userRepository.findByNickname(writerNickname).get().getId();
@@ -187,6 +202,8 @@ public class SettingController {
         if (!isCertifiedUser()) {
             return "redirect:/user/emailCertified";
         }
+
+        model.addAttribute("currentNickname", settingService.getUserNickname());
 
         UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.getCurrentUserInfoUpdateRequestDto();
         UserPasswordUpdateRequestDto userPasswordUpdateRequestDto = userInfoUpdateRequestDto.convertToPasswordUpdateDto();
@@ -238,6 +255,11 @@ public class SettingController {
 
         if (bindingResult.hasErrors()) {
             log.info("errors = {}", bindingResult);
+
+            String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+            model.addAttribute("profileImageStoreName", profileImageStoreName);
+            model.addAttribute("currentNickname", settingService.getUserNickname());
+
             return "setting/userPassword";
         }
 
@@ -261,6 +283,8 @@ public class SettingController {
 
     @GetMapping("/setting/userList/search")
     public String search(@RequestParam(value = "keyword") String keyword, Model model, @RequestParam(value = "searchOption", required = false) String searchOption, @RequestParam(value = "page", defaultValue = "1") int pageNum) {
+        model.addAttribute("currentNickname", settingService.getUserNickname());
+
         String writerNickname = settingService.getCurrentUserInfoUpdateRequestDto().getNickname();
 
         Long writerId = userRepository.findByNickname(writerNickname).get().getId();
@@ -321,6 +345,8 @@ public class SettingController {
 
     @GetMapping("/setting/withdrawal")
     public String withdraw(Model model) {
+        model.addAttribute("currentNickname", settingService.getUserNickname());
+
         boolean isFormUser = settingService.isFormUser();
 
         if (isFormUser) {
@@ -375,7 +401,11 @@ public class SettingController {
 
         if (bindingResult.hasErrors()) {
             log.info("errors = {}", bindingResult);
+
+            String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+            model.addAttribute("profileImageStoreName", profileImageStoreName);
             model.addAttribute("formUser", true);
+            model.addAttribute("currentNickname", settingService.getUserNickname());
 
             return "setting/withdrawal";
         }
@@ -410,7 +440,11 @@ public class SettingController {
 
         if (bindingResult.hasErrors()) {
             log.info("errors = {}", bindingResult);
+
+            String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
+            model.addAttribute("profileImageStoreName", profileImageStoreName);
             model.addAttribute("formUser", false);
+            model.addAttribute("currentNickname", settingService.getUserNickname());
 
             return "setting/withdrawal";
         }

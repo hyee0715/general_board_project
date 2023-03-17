@@ -96,7 +96,7 @@
                    data-bs-toggle="dropdown" aria-expanded="false">
                     <img th:src="|/images/${profileImageStoreName}|" alt="" width="32" height="32"
                          class="rounded-circle me-2" onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
-                    <strong th:text="${nickname}">닉네임</strong>
+                    <strong th:text="${currentNickname}">닉네임</strong>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                     <li><a class="dropdown-item" href="/">게시판</a></li>
