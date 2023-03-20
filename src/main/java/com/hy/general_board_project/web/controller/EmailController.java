@@ -1,5 +1,7 @@
 package com.hy.general_board_project.web.controller;
 
+import static com.hy.general_board_project.service.MessageService.showMessageAndRedirect;
+
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.service.UserService;
 import com.hy.general_board_project.web.dto.message.MessageDto;
@@ -21,12 +23,6 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class EmailController {
     private final UserService userService;
-
-    // 사용자에게 팝업 메시지를 전달하고, 페이지를 리다이렉트 한다.
-    private String showMessageAndRedirect(final MessageDto params, Model model) {
-        model.addAttribute("params", params);
-        return "common/messageRedirect";
-    }
 
     @GetMapping(value = "/user/email/certified")
     public String checkMail(HttpServletRequest request, UserSignUpRequestDto userSignUpRequestDto, Model model) throws MessagingException {
