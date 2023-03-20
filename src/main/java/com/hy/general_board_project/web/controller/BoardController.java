@@ -1,6 +1,5 @@
 package com.hy.general_board_project.web.controller;
 
-import com.hy.general_board_project.config.auth.dto.SessionUser;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.service.BoardService;
@@ -9,8 +8,6 @@ import com.hy.general_board_project.web.dto.board.BoardDetailResponseDto;
 import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +26,12 @@ import java.util.Optional;
 public class BoardController {
 
     private final BoardService boardService;
-    private final HttpSession httpSession;
     private final UserRepository userRepository;
     private final SettingService settingService;
 
     @GetMapping("/write")
     public String write(Model model) {
-        String nickname = findUserNickname();
+        String nickname = settingService.getUserNickname();
 
         model.addAttribute("nickname", nickname);
         model.addAttribute("view", 0);
@@ -86,12 +82,10 @@ public class BoardController {
 
         model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
 
-        String nickname = findUserNickname();
-
+        String nickname = settingService.getUserNickname();
         model.addAttribute("nickname", nickname);
 
         Optional<User> user = userRepository.findByNickname(nickname);
-
         if (user.isPresent()) {
             Long userId = user.get().getId();
             model.addAttribute("userId", userId);
@@ -125,7 +119,7 @@ public class BoardController {
         BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(no);
 
         model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
-        model.addAttribute("nickname", findUserNickname());
+        model.addAttribute("nickname", settingService.getUserNickname());
 
         String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
         model.addAttribute("profileImageStoreName", profileImageStoreName);
@@ -138,12 +132,10 @@ public class BoardController {
         List<BoardSearchResponseDto> boardDtoList = boardService.search(keyword, pageNum, searchOption);
 
         int searchPostTotalCount = boardService.getSearchPostTotalCount(keyword, searchOption);
-
         int totalLastPageNum = boardService.getTotalLastSearchPageNum(searchPostTotalCount);
-
         List<Integer> pageList = boardService.getPageList(pageNum, totalLastPageNum);
 
-        model.addAttribute("nickname", findUserNickname());
+        model.addAttribute("nickname", settingService.getUserNickname());
         model.addAttribute("boardList", boardDtoList);
         model.addAttribute("pageList", pageList);
         model.addAttribute("keyword", keyword);
@@ -155,28 +147,5 @@ public class BoardController {
         model.addAttribute("profileImageStoreName", profileImageStoreName);
 
         return "board/search";
-    }
-
-    public String findUserNickname() {
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-
-        if (sessionUser != null) {
-            Optional<User> user = userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
-
-            return user.get().getNickname();
-        }
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        if (anonymousUserName.equals("anonymousUser")) {
-            return null;
-        }
-
-        UserDetails userDetails = (UserDetails)principal;
-        String username = userDetails.getUsername();
-        Optional<User> user = userRepository.findByUsername(username);
-
-        return user.get().getNickname();
     }
 }

@@ -302,6 +302,9 @@ public class SettingService {
     public String getUserNickname() {
         User user = getCurrentUser();
 
+        if (user == null) {
+            return null;
+        }
         return user.getNickname();
     }
 }

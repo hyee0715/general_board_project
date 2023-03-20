@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 public class BoardApiController {
+
     private final BoardService boardService;
 
     @PostMapping("/board/write")
