@@ -62,4 +62,15 @@ public class UserService {
 
         user.updateProfileImage(null);
     }
+
+    public boolean isCertifiedUser() {
+        UserSignUpRequestDto userSignUpRequestDto = getEmailCertifiedInfo();
+        String emailCertified = userSignUpRequestDto.getCertified();
+
+        if (!emailCertified.equals("Y")) {
+            return false;
+        }
+
+        return true;
+    }
 }

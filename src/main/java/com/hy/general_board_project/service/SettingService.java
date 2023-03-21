@@ -9,6 +9,7 @@ import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
 import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
+import com.hy.general_board_project.web.dto.profileImage.ProfileImageDto;
 import com.hy.general_board_project.web.dto.user.FormUserWithdrawRequestDto;
 import com.hy.general_board_project.web.dto.user.SocialUserWithdrawRequestDto;
 import com.hy.general_board_project.web.dto.user.UserInfoUpdateRequestDto;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +41,8 @@ public class SettingService {
     private final BoardRepository boardRepository;
     private final ProfileImageRepository profileImageRepository;
     private final HttpSession httpSession;
+    private final BoardService boardService;
+    private final FileStoreService fileStoreService;
 
     @Transactional
     public String updateUserNickname(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
@@ -118,7 +122,7 @@ public class SettingService {
         return userRepository.findByEmailAndProvider(sessionUser.getEmail(), sessionUser.getProvider());
     }
 
-    UserDetails getUserDetailsForFormUser() {
+    public UserDetails getUserDetailsForFormUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String anonymousUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -130,7 +134,7 @@ public class SettingService {
     }
 
     @Transactional
-    Optional<User> getUserByUserDetailsForFormUser(UserDetails userDetails) {
+    public Optional<User> getUserByUserDetailsForFormUser(UserDetails userDetails) {
         String username = userDetails.getUsername();
 
         return userRepository.findByUsername(username);
@@ -306,5 +310,38 @@ public class SettingService {
             return null;
         }
         return user.getNickname();
+    }
+
+    @Transactional
+    public void updateUserNicknameAndBoardWriter(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
+        String newUserNickname = updateUserNickname(userInfoUpdateRequestDto);
+
+        //해당 사용자의 모든 게시물 작성자 이름 수정
+        boardService.updateBoardWriter(newUserNickname);
+    }
+
+    @Transactional
+    public void deleteUserProfileImage(Long currentUserProfileImageId) {
+        if (currentUserProfileImageId != null) {
+            fileStoreService.deleteStoredFile(currentUserProfileImageId);
+
+            deleteProfileImage(currentUserProfileImageId);
+        }
+    }
+
+    @Transactional
+    public void updateNewProfileImage(UserInfoUpdateRequestDto userInfoUpdateRequestDto) throws IOException {
+        //새 프로필 사진 저장
+        ProfileImageDto profileImageDto = fileStoreService.storeFile(userInfoUpdateRequestDto.getProfileImage());
+        ProfileImage profileImage = fileStoreService.save(profileImageDto);
+
+        updateUserProfileImage(userInfoUpdateRequestDto, profileImage);
+    }
+
+    public User findUser() {
+        UserDetails userDetails = getUserDetailsForFormUser();
+        Optional<User> userEntity = getUserByUserDetailsForFormUser(userDetails);
+
+        return userEntity.get();
     }
 }
