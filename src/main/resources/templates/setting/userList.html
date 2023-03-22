@@ -1,21 +1,71 @@
-<!DOCTYPE HTML>
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.104.2">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-          crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/setting.css">
-
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-            crossorigin="anonymous"></script>
     <title>General Board</title>
 
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/dashboard/">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+    }
+
+    .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+    }
+
+    .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+    }
+
+    .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .field-error-form {
         border-color: #dc3545;
         color: #dc3545;
@@ -27,169 +77,154 @@
         font-size: 12px;
         padding-left: 3px;
     }
-
     </style>
+
+    <!-- Custom styles for this template -->
+    <link href="/css/dashboard.css" rel="stylesheet">
 </head>
-
 <body>
-<div style="height: 100%;">
-    <div style="display: inline-block; height: 100%;">
-        <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 250px; height: 100%;">
-            <a href="/" class="d-flex align-items-center mb-md-0 me-md-auto text-white text-decoration-none">
-                <span class="fs-4" style="margin-left: 18px;">GENERAL BOARD</span>
-            </a>
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <button onclick="location.href='/setting/userInfo'" type="button" class="nav-link text-white"
-                            aria-current="page" style="width: 100%;">
-                        <a style="margin-right: 76px;">
-                            내 정보 수정
-                        </a>
-                    </button>
-                </li>
-                <div th:if="${formUser == true}">
-                    <li>
-                        <button onclick="location.href='/setting/userPassword'" type="button"
-                                class="nav-link text-white" style="width: 100%;">
-                            <a style="margin-right: 65px;">
-                                비밀 번호 변경
-                            </a>
-                        </button>
-                    </li>
-                </div>
-                <li>
-                    <button href="#" class="nav-link text-white active collapsed" data-bs-toggle="collapse"
-                            data-bs-target="#post-collapse" aria-expanded="false" style="width: 100%;">
-                        <a style="margin-right: 114px;">
-                            내 활동
-                        </a>
-                    </button>
-                    <div class="collapse show" id="post-collapse">
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="/setting/userList"
-                                   class="link-dark d-inline-flex text-decoration-none rounded text-white collapse show">작성한
-                                게시물</a>
-                            </li>
-                            <!--                            <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded text-white"></a>-->
-                            <!--                            </li>-->
-                            <!--                            <li><a href="#"-->
-                            <!--                                   class="link-dark d-inline-flex text-decoration-none rounded text-white">Shipped</a>-->
-                            <!--                            </li>-->
-                            <!--                            <li><a href="#"-->
-                            <!--                                   class="link-dark d-inline-flex text-decoration-none rounded text-white">Returned</a>-->
-                            <!--                            </li>-->
-                        </ul>
-                    </div>
-                </li>
-                <li>
-                    <button onclick="location.href='/setting/withdrawal'" type="button" class="nav-link text-white"
-                            style="width: 100%;">
-                        <a style="margin-right: 98px;">
-                            회원 탈퇴
-                        </a>
-                    </button>
-                </li>
 
-            </ul>
-            <hr>
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                   data-bs-toggle="dropdown" aria-expanded="false">
-                    <img th:src="|/images/${profileImageStoreName}|" alt="" width="32" height="32"
-                         class="rounded-circle me-2" onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
-                    <strong th:text="${currentNickname}">닉네임</strong>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                    <li><a class="dropdown-item" href="/">게시판</a></li>
-                    <li><a class="dropdown-item" href="/board/write">글쓰기</a></li>
-                    <li><a class="dropdown-item" href="/setting/userInfo">마이 페이지</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
-                </ul>
-            </div>
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="/">GENERAL BOARD</a>
+
+    <div class="navbar-nav">
+        <div class="nav-item text-nowrap">
+            <!--            <a class="nav-link px-3" href="#">Sign out</a>-->
+            <a class="nav-link px-3 d-flex align-items-center text-white text-decoration-none"
+               aria-expanded="false">
+                <img th:src="|/images/${profileImageStoreName}|" alt="" width="32" height="32"
+                     class="rounded-circle me-2"
+                     onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
+                <strong th:text="${currentNickname}">닉네임</strong>
+            </a>
         </div>
     </div>
-    <div style="display: inline-block; margin-left: 25px;">
-        <div class="d-flex flex-column flex-shrink-0" style="width: 1000px; height: 600px;">
+</header>
 
-            <div class="container">
-                <main role="main" class="container">
-                    <br>
-                    <h2>작성한 게시물</h2>
-                    <br>
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3 sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/setting/userInfo">
+                            <span data-feather="user" class="align-text-bottom"></span>
+                            내 정보 수정
+                        </a>
+                    </li>
+                    <div th:if="${formUser == true}">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/setting/userPassword">
+                                <span data-feather="lock" class="align-text-bottom"></span>
+                                비밀 번호 변경
+                            </a>
+                        </li>
+                    </div>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/setting/userList">
+                            <span data-feather="layers" class="align-text-bottom"></span>
+                            작성한 게시물
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/setting/withdrawal">
+                            <span data-feather="slash" class="align-text-bottom"></span>
+                            회원 탈퇴
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"></div>
 
-                    <div class="starter-template">
-                        <table class="table table-bordered">
-                            <!-- CONTENTS !-->
-                            <thead>
-                            <tr style="text-align: center">
-                                <th>
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" id="allCheckBox" onclick="allChecked()">
-                                    </label>
-                                </th>
-                                <th class="col-md-1">번호</th>
-                                <th class="col-md-6">제목</th>
-                                <th class="col-md-2">작성자</th>
-                                <th class="col-md-2">작성일</th>
-                                <th class="col-md-1">조회수</th>
-                            </tr>
-                            </thead>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <span data-feather="log-out" class="align-text-bottom"></span>
+                            로그아웃
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-                            <tbody>
-                            <!-- CONTENTS !-->
-                            <tr th:each="board : ${boardList}">
-                                <td>
-                                    <label class="checkbox-inline">
-                                        <input type="checkbox" name="chk" class="chk" onclick="chkClicked()"
-                                               th:value="${board.id}">
-                                    </label>
-                                </td>
-                                <td th:text="${board.id}" style="text-align: center"></td>
-                                <td><a th:href="'/board/detail/'+${board.id}" th:text="${board.title}"></a></td>
-                                <td th:text="${board.writer}" style="text-align: center"></td>
-                                <td th:text="${board.createdDate} ? ${#temporals.format(board.createdDate,'yyyy-MM-dd HH:mm')} : ${board.createdDate}"
-                                    style="text-align: center"></td>
-                                <td th:text="${board.view}" style="text-align: center"></td>
-                            </tr>
-                            </tbody>
-                        </table>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                <div class="d-flex flex-column flex-shrink-0 p-3">
+                    <div class="container">
+                        <main role="main" class="container">
+                            <br>
+                            <h4 class="mb-3">작성한 게시물</h4>
+                            <br>
 
-                        <!-- Pagination -->
-                        <div>
-                            <div style="display: inline-block;">
-                                <nav aria-label="Page navigation example">
-                                    <ul class="pagination">
-                                        <li class="page-item">
-                                            <a th:if="${curPage != 1}" class="page-link"
-                                               href="/setting/userList/?page=1"
-                                               aria-label="Start">
-                                                <span aria-hidden="true" class="sr-only">Start</span>
-                                            </a>
-                                            <a th:if="${curPage == 1}" class="page-link"
-                                               href="/setting/userList/?page=1"
-                                               aria-label="Start" style="display: none;">
-                                                <span aria-hidden="true" class="sr-only">Start</span>
-                                            </a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a th:if="${curPage != 1}" class="page-link"
-                                               th:href="@{'/setting/userList/?page=' + ${curPage - 1}}"
-                                               aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                                <span class="sr-only">Previous</span>
-                                            </a>
-                                            <a th:if="${curPage == 1}" class="page-link"
-                                               href="/setting/userList/?page=1"
-                                               aria-label="Previous" style="display: none;">
-                                                <span aria-hidden="true">&laquo;</span>
-                                                <span class="sr-only">Previous</span>
-                                            </a>
-                                        </li>
-                                        <span th:each="pageNum : ${pageList}" th:inline="text">
+                            <div class="starter-template">
+                                <table class="table table-bordered">
+                                    <!-- CONTENTS !-->
+                                    <thead>
+                                    <tr style="text-align: center">
+                                        <th>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" id="allCheckBox" onclick="allChecked()">
+                                            </label>
+                                        </th>
+                                        <th class="col-md-1">번호</th>
+                                        <th class="col-md-6">제목</th>
+                                        <th class="col-md-2">작성자</th>
+                                        <th class="col-md-2">작성일</th>
+                                        <th class="col-md-1">조회수</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <!-- CONTENTS !-->
+                                    <tr th:each="board : ${boardList}">
+                                        <td>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="chk" class="chk" onclick="chkClicked()"
+                                                       th:value="${board.id}">
+                                            </label>
+                                        </td>
+                                        <td th:text="${board.id}" style="text-align: center"></td>
+                                        <td><a th:href="'/board/detail/'+${board.id}" th:text="${board.title}"
+                                               style="text-decoration:none; color: inherit;"></a></td>
+                                        <td th:text="${board.writer}" style="text-align: center"></td>
+                                        <td th:text="${board.createdDate} ? ${#temporals.format(board.createdDate,'yyyy-MM-dd HH:mm')} : ${board.createdDate}"
+                                            style="text-align: center"></td>
+                                        <td th:text="${board.view}" style="text-align: center"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- Pagination -->
+                                <div>
+                                    <div style="display: inline-block;">
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination">
+                                                <li class="page-item">
+                                                    <a th:if="${curPage != 1}" class="page-link"
+                                                       href="/setting/userList/?page=1"
+                                                       aria-label="Start">
+                                                        <span aria-hidden="true" class="sr-only">Start</span>
+                                                    </a>
+                                                    <a th:if="${curPage == 1}" class="page-link"
+                                                       href="/setting/userList/?page=1"
+                                                       aria-label="Start" style="display: none;">
+                                                        <span aria-hidden="true" class="sr-only">Start</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item">
+                                                    <a th:if="${curPage != 1}" class="page-link"
+                                                       th:href="@{'/setting/userList/?page=' + ${curPage - 1}}"
+                                                       aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                        <span class="sr-only">Previous</span>
+                                                    </a>
+                                                    <a th:if="${curPage == 1}" class="page-link"
+                                                       href="/setting/userList/?page=1"
+                                                       aria-label="Previous" style="display: none;">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                        <span class="sr-only">Previous</span>
+                                                    </a>
+                                                </li>
+                                                <span th:each="pageNum : ${pageList}" th:inline="text">
                                         <li class="page-item">
                                             <a th:if="${pageNum != curPage}" class="page-link"
                                                th:href="@{'/setting/userList/?page=' + ${pageNum}}">[[${pageNum}]]</a>
@@ -197,66 +232,71 @@
                                                     th:href="@{'/setting/userList/?page=' + ${pageNum}}">[[${pageNum}]] </strong>
                                         </li>
                                     </span>
-                                        <li class="page-item">
-                                            <a th:if="${curPage != totalLastPageNum}" class="page-link"
-                                               th:href="@{'/setting/userList/?page=' + ${curPage + 1}}"
-                                               aria-label="Next">
-                                                <span class="sr-only">Next</span>
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                            <a th:if="${curPage == totalLastPageNum}" class="page-link"
-                                               th:href="@{'/setting/userList/?page=' + ${curPage}}" aria-label="Next"
-                                               style="display: none;">
-                                                <span class="sr-only">Next</span>
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                        <li class="page-item">
-                                            <a th:if="${curPage != totalLastPageNum}" class="page-link"
-                                               th:href="@{'/setting/userList/?page=' + ${totalLastPageNum}}"
-                                               aria-label="End">
-                                                <span aria-hidden="true" class="sr-only">End</span>
-                                            </a>
+                                                <li class="page-item">
+                                                    <a th:if="${curPage != totalLastPageNum}" class="page-link"
+                                                       th:href="@{'/setting/userList/?page=' + ${curPage + 1}}"
+                                                       aria-label="Next">
+                                                        <span class="sr-only">Next</span>
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                    <a th:if="${curPage == totalLastPageNum}" class="page-link"
+                                                       th:href="@{'/setting/userList/?page=' + ${curPage}}"
+                                                       aria-label="Next"
+                                                       style="display: none;">
+                                                        <span class="sr-only">Next</span>
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item">
+                                                    <a th:if="${curPage != totalLastPageNum}" class="page-link"
+                                                       th:href="@{'/setting/userList/?page=' + ${totalLastPageNum}}"
+                                                       aria-label="End">
+                                                        <span aria-hidden="true" class="sr-only">End</span>
+                                                    </a>
 
-                                            <a th:if="${curPage == totalLastPageNum}" class="page-link"
-                                               th:href="@{'/setting/userList/?page=' + ${totalLastPageNum}}"
-                                               aria-label="End" style="display: none;">
-                                                <span aria-hidden="true" class="sr-only">End</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
+                                                    <a th:if="${curPage == totalLastPageNum}" class="page-link"
+                                                       th:href="@{'/setting/userList/?page=' + ${totalLastPageNum}}"
+                                                       aria-label="End" style="display: none;">
+                                                        <span aria-hidden="true" class="sr-only">End</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+
+                                    <div style="display: inline-block; float: right;">
+                                        <a href='javascript:boardDelete();' class="btn btn-outline-danger">삭제</a>
+                                    </div>
+
+                                    <div style="display: inline-block; float: right;"> <!-- 글쓰기 버튼 -->
+                                        <a style="float: right; margin-right: 15px;" class="btn btn-outline-dark"
+                                           th:href="@{/board/write}">글쓰기</a>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div style="display: inline-block; float: right;">
-                                <a href='javascript:boardDelete();' class="btn btn-outline-danger">삭제</a>
+                            <div>
+                                <form action="/setting/userList/search" method="GET">
+                                    <select name="searchOption">
+                                        <option selected value="">검색 옵션</option>
+                                        <option value="title">제목</option>
+                                        <option value="content">내용</option>
+                                    </select>
+                                    <input name="keyword" type="text" th:value="${keyword}">
+                                    <button class="btn btn-primary">검색하기</button>
+                                </form>
                             </div>
-
-                            <div style="display: inline-block; float: right;"> <!-- 글쓰기 버튼 -->
-                                <a style="float: right; margin-right: 15px;" class="btn btn-outline-dark"
-                                   th:href="@{/board/write}">글쓰기</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <form action="/setting/userList/search" method="GET">
-                            <select name="searchOption">
-                                <option selected value="">검색 옵션</option>
-                                <option value="title">제목</option>
-                                <option value="content">내용</option>
-                            </select>
-                            <input name="keyword" type="text" th:value="${keyword}">
-                            <button class="btn btn-primary">검색하기</button>
-                        </form>
-                    </div>
-                </main>
-            </div> <!-- /container -->
-        </div>
+                        </main>
+                    </div> <!-- /container -->
+                </div>
+            </div>
+        </main>
     </div>
 </div>
 
 <div th:replace="fragments/settingFooter :: settingFooter"/>
+
+<script src="/js/app/bootstrap.bundle.min.js"></script>
 
 <script>
     //체크박스 전체 선택 클릭 이벤트
@@ -353,8 +393,14 @@
             }
         }
     }
-
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+        integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+        crossorigin="anonymous"></script>
+<script src="/js/app/dashboard.js"></script>
 </body>
 </html>

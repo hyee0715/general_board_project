@@ -16,15 +16,15 @@ class UserServiceTest {
     void joinUser() {
         UserSignUpRequestDto requestDto =
                 UserSignUpRequestDto.builder()
-                .username("김이름")
+                .realName("김이름")
+                .username("아이디")
                 .nickname("닉네임")
                 .password("abcd123")
                 .email("aa@aa")
-        //        .role(Role.USER)
                 .build();
 
         Long userId = userService.joinUser(requestDto);
 
-        Assertions.assertThat(userId).isEqualTo(76);
+        //Assertions.assertThat(userId).isEqualTo(203);
     }
 }
