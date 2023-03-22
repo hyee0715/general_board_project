@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
+import java.util.Random;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -72,5 +73,20 @@ public class UserService {
         }
 
         return true;
+    }
+
+    public String makeCertifiedKey() {
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        int num = 0;
+
+        do {
+            num = random.nextInt(75) + 48;
+            if ((num >= 48 && num <= 57) || (num >= 65 && num <= 90) || (num >= 97 && num <= 122)) {
+                sb.append((char) num);
+            }
+
+        } while (sb.length() < 10);
+        return sb.toString();
     }
 }
