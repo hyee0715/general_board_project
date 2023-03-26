@@ -1,0 +1,76 @@
+#spring:
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect  # JPA 데이터베이스 플랫폼 (InnoDB)
+#    open-in-view: false
+#    show-sql: true
+#    hibernate:
+#      format_sql: true
+#      ddl-auto: update  # none, update, create, create-drop, validate
+#
+#  mvc:
+#    hiddenmethod:
+#      filter:
+#        enabled: true # GET, POST 뿐 만 아니라 PUT, DELETE 등의 메서드도 사용하기 위한 설정
+#
+#  devtools:
+#    livereload:
+#      enabled: true
+#    restart:
+#      enabled: true
+#    thymeleaf:
+#      cache: false
+#
+#  logging:
+#    level:
+#      org:
+#        hibernate:
+#          SQL: DEBUG
+#          type:
+#            descriptor:
+#              sql:
+#                BasicBinder: TRACE
+#
+#  profiles:
+#    active: personal, oauth, email
+#
+#  messages:
+#    basename: errors
+#
+#  servlet:
+#    multipart:
+#      location: C:/Users/hyee0/upload/
+#      enabled: true
+#      file-size-threshold: 2KB
+#      max-file-size: 200MB
+#      max-request-size: 215MB
+#
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: test
+#            client-secret: test
+#            scope: email, profile
+#          naver:
+#            client-id: test
+#            client-secret: test
+#            authorizationGrantType: authorization_code
+#            redirectUri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+#            scope: name, email
+#            client-name: Naver
+#        provider:
+#          naver:
+#            authorizationUri: https://nid.naver.com/oauth2.0/authorize
+#            tokenUri: https://nid.naver.com/oauth2.0/token
+#            userInfoUri: https://openapi.naver.com/v1/nid/me
+#            userNameAttribute: response
+#
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/GENERAL_BOARD_DB?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+#    username: test1
+#    password: 1234
+#
+#file:
+#  dir: C:/Users/hyee0/upload/
