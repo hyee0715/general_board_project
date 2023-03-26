@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <title>GENERAL BOARD</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/account.css">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@200&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'IBM Plex Sans KR', sans-serif;
+        }
+
+        .find-button {
+            width: 100px;
+            height: 40px;
+            border: 0;
+            outline: none;
+            border-radius: 40px;
+            background: rgb(80, 80, 80);
+            color: white;
+            font-size: 13px;
+            letter-spacing: 2px;
+        }
+
+        .field-error-form {
+            border-color: #dc3545;
+            color: #dc3545;
+            padding-left: 3px;
+        }
+
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+            font-size: 12px;
+            padding-left: 3px;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="signUp-block">
+        <div style="text-align:center;">
+            <a href="/" style="font-size: 40px; color: #6E4690; text-decoration-line: none;">General Board</a>
+        </div>
+
+        <div class="input-form">
+            <h3>아이디 찾기</h3>
+            <div style="font-size: 20px;">
+                <div>계정에 등록된 이름과 이메일을 입력해주세요. 입력하신 이메일 주소로 인증 메일을 보내드립니다.</div>
+                <div>인증을 완료하시면 해당 이메일로 등록되어 있는 계정의 아이디를 확인하실 수 있습니다.</div>
+            </div>
+            <br>
+
+            <form id="findUsernameForm" action="/user/findUsername" method="post" th:object="${findUsernameDto}"
+                  novalidate>
+                <input type="hidden" th:field="*{username}" id="username" name="username">
+                <div class="signUp mb-3" style="margin-top: 10px;">
+                    <label for="realName" style="font-weight: bold;">이름</label>
+                    <input type="text" th:field="*{realName}" th:errorclass="field-error-form" class="form-control"
+                           id="realName" placeholder="이름을 입력해주세요." name="realName" style="width: 250px;" required>
+                    <div class="field-error" th:errors="*{realName}">
+                        이름 오류
+                    </div>
+                </div>
+                <div>
+                    <div class="signUp mb-3" style="margin-top: 10px; display: inline-block;">
+                        <label for="email" style="font-weight: bold;">이메일</label>
+                        <input type="email" th:field="*{email}" th:errorclass="field-error-form" class="form-control"
+                               id="email" placeholder="이메일을 입력해주세요." name="email" style="width: 250px;" required>
+                        <div class="field-error" th:errors="*{email}">
+                            이메일 오류
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div th:if="${#fields.hasGlobalErrors()}">
+                        <p class="field-error" th:each="err : ${#fields.globalErrors()}"
+                           th:text="${err}">글로벌 오류 메시지</p>
+                    </div>
+
+                    <button class="find-button" id="email_send_buttton" type="submit"
+                            style="display: inline-block;">인증 요청
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

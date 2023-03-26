@@ -25,6 +25,9 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+application-personal.yml
+application-oauth.yml
+application-email.yml
 
 ### NetBeans ###
 /nbproject/private/
