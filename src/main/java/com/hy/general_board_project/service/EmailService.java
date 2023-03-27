@@ -53,7 +53,7 @@ public class EmailService {
                         "		감사합니다." +
                         "	</p>" +
                         "	<a style=\"color: #FFF; text-decoration: none; text-align: center;\"" +
-                        "	href=\"http://localhost:8080/user/findUsername/email/certified?email=" + userDto.getEmail() + "&realName=" + userDto.getRealName() + "&username=" + userDto.getUsername() + "\" target=\"_blank\">" +
+                        "	href=\"http://ec2-43-201-158-17.ap-northeast-2.compute.amazonaws.com:8080/user/findUsername/email/certified?email=" + userDto.getEmail() + "&realName=" + userDto.getRealName() + "&username=" + userDto.getUsername() + "\" target=\"_blank\">" +
                         "		<p" +
                         "			style=\"display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: #02b875; line-height: 45px; vertical-align: middle; font-size: 16px;\">" +
                         "			메일 인증</p>" +
@@ -93,7 +93,7 @@ public class EmailService {
                         userDto.getTempPassword() +
                         "	</p>" +
                         "	<a style=\"color: #FFF; text-decoration: none; text-align: center;\"" +
-                        "	href=\"http://localhost:8080/user/login" + "\" target=\"_blank\">" +
+                        "	href=\"http://ec2-43-201-158-17.ap-northeast-2.compute.amazonaws.com:8080/user/login" + "\" target=\"_blank\">" +
                         "		<p" +
                         "			style=\"display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: #02b875; line-height: 45px; vertical-align: middle; font-size: 16px;\">" +
                         "			로그인 하기</p>" +
@@ -129,7 +129,7 @@ public class EmailService {
                         "		감사합니다." +
                         "	</p>" +
                         "	<a style=\"color: #FFF; text-decoration: none; text-align: center;\"" +
-                        "	href=\"http://localhost:8080/user/email/certified?email=" + userDto.getEmail() + "&certified=" + userDto.getCertified() + "\" target=\"_blank\">" +
+                        "	href=\"http://ec2-43-201-158-17.ap-northeast-2.compute.amazonaws.com:8080/user/email/certified?email=" + userDto.getEmail() + "&certified=" + userDto.getCertified() + "\" target=\"_blank\">" +
                         "		<p" +
                         "			style=\"display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: #02b875; line-height: 45px; vertical-align: middle; font-size: 16px;\">" +
                         "			메일 인증</p>" +
