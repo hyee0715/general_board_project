@@ -53,6 +53,11 @@ public class SettingController {
         String profileImageStoreName = settingService.getCurrentUserProfileImageStoreName();
         model.addAttribute("profileImageStoreName", profileImageStoreName);
 
+        if (profileImageStoreName != null) {
+            String profileImageStoreNameForDownload = settingService.getProfileImageStoreNameForDownload(profileImageStoreName);
+            model.addAttribute("profileImageStoreNameForDownload", profileImageStoreNameForDownload);
+        }
+
         boolean isFormUser = settingService.isFormUser();
 
         if (isFormUser) {
@@ -113,6 +118,19 @@ public class SettingController {
 
         MessageDto message = new MessageDto("회원 정보 수정이 완료되었습니다.", "/setting/userInfo", RequestMethod.GET, null);
         return showMessageAndRedirect(message, model);
+    }
+
+    @ResponseBody
+    @GetMapping("/download/{fileName}")
+    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable String fileName) throws IOException {
+        byte[] data = fileStoreService.downloadFile(fileName);
+        ByteArrayResource resource = new ByteArrayResource(data);
+        return ResponseEntity
+                .ok()
+                .contentLength(data.length)
+                .header("Content-type", "application/octet-stream")
+                .header("Content-disposition", "attachment; filename=\"" + fileName + "\"")
+                .body(resource);
     }
 
     @GetMapping("/setting/userList")

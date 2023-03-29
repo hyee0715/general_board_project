@@ -2,6 +2,9 @@ package com.hy.general_board_project.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 import com.hy.general_board_project.domain.profileImage.ProfileImage;
 import com.hy.general_board_project.domain.profileImage.ProfileImageRepository;
 import com.hy.general_board_project.web.dto.profileImage.ProfileImageDto;
@@ -83,5 +86,18 @@ public class FileStoreService {
     private String extractExt(String originalFilename) {
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
+    }
+
+    public byte[] downloadFile(String fileName) throws IOException {
+        fileName = LOCAL_STORAGE_DIRECTORY + "/" + fileName;
+
+        S3Object s3Object = s3Client.getObject(bucketName, fileName);
+        S3ObjectInputStream inputStream = s3Object.getObjectContent();
+        try {
+            return IOUtils.toByteArray(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
