@@ -12,8 +12,8 @@ import com.hy.general_board_project.web.dto.message.MessageDto;
 import com.hy.general_board_project.web.dto.user.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 @Slf4j
@@ -103,7 +102,7 @@ public class SettingController {
             return showMessageAndRedirect(message, model);
         }
 
-        //프로필 사진 설정 되어 있는 상태에서 다른 사진으로 변경하는 경우
+        //프로필 사진 설정 되어 있는 상태에서 다른 사진으로 변경하는 경우 or 기본 프로필 사진에서 새로운 사진으로 변경하는 경우
         if (!userInfoUpdateRequestDto.getProfileImage().isEmpty()) {
             Long currentUserProfileImageId = settingService.getCurrentUserProfileImageId();
             userService.deleteProfileImage(userInfoUpdateRequestDto.getId());
@@ -114,13 +113,6 @@ public class SettingController {
 
         MessageDto message = new MessageDto("회원 정보 수정이 완료되었습니다.", "/setting/userInfo", RequestMethod.GET, null);
         return showMessageAndRedirect(message, model);
-    }
-
-    @ResponseBody
-    @GetMapping("/images/{filename}")
-    public Resource downloadImage(@PathVariable String filename) throws
-            MalformedURLException {
-        return new UrlResource("file:///" + fileStoreService.getFullPath(filename));
     }
 
     @GetMapping("/setting/userList")

@@ -96,7 +96,7 @@
             <!--            <a class="nav-link px-3" href="#">Sign out</a>-->
             <a class="nav-link px-3 d-flex align-items-center text-white text-decoration-none"
                aria-expanded="false">
-                <img th:src="|/images/${profileImageStoreName}|" alt="" width="32" height="32"
+                <img th:src="|https://generalboardbucket.s3.ap-northeast-2.amazonaws.com/${profileImageStoreName}|" alt="" width="32" height="32"
                      class="rounded-circle me-2"
                      onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
                 <strong th:text="${currentNickname}">닉네임</strong>
@@ -162,7 +162,7 @@
                               enctype="multipart/form-data" novalidate>
 
                             <div style="text-align:center; margin-bottom=15px;">
-                                <img th:src="|/images/${profileImageStoreName}|" alt="" width="130" height="130"
+                                <img th:src="|https://generalboardbucket.s3.ap-northeast-2.amazonaws.com/${profileImageStoreName}|" alt="" width="130" height="130"
                                      class="rounded-circle me-2" id="preview"
                                      onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
 
