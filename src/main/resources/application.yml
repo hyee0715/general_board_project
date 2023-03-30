@@ -46,6 +46,8 @@ cloud:
       bucket: generalboardbucket
     stack:
       auto: false
+    credentials:
+      instanceProfile: true
 
 application:
   bucket: generalboardbucket
