@@ -46,7 +46,7 @@ public class FileStoreService {
 
         File fileObj = convertMultiPartFileToFile(multipartFile);
         String originalFilename = multipartFile.getOriginalFilename();
-        String storeFileName = LOCAL_STORAGE_DIRECTORY + "/" + createStoreFileName(originalFilename);
+        String storeFileName = MAIN_STORAGE_DIRECTORY + "/" + createStoreFileName(originalFilename);
         s3Client.putObject(new PutObjectRequest(bucketName, storeFileName, fileObj));
         fileObj.delete();
 
@@ -89,7 +89,7 @@ public class FileStoreService {
     }
 
     public byte[] downloadFile(String fileName) throws IOException {
-        fileName = LOCAL_STORAGE_DIRECTORY + "/" + fileName;
+        fileName = MAIN_STORAGE_DIRECTORY + "/" + fileName;
 
         S3Object s3Object = s3Client.getObject(bucketName, fileName);
         S3ObjectInputStream inputStream = s3Object.getObjectContent();
