@@ -334,4 +334,14 @@ public class SettingServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("프로필 사진이 존재하지 않습니다.");
     }
+
+    @Test
+    @DisplayName("프로필 사진 다운로드를 위해 경로 자르기")
+    public void profileImageStoreNameForDownload() {
+        String storeName = "local/abcd-ddd-befa";
+
+        String result = settingService.getProfileImageStoreNameForDownload(storeName);
+
+        Assertions.assertThat(result).isEqualTo("abcd-ddd-befa");
+    }
 }

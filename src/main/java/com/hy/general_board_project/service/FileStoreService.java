@@ -1,17 +1,25 @@
 package com.hy.general_board_project.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 import com.hy.general_board_project.domain.profileImage.ProfileImage;
 import com.hy.general_board_project.domain.profileImage.ProfileImageRepository;
 import com.hy.general_board_project.web.dto.profileImage.ProfileImageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -19,28 +27,53 @@ import java.util.UUID;
 @Service
 public class FileStoreService {
 
+    private static final String LOCAL_STORAGE_DIRECTORY = "local";
+    private static final String MAIN_STORAGE_DIRECTORY = "main";
+
     private final ProfileImageRepository profileImageRepository;
 
-    @Value("${file.dir}")
-    private String fileDir;
+    @Value("${application.bucket}")
+    private String bucketName;
 
-    public String getFullPath(String filename) {
-        return fileDir + filename;
-    }
+    @Autowired
+    private AmazonS3 s3Client;
 
-    public ProfileImageDto storeFile(MultipartFile multipartFile) throws IOException
-    {
+    public ProfileImageDto storeFile(MultipartFile multipartFile) {
         if (multipartFile.isEmpty()) {
-            log.info("multipart empty");
+            log.info("multipart is empty.");
             return null;
         }
 
+        File fileObj = convertMultiPartFileToFile(multipartFile);
         String originalFilename = multipartFile.getOriginalFilename();
-        String storeFileName = createStoreFileName(originalFilename);
+        String storeFileName = MAIN_STORAGE_DIRECTORY + "/" + createStoreFileName(originalFilename);
+        s3Client.putObject(new PutObjectRequest(bucketName, storeFileName, fileObj));
+        fileObj.delete();
 
-        multipartFile.transferTo(new File(getFullPath(storeFileName)));
+        log.info("multipartFile uploaded : {}", storeFileName);
 
         return new ProfileImageDto(originalFilename, storeFileName);
+    }
+
+    @Transactional
+    public ProfileImage save(ProfileImageDto profileImageDto) {
+        return profileImageRepository.save(profileImageDto.toEntity());
+    }
+
+    public void deleteStoredFile(Long profileImageId) {
+        ProfileImage profileImage = profileImageRepository.findById(profileImageId).get();
+        String storeFileName = profileImage.getStoreName();
+        s3Client.deleteObject(bucketName, storeFileName);
+    }
+
+    private File convertMultiPartFileToFile(MultipartFile file) {
+        File convertedFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
+        try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
+            fos.write(file.getBytes());
+        } catch (IOException e) {
+            log.error("Error converting multipartFile to file", e);
+        }
+        return convertedFile;
     }
 
     private String createStoreFileName(String originalFilename) {
@@ -55,16 +88,16 @@ public class FileStoreService {
         return originalFilename.substring(pos + 1);
     }
 
-    @Transactional
-    public ProfileImage save(ProfileImageDto profileImageDto) {
-        return profileImageRepository.save(profileImageDto.toEntity());
-    }
+    public byte[] downloadFile(String fileName) throws IOException {
+        fileName = MAIN_STORAGE_DIRECTORY + "/" + fileName;
 
-    public boolean deleteStoredFile(Long profileImageId) {
-        ProfileImage profileImage = profileImageRepository.findById(profileImageId).get();
-        String storeFileName = profileImage.getStoreName();
-        File file = new File(getFullPath(storeFileName));
-
-        return file.delete();
+        S3Object s3Object = s3Client.getObject(bucketName, fileName);
+        S3ObjectInputStream inputStream = s3Object.getObjectContent();
+        try {
+            return IOUtils.toByteArray(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

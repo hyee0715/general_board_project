@@ -81,6 +81,7 @@
     #profileImage {
         display: none;
     }
+
     </style>
 
     <!-- Custom styles for this template -->
@@ -96,7 +97,8 @@
             <!--            <a class="nav-link px-3" href="#">Sign out</a>-->
             <a class="nav-link px-3 d-flex align-items-center text-white text-decoration-none"
                aria-expanded="false">
-                <img th:src="|/images/${profileImageStoreName}|" alt="" width="32" height="32"
+                <img th:src="|https://generalboardbucket.s3.ap-northeast-2.amazonaws.com/${profileImageStoreName}|"
+                     alt="" width="32" height="32"
                      class="rounded-circle me-2"
                      onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
                 <strong th:text="${currentNickname}">닉네임</strong>
@@ -162,14 +164,15 @@
                               enctype="multipart/form-data" novalidate>
 
                             <div style="text-align:center; margin-bottom=15px;">
-                                <img th:src="|/images/${profileImageStoreName}|" alt="" width="130" height="130"
+                                <img th:src="|https://generalboardbucket.s3.ap-northeast-2.amazonaws.com/${profileImageStoreName}|"
+                                     alt="" width="130" height="130"
                                      class="rounded-circle me-2" id="preview"
                                      onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
 
                                 <div class="dropdown" style="margin-top: 7px;">
                                     <a href="#" class="btn btn-sm btn-outline-secondary text-decoration-none"
                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <div>프로필 사진 변경하기</div>
+                                        <div>프로필 사진 설정</div>
                                     </a>
                                     <ul class="dropdown-menu text-small shadow">
                                         <li>
@@ -185,6 +188,15 @@
                                                 <a class="dropdown-item preview-delete">기본 이미지로 변경</a>
                                             </label>
                                         </li>
+
+                                        <div th:if="${profileImageStoreNameForDownload} != null">
+                                            <li>
+                                                <label>
+                                                    <a class="dropdown-item"
+                                                       th:href="@{'http://ec2-43-201-158-17.ap-northeast-2.compute.amazonaws.com:8080/download/' + ${profileImageStoreNameForDownload}}">현재 사진 다운로드</a>
+                                                </label>
+                                            </li>
+                                        </div>
                                     </ul>
                                 </div>
                             </div>
@@ -261,6 +273,7 @@
 
         $("#profileImageId").val("-1");
     } );
+
 </script>
 
 <script src="/js/app/bootstrap.bundle.min.js"></script>

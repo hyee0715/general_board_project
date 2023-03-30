@@ -26,7 +26,7 @@
             </ul>
             <a sec:authorize="isAuthenticated()">
                 <div style="display: inline; margin-right: 10px;">
-                    <img th:src="|/images/${profileImageStoreName}|" alt="" width="32" height="32"
+                    <img th:src="|https://generalboardbucket.s3.ap-northeast-2.amazonaws.com/${profileImageStoreName}|" alt="" width="32" height="32"
                          class="rounded-circle me-2" onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
                     <a th:text="${nickname}">사용자</a> 님
                 </div>

@@ -28,6 +28,7 @@ out/
 application-personal.yml
 application-oauth.yml
 application-email.yml
+application-aws.yml
 
 ### NetBeans ###
 /nbproject/private/

@@ -295,6 +295,15 @@ public class SettingService {
         return getUserProfileImageStoreNameByUser(user);
     }
 
+    public String getProfileImageStoreNameForDownload(String storeName) {
+        if (storeName.isEmpty()) {
+            return null;
+        }
+
+        String[] names = storeName.split("/");
+        return names[names.length - 1];
+    }
+
     @Transactional
     public void deleteProfileImage(Long profileImageId) {
         ProfileImage profileImage = profileImageRepository.findById(profileImageId)

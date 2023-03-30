@@ -31,18 +31,38 @@ spring:
                 BasicBinder: TRACE
 
   profiles:
-    active: personal, oauth, email
+    active: personal, oauth, email, aws
 
   messages:
     basename: errors
 
+---
+# S3에 필요한 정보
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: generalboardbucket
+    stack:
+      auto: false
+    credentials:
+      instanceProfile: true
+
+application:
+  bucket: generalboardbucket
+
+spring:
   servlet:
     multipart:
-      location: C:/Users/hyee0/upload/
       enabled: true
       file-size-threshold: 2KB
-      max-file-size: 200MB
-      max-request-size: 215MB
+      max-file-size: 1GB
+      max-request-size: 1GB
 
-file:
-  dir: C:/Users/hyee0/upload/
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
