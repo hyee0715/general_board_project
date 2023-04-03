@@ -7,7 +7,7 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import com.hy.general_board_project.domain.profileImage.ProfileImage;
 import com.hy.general_board_project.domain.profileImage.ProfileImageRepository;
-import com.hy.general_board_project.web.dto.profileImage.ProfileImageDto;
+import com.hy.general_board_project.domain.dto.profileImage.ProfileImageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

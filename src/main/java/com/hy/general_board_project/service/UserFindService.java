@@ -2,8 +2,8 @@ package com.hy.general_board_project.service;
 
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
-import com.hy.general_board_project.web.dto.user.FindPasswordDto;
-import com.hy.general_board_project.web.dto.user.FindUsernameDto;
+import com.hy.general_board_project.domain.dto.user.FindPasswordDto;
+import com.hy.general_board_project.domain.dto.user.FindUsernameDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

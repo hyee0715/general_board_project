@@ -1,4 +1,4 @@
-package com.hy.general_board_project.web.dto.profileImage;
+package com.hy.general_board_project.domain.dto.profileImage;
 
 import com.hy.general_board_project.domain.profileImage.ProfileImage;
 import lombok.*;

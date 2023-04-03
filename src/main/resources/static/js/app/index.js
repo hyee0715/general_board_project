@@ -55,7 +55,7 @@ var main = {
 
         $.ajax({
             type: 'POST',
-            url: '/board/write',
+            url: '/api/board/write',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -107,7 +107,7 @@ var main = {
 
         $.ajax({
             type: 'PUT',
-            url: '/board/detail/update/'+id,
+            url: '/api/board/detail/update/'+id,
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -123,7 +123,7 @@ var main = {
 
         $.ajax({
             type: 'DELETE',
-            url: '/board/detail/'+id,
+            url: '/api/board/detail/delete/'+id,
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function() {

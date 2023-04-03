@@ -1,4 +1,4 @@
-package com.hy.general_board_project.web.dto.user;
+package com.hy.general_board_project.domain.dto.user;
 
 import com.hy.general_board_project.domain.user.User;
 import lombok.*;

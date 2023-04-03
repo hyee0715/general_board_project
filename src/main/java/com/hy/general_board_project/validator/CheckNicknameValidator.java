@@ -1,8 +1,7 @@
 package com.hy.general_board_project.validator;
 
 import com.hy.general_board_project.domain.user.UserRepository;
-import com.hy.general_board_project.web.dto.user.UserDto;
-import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
+import com.hy.general_board_project.domain.dto.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
