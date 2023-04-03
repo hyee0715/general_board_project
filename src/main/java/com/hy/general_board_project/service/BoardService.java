@@ -33,6 +33,9 @@ public class BoardService {
 
     @Transactional
     public Long save(BoardSaveRequestDto requestDto) {
+        User user = userRepository.findByNickname(requestDto.getWriter()).get();
+        requestDto.setUser(user);
+
         return boardRepository.save(requestDto.toEntity()).getId();
     }
 
@@ -233,5 +236,14 @@ public class BoardService {
         }
 
         return profileImage.getStoreName();
+    }
+
+    @Transactional
+    public void deleteUserRelation(Long userId) {
+        List<Board> boards = boardRepository.findByWriterId(userId);
+
+        for (Board board : boards) {
+            board.removeUser();
+        }
     }
 }

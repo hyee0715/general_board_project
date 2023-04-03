@@ -1,6 +1,7 @@
 package com.hy.general_board_project.web.dto.board;
 
 import com.hy.general_board_project.domain.board.Board;
+import com.hy.general_board_project.domain.user.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -19,9 +20,10 @@ public class BoardDetailResponseDto {
     private LocalDateTime modifiedDate;
     private Integer view;
     private Long writerId;
+    private User user;
 
     @Builder
-    public BoardDetailResponseDto(Long id, String title, String writer, String profileImage, String content, LocalDateTime createdDate, LocalDateTime modifiedDate, Integer view, Long writerId) {
+    public BoardDetailResponseDto(Long id, String title, String writer, String profileImage, String content, LocalDateTime createdDate, LocalDateTime modifiedDate, Integer view, Long writerId, User user) {
         this.id = id;
         this.title = title;
         this.writer = writer;
@@ -31,6 +33,7 @@ public class BoardDetailResponseDto {
         this.modifiedDate = modifiedDate;
         this.view = view;
         this.writerId = writerId;
+        this.user = user;
     }
 
     // Entity -> BoardDetailResponseDto로 변환
@@ -44,6 +47,7 @@ public class BoardDetailResponseDto {
                 .modifiedDate(board.getModifiedDate())
                 .view(board.getView())
                 .writerId(board.getWriterId())
+                .user(board.getUser())
                 .build();
     }
 }

@@ -1,11 +1,11 @@
 package com.hy.general_board_project.web.dto.board;
 
 import com.hy.general_board_project.domain.board.Board;
+import com.hy.general_board_project.domain.user.User;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Getter
+@Setter
 @NoArgsConstructor
 public class BoardSaveRequestDto {
     private String title;
@@ -13,14 +13,16 @@ public class BoardSaveRequestDto {
     private String content;
     private Integer view;
     private Long writerId;
+    private User user;
 
     @Builder
-    public BoardSaveRequestDto(String title, String content, String writer, Integer view, Long writerId) {
+    public BoardSaveRequestDto(String title, String content, String writer, Integer view, Long writerId, User user) {
         this.title = title;
         this.writer = writer;
         this.content = content;
         this.view = view;
         this.writerId = writerId;
+        this.user = user;
     }
 
     public Board toEntity() {
@@ -30,6 +32,7 @@ public class BoardSaveRequestDto {
                 .content(content)
                 .view(view)
                 .writerId(writerId)
+                .user(user)
                 .build();
     }
 }
