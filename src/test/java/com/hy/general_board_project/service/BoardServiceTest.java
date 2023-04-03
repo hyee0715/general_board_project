@@ -2,16 +2,20 @@ package com.hy.general_board_project.service;
 
 import com.hy.general_board_project.domain.board.Board;
 import com.hy.general_board_project.domain.board.BoardRepository;
+import com.hy.general_board_project.domain.user.User;
+import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
 import com.hy.general_board_project.web.dto.board.BoardSaveRequestDto;
 import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
 import com.hy.general_board_project.web.dto.board.BoardUpdateRequestDto;
+import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,44 +33,59 @@ class BoardServiceTest {
     @Autowired
     BoardRepository boardRepository;
 
-    List<Long> afterDeleteIds = new ArrayList<>();
+    @Autowired
+    UserRepository userRepository;
 
-    @AfterEach
-    void deleteAfterTest() {
-        for (long id : afterDeleteIds) {
-            boardRepository.deleteById(id);
-        }
+    @Autowired
+    UserService userService;
 
-        afterDeleteIds.clear();
+    User user;
+
+    @BeforeEach
+    public void signUp() {
+        UserSignUpRequestDto requestDto =
+                UserSignUpRequestDto.builder()
+                        .realName("김이름")
+                        .username("아이디")
+                        .nickname("닉네임")
+                        .password("abcd123##")
+                        .email("aa@aa")
+                        .build();
+
+        Long userId = userService.joinUser(requestDto);
+        user = userRepository.findById(userId).get();
     }
 
     @Test
     @DisplayName("게시물 새로 작성하기")
+    @Transactional
     void save() {
         BoardSaveRequestDto boardSaveRequestDto = BoardSaveRequestDto.builder()
                 .title("새로 작성 제목")
-                .writer("글쓴이")
+                .writer(user.getNickname())
                 .content("작성 내용")
                 .view(0)
-                .writerId(100001L)
+                .writerId(user.getId())
+                .user(user)
                 .build();
 
         Long savedBoardId = boardService.save(boardSaveRequestDto);
         String title = boardRepository.findById(savedBoardId).get().getTitle();
-        afterDeleteIds.add(savedBoardId);
 
         Assertions.assertThat(title).isEqualTo("새로 작성 제목");
     }
 
     @Test
     @DisplayName("작성한 게시물 수정하기")
+    @Transactional
     void update() {
         BoardSaveRequestDto boardSaveRequestDto = BoardSaveRequestDto.builder()
                 .title("새로 작성 제목")
-                .writer("글쓴이")
+                .writer(user.getNickname())
                 .content("작성 내용")
                 .view(0)
-                .writerId(100001L)
+                .writerId(user.getId())
+                .user(user)
                 .build();
 
         Long savedBoardId = boardService.save(boardSaveRequestDto);
@@ -78,28 +97,27 @@ class BoardServiceTest {
 
         Long updatedBoardId = boardService.update(savedBoardId, boardUpdateRequestDto);
         String title = boardRepository.findById(updatedBoardId).get().getTitle();
-        afterDeleteIds.add(updatedBoardId);
 
         Assertions.assertThat(title).isEqualTo("수정 제목");
     }
 
     @Test
     @DisplayName("한 페이지에 출력하는 게시물 번호 체크하기")
+    @Transactional
     void getBoardList() {
         List<Long> savedBoardIds = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
             BoardSaveRequestDto saveBoards = BoardSaveRequestDto.builder()
                     .title("테스트" + i)
-                    .writer("글쓴이")
+                    .writer(user.getNickname())
                     .content("작성 내용")
                     .view(0)
-                    .writerId(100001L)
+                    .writerId(user.getId())
+                    .user(user)
                     .build();
 
             Long savedBoardId = boardService.save(saveBoards);
             savedBoardIds.add(savedBoardId);
-
-            afterDeleteIds.add(savedBoardId);
         }
 
         List<BoardListResponseDto> boardList = boardService.getBoardList(1);
@@ -110,13 +128,15 @@ class BoardServiceTest {
 
     @Test
     @DisplayName("게시물 삭제하기 성공하는 경우")
+    @Transactional
     public void deleteSuccess() {
         BoardSaveRequestDto boardSaveRequestDto = BoardSaveRequestDto.builder()
                 .title("새로 작성 제목")
-                .writer("글쓴이")
+                .writer(user.getNickname())
                 .content("작성 내용")
                 .view(0)
-                .writerId(100001L)
+                .writerId(user.getId())
+                .user(user)
                 .build();
 
         Long savedBoardId = boardService.save(boardSaveRequestDto);
@@ -127,6 +147,7 @@ class BoardServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 게시물을 삭제하기 시도하는 경우")
+    @Transactional
     public void deleteFail() {
         assertThatThrownBy(() -> boardService.delete(100000000000001L))
                 .isInstanceOf(IllegalArgumentException.class)
@@ -135,21 +156,21 @@ class BoardServiceTest {
 
     @Test
     @DisplayName("게시물 검색하기")
+    @Transactional
     public void search() {
         List<Long> savedBoardIds = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
             BoardSaveRequestDto saveBoards = BoardSaveRequestDto.builder()
                     .title("테스트" + i % 2 + i % 2)
-                    .writer("글쓴이")
+                    .writer(user.getNickname())
                     .content("작성 내용")
                     .view(0)
-                    .writerId(100001L)
+                    .writerId(user.getId())
+                    .user(user)
                     .build();
 
             Long savedBoardId = boardService.save(saveBoards);
             savedBoardIds.add(savedBoardId);
-
-            afterDeleteIds.add(savedBoardId);
         }
 
         List<BoardSearchResponseDto> searchResult = boardService.search("테스트00", 1, "title");

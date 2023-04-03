@@ -252,6 +252,7 @@ public class SettingService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. username = " + username));
 
+        boardService.deleteUserRelation(user.getId());
         userRepository.delete(user);
     }
 
@@ -260,6 +261,7 @@ public class SettingService {
         User user = userRepository.findByEmailAndProvider(email, provider)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. email = " + email + " provider = " + provider));
 
+        boardService.deleteUserRelation(user.getId());
         userRepository.delete(user);
     }
 

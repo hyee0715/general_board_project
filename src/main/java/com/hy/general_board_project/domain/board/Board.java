@@ -1,6 +1,7 @@
 package com.hy.general_board_project.domain.board;
 
 import com.hy.general_board_project.domain.Time;
+import com.hy.general_board_project.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,13 +32,18 @@ public class Board extends Time {
     @Column
     private Long writerId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user; //Writer Entity
+
     @Builder
-    public Board(String title, String writer, String content, Integer view, Long writerId) {
+    public Board(String title, String writer, String content, Integer view, Long writerId, User user) {
         this.title = title;
         this.writer = writer;
         this.content = content;
         this.view = view;
         this.writerId = writerId;
+        this.user = user;
     }
 
     public void update(String title, String content) {
@@ -47,5 +53,9 @@ public class Board extends Time {
 
     public void updateWriter(String writer) {
         this.writer = writer;
+    }
+
+    public void removeUser() {
+        this.user = null;
     }
 }
