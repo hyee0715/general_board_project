@@ -1,4 +1,4 @@
-package com.hy.general_board_project.web.dto.message;
+package com.hy.general_board_project.domain.dto.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

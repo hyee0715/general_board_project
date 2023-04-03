@@ -1,11 +1,11 @@
-package com.hy.general_board_project.web.controller;
+package com.hy.general_board_project.controller.web;
 
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.service.BoardService;
 import com.hy.general_board_project.service.SettingService;
-import com.hy.general_board_project.web.dto.board.BoardDetailResponseDto;
-import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
+import com.hy.general_board_project.domain.dto.board.BoardDetailResponseDto;
+import com.hy.general_board_project.domain.dto.board.BoardSearchResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 

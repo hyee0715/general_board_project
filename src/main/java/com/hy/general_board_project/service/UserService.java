@@ -3,7 +3,7 @@ package com.hy.general_board_project.service;
 import com.hy.general_board_project.domain.user.Role;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
-import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
+import com.hy.general_board_project.domain.dto.user.UserSignUpRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

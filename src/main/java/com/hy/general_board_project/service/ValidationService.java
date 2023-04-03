@@ -1,7 +1,7 @@
 package com.hy.general_board_project.service;
 
+import com.hy.general_board_project.domain.dto.user.*;
 import com.hy.general_board_project.domain.user.User;
-import com.hy.general_board_project.web.dto.user.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

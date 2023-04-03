@@ -1,8 +1,7 @@
 package com.hy.general_board_project.service;
 
-import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
-import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
+import com.hy.general_board_project.domain.dto.user.UserSignUpRequestDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

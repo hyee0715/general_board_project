@@ -58,7 +58,7 @@
 				'click',
 				function() {
 					$.ajax({
-						url : "/user/email/send",
+						url : "/api/user/email/send",
 						type : "GET",
 						data : $("#signUpForm").serialize(),
 						success : function(data) {

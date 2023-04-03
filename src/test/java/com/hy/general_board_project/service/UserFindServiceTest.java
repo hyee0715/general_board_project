@@ -2,10 +2,9 @@ package com.hy.general_board_project.service;
 
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
-import com.hy.general_board_project.web.dto.user.FindPasswordDto;
-import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
+import com.hy.general_board_project.domain.dto.user.FindPasswordDto;
+import com.hy.general_board_project.domain.dto.user.UserSignUpRequestDto;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @SpringBootTest

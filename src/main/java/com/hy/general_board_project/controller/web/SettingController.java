@@ -1,15 +1,18 @@
-package com.hy.general_board_project.web.controller;
+package com.hy.general_board_project.controller.web;
 
 import static com.hy.general_board_project.service.MessageService.showMessageAndRedirect;
 
+import com.hy.general_board_project.domain.dto.user.FormUserWithdrawRequestDto;
+import com.hy.general_board_project.domain.dto.user.SocialUserWithdrawRequestDto;
+import com.hy.general_board_project.domain.dto.user.UserInfoUpdateRequestDto;
+import com.hy.general_board_project.domain.dto.user.UserPasswordUpdateRequestDto;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.service.*;
 import com.hy.general_board_project.validator.CheckNicknameModificationValidator;
-import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
-import com.hy.general_board_project.web.dto.board.BoardSearchResponseDto;
-import com.hy.general_board_project.web.dto.message.MessageDto;
-import com.hy.general_board_project.web.dto.user.*;
+import com.hy.general_board_project.domain.dto.board.BoardListResponseDto;
+import com.hy.general_board_project.domain.dto.board.BoardSearchResponseDto;
+import com.hy.general_board_project.domain.dto.message.MessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;

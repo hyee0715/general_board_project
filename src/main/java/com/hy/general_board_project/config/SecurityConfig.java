@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/board/write", "/setting/**").hasRole(Role.USER.name())
-                .antMatchers("/**", "/board/detail", "/user/login", "/user/signUp").permitAll()
+                .antMatchers("/**", "/board/detail", "/user/login", "/user/signUp", "/api/**").permitAll()
                 .anyRequest().authenticated()
                 .and() // 로그인 설정
                 .formLogin()

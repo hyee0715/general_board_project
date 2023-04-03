@@ -1,11 +1,11 @@
-package com.hy.general_board_project.web.controller;
+package com.hy.general_board_project.controller.web;
 
 import com.hy.general_board_project.service.UserService;
 import com.hy.general_board_project.service.ValidationService;
 import com.hy.general_board_project.validator.CheckEmailAndProviderValidator;
 import com.hy.general_board_project.validator.CheckNicknameValidator;
 import com.hy.general_board_project.validator.CheckUsernameValidator;
-import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
+import com.hy.general_board_project.domain.dto.user.UserSignUpRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -64,11 +64,8 @@ public class UserController {
     public String signUp(@Validated @ModelAttribute UserSignUpRequestDto userSignUpRequestDto, BindingResult bindingResult) {
 
         bindingResult = validationService.validateRealNameForSignUp(userSignUpRequestDto, bindingResult);
-
         bindingResult = validationService.validateUsernameForSignUp(userSignUpRequestDto, bindingResult);
-
         bindingResult = validationService.validateNicknameForSignUp(userSignUpRequestDto, bindingResult);
-
         bindingResult = validationService.validatePasswordForSignUp(userSignUpRequestDto, bindingResult);
 
         if (bindingResult.hasErrors()) {

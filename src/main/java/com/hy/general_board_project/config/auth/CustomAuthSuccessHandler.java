@@ -1,7 +1,7 @@
 package com.hy.general_board_project.config.auth;
 
 import com.hy.general_board_project.service.UserService;
-import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
+import com.hy.general_board_project.domain.dto.user.UserSignUpRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;

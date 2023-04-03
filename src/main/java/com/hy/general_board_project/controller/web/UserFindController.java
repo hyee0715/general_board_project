@@ -1,13 +1,13 @@
-package com.hy.general_board_project.web.controller;
+package com.hy.general_board_project.controller.web;
 
 import static com.hy.general_board_project.service.MessageService.showMessageAndRedirect;
 
 import com.hy.general_board_project.service.EmailService;
 import com.hy.general_board_project.service.UserFindService;
 import com.hy.general_board_project.service.ValidationService;
-import com.hy.general_board_project.web.dto.message.MessageDto;
-import com.hy.general_board_project.web.dto.user.FindPasswordDto;
-import com.hy.general_board_project.web.dto.user.FindUsernameDto;
+import com.hy.general_board_project.domain.dto.message.MessageDto;
+import com.hy.general_board_project.domain.dto.user.FindPasswordDto;
+import com.hy.general_board_project.domain.dto.user.FindUsernameDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

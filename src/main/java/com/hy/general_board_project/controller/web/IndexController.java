@@ -1,8 +1,8 @@
-package com.hy.general_board_project.web.controller;
+package com.hy.general_board_project.controller.web;
 
 import com.hy.general_board_project.service.BoardService;
 import com.hy.general_board_project.service.SettingService;
-import com.hy.general_board_project.web.dto.board.BoardListResponseDto;
+import com.hy.general_board_project.domain.dto.board.BoardListResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package com.hy.general_board_project.web.dto.user;
+package com.hy.general_board_project.domain.dto.user;
 
 import com.hy.general_board_project.domain.user.User;
 import lombok.*;
@@ -9,26 +9,28 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @ToString
 @NoArgsConstructor
-public class FormUserWithdrawRequestDto implements UserDto {
-
-    private Long id;
+public class FindUsernameDto implements UserDto {
 
     @NotBlank
+    private String realName;
+
     private String username;
 
     @NotBlank
-    private String requestPassword;
+    private String email;
 
     @Builder
-    public FormUserWithdrawRequestDto(Long id, String username, String requestPassword) {
-        this.id = id;
+    public FindUsernameDto(String realName, String username, String email) {
+        this.realName = realName;
         this.username = username;
-        this.requestPassword = requestPassword;
+        this.email = email;
     }
 
     public User toEntity() {
         return User.builder()
+                .realName(realName)
                 .username(username)
+                .email(email)
                 .build();
     }
 }

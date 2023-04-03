@@ -2,10 +2,10 @@ package com.hy.general_board_project.service;
 
 import com.hy.general_board_project.domain.board.Board;
 import com.hy.general_board_project.domain.board.BoardRepository;
+import com.hy.general_board_project.domain.dto.board.*;
 import com.hy.general_board_project.domain.profileImage.ProfileImage;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
-import com.hy.general_board_project.web.dto.board.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

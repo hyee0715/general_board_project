@@ -1,11 +1,11 @@
-package com.hy.general_board_project.web.controller;
+package com.hy.general_board_project.controller.web;
 
 import static com.hy.general_board_project.service.MessageService.showMessageAndRedirect;
 
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.service.UserService;
-import com.hy.general_board_project.web.dto.message.MessageDto;
-import com.hy.general_board_project.web.dto.user.UserSignUpRequestDto;
+import com.hy.general_board_project.domain.dto.message.MessageDto;
+import com.hy.general_board_project.domain.dto.user.UserSignUpRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;

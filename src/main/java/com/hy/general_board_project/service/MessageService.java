@@ -1,6 +1,6 @@
 package com.hy.general_board_project.service;
 
-import com.hy.general_board_project.web.dto.message.MessageDto;
+import com.hy.general_board_project.domain.dto.message.MessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
