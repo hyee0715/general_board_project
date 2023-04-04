@@ -6,6 +6,7 @@ import com.hy.general_board_project.validator.CheckEmailAndProviderValidator;
 import com.hy.general_board_project.validator.CheckNicknameValidator;
 import com.hy.general_board_project.validator.CheckUsernameValidator;
 import com.hy.general_board_project.domain.dto.user.UserSignUpRequestDto;
+import com.hy.general_board_project.validator.validation.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -61,13 +62,7 @@ public class UserController {
     }
 
     @PostMapping("/user/signUp")
-    public String signUp(@Validated @ModelAttribute UserSignUpRequestDto userSignUpRequestDto, BindingResult bindingResult) {
-
-        bindingResult = validationService.validateRealNameForSignUp(userSignUpRequestDto, bindingResult);
-        bindingResult = validationService.validateUsernameForSignUp(userSignUpRequestDto, bindingResult);
-        bindingResult = validationService.validateNicknameForSignUp(userSignUpRequestDto, bindingResult);
-        bindingResult = validationService.validatePasswordForSignUp(userSignUpRequestDto, bindingResult);
-
+    public String signUp(@Validated({RealNameValidationSequence.class, UsernameValidationSequence.class, NicknameValidationSequence.class, PasswordValidationSequence.class, EmailValidationSequence.class}) @ModelAttribute UserSignUpRequestDto userSignUpRequestDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.info("errors = {}", bindingResult);
             return "account/signUp";
