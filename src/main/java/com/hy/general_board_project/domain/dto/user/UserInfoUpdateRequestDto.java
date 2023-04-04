@@ -1,11 +1,14 @@
 package com.hy.general_board_project.domain.dto.user;
 
 import com.hy.general_board_project.domain.user.User;
+import com.hy.general_board_project.validator.validation.signUp.NicknameValidationGroups;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -21,7 +24,9 @@ public class UserInfoUpdateRequestDto implements UserDto {
     @NotBlank
     private String username;
 
-    @NotBlank
+    @Size(min = 2, max = 10, message = "닉네임은 2~10자리 제한입니다.", groups = NicknameValidationGroups.SizeCheckGroup.class)
+    @NotBlank(groups = NicknameValidationGroups.NotNullGroup.class)
+    @Pattern(regexp = "^[가-힣a-zA-Z0-9]{2,10}$", message = "닉네임은 특수문자가 포함될 수 없습니다.", groups = NicknameValidationGroups.PatternCheckGroup.class)
     private String nickname;
 
     @Email

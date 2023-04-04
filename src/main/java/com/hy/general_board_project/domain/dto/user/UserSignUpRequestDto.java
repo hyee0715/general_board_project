@@ -2,7 +2,7 @@ package com.hy.general_board_project.domain.dto.user;
 
 import com.hy.general_board_project.domain.user.Role;
 import com.hy.general_board_project.domain.user.User;
-import com.hy.general_board_project.validator.validation.*;
+import com.hy.general_board_project.validator.validation.signUp.*;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -31,7 +31,7 @@ public class UserSignUpRequestDto implements UserDto {
     @Pattern(regexp = "^[가-힣a-zA-Z0-9]{2,10}$", message = "닉네임은 특수문자가 포함될 수 없습니다.", groups = NicknameValidationGroups.PatternCheckGroup.class)
     private String nickname;
 
-    @Size(min = 8, max = 20, message = "비밀번호는 8~10자리 제한입니다.", groups = PasswordValidationGroups.SizeCheckGroup.class)
+    @Size(min = 8, max = 20, message = "비밀번호는 8~20자리 제한입니다.", groups = PasswordValidationGroups.SizeCheckGroup.class)
     @NotBlank(groups = PasswordValidationGroups.NotNullGroup.class)
     @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}", message = "비밀번호는 영문 대소문자, 숫자, 특수기호 1개 이상으로 구성되어야 합니다.", groups = PasswordValidationGroups.PatternCheckGroup.class)
     private String password;

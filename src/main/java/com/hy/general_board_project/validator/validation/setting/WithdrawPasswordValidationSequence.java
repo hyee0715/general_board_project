@@ -1,0 +1,7 @@
+package com.hy.general_board_project.validator.validation.setting;
+
+import javax.validation.GroupSequence;
+
+@GroupSequence({WithdrawPasswordValidationGroups.NotNullGroup.class, WithdrawPasswordValidationGroups.SizeCheckGroup.class, WithdrawPasswordValidationGroups.PatternCheckGroup.class, WithdrawPasswordValidationGroups.IdentificationCheckWithPasswordGroup.class})
+public interface WithdrawPasswordValidationSequence {
+}

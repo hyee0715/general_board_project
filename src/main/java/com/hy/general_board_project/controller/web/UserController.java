@@ -1,12 +1,11 @@
 package com.hy.general_board_project.controller.web;
 
 import com.hy.general_board_project.service.UserService;
-import com.hy.general_board_project.service.ValidationService;
 import com.hy.general_board_project.validator.CheckEmailAndProviderValidator;
 import com.hy.general_board_project.validator.CheckNicknameValidator;
 import com.hy.general_board_project.validator.CheckUsernameValidator;
 import com.hy.general_board_project.domain.dto.user.UserSignUpRequestDto;
-import com.hy.general_board_project.validator.validation.*;
+import com.hy.general_board_project.validator.validation.signUp.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -27,7 +26,6 @@ public class UserController {
     private final CheckUsernameValidator checkUsernameValidator;
     private final CheckNicknameValidator checkNicknameValidator;
     private final CheckEmailAndProviderValidator checkEmailAndProviderValidator;
-    private final ValidationService validationService;
 
     @InitBinder
     public void validatorBinder(WebDataBinder binder) {
