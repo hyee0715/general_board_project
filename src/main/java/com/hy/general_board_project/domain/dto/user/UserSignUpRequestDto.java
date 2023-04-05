@@ -2,7 +2,7 @@ package com.hy.general_board_project.domain.dto.user;
 
 import com.hy.general_board_project.domain.user.Role;
 import com.hy.general_board_project.domain.user.User;
-import com.hy.general_board_project.validator.validation.signUp.*;
+import com.hy.general_board_project.validator.validation.user.*;
 import lombok.*;
 
 import javax.validation.constraints.Email;

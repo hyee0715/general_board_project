@@ -13,7 +13,7 @@ import com.hy.general_board_project.domain.dto.board.BoardListResponseDto;
 import com.hy.general_board_project.domain.dto.board.BoardSearchResponseDto;
 import com.hy.general_board_project.domain.dto.message.MessageDto;
 import com.hy.general_board_project.validator.validation.setting.*;
-import com.hy.general_board_project.validator.validation.signUp.NicknameValidationSequence;
+import com.hy.general_board_project.validator.validation.user.NicknameValidationSequence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;

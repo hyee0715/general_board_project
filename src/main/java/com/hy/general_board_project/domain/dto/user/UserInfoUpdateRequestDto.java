@@ -1,7 +1,7 @@
 package com.hy.general_board_project.domain.dto.user;
 
 import com.hy.general_board_project.domain.user.User;
-import com.hy.general_board_project.validator.validation.signUp.NicknameValidationGroups;
+import com.hy.general_board_project.validator.validation.user.NicknameValidationGroups;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 

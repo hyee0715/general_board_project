@@ -5,7 +5,7 @@ import com.hy.general_board_project.validator.CheckEmailAndProviderValidator;
 import com.hy.general_board_project.validator.CheckNicknameValidator;
 import com.hy.general_board_project.validator.CheckUsernameValidator;
 import com.hy.general_board_project.domain.dto.user.UserSignUpRequestDto;
-import com.hy.general_board_project.validator.validation.signUp.*;
+import com.hy.general_board_project.validator.validation.user.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

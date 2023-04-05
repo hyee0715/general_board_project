@@ -1,4 +1,4 @@
-package com.hy.general_board_project.validator.validation.signUp;
+package com.hy.general_board_project.validator.validation.user;
 
 import javax.validation.GroupSequence;
 
