@@ -6,13 +6,14 @@ import com.hy.general_board_project.domain.dto.user.FormUserWithdrawRequestDto;
 import com.hy.general_board_project.domain.dto.user.SocialUserWithdrawRequestDto;
 import com.hy.general_board_project.domain.dto.user.UserInfoUpdateRequestDto;
 import com.hy.general_board_project.domain.dto.user.UserPasswordUpdateRequestDto;
-import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.service.*;
 import com.hy.general_board_project.validator.CheckNicknameModificationValidator;
 import com.hy.general_board_project.domain.dto.board.BoardListResponseDto;
 import com.hy.general_board_project.domain.dto.board.BoardSearchResponseDto;
 import com.hy.general_board_project.domain.dto.message.MessageDto;
+import com.hy.general_board_project.validator.validation.setting.*;
+import com.hy.general_board_project.validator.validation.user.NicknameValidationSequence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
@@ -39,7 +40,6 @@ public class SettingController {
     private final UserRepository userRepository;
     private final UserService userService;
     private final FileStoreService fileStoreService;
-    private final ValidationService validationService;
 
     @InitBinder
     public void validatorBinder(WebDataBinder binder) {
@@ -47,7 +47,7 @@ public class SettingController {
     }
 
     @GetMapping("/setting/userInfo")
-    public String moveToUserInfo(Model model) {
+    public String userInfo(Model model) {
         model.addAttribute("currentNickname", settingService.getUserNickname());
 
         UserInfoUpdateRequestDto userInfoUpdateRequestDto = settingService.getCurrentUserInfoUpdateRequestDto();
@@ -77,9 +77,7 @@ public class SettingController {
     }
 
     @PostMapping("/setting/userInfo")
-    public String updateUserInfo(@Validated @ModelAttribute UserInfoUpdateRequestDto userInfoUpdateRequestDto, BindingResult bindingResult, Model model) throws IOException {
-
-        bindingResult = validationService.validateNicknameForUpdateUserInfo(userInfoUpdateRequestDto, bindingResult);
+    public String updateUserInfo(@Validated({NicknameValidationSequence.class}) @ModelAttribute UserInfoUpdateRequestDto userInfoUpdateRequestDto, BindingResult bindingResult, Model model) throws IOException {
 
         if (bindingResult.hasErrors()) {
             log.info("errors ={}", bindingResult);
@@ -173,7 +171,7 @@ public class SettingController {
     }
 
     @GetMapping("/setting/userPassword")
-    public String moveToUserPassword(Model model) {
+    public String userPassword(Model model) {
         if (!userService.isCertifiedUser()) {
             return "redirect:/user/emailCertified";
         }
@@ -194,13 +192,7 @@ public class SettingController {
     }
 
     @PostMapping("/setting/userPassword")
-    public String updateUserPassword(@Validated @ModelAttribute UserPasswordUpdateRequestDto userPasswordUpdateRequestDto, BindingResult bindingResult, Model model) {
-
-        User currentUser = settingService.findUser();
-
-        bindingResult = validationService.validateCurrentPasswordForUpdatePassword(userPasswordUpdateRequestDto, bindingResult, currentUser);
-        bindingResult = validationService.validateNewPasswordForUpdatePassword(userPasswordUpdateRequestDto, bindingResult, currentUser);
-        bindingResult = validationService.validateNewPasswordConfirmForUpdatePassword(userPasswordUpdateRequestDto, bindingResult);
+    public String updateUserPassword(@Validated({CurrentPasswordValidationSequence.class, NewPasswordValidationSequence.class, NewPasswordConfirmValidationSequence.class}) @ModelAttribute UserPasswordUpdateRequestDto userPasswordUpdateRequestDto, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors = {}", bindingResult);
@@ -318,10 +310,7 @@ public class SettingController {
     }
 
     @PostMapping("/setting/withdrawal/password")
-    public String checkWithdrawalPassword(@Validated @ModelAttribute FormUserWithdrawRequestDto formUserWithdrawRequestDto, BindingResult bindingResult, Model model) {
-        User currentUser = settingService.findUser();
-
-        bindingResult = validationService.validatePasswordForWithdrawal(formUserWithdrawRequestDto, bindingResult, currentUser);
+    public String checkWithdrawalPassword(@Validated({WithdrawPasswordValidationSequence.class}) @ModelAttribute FormUserWithdrawRequestDto formUserWithdrawRequestDto, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors = {}", bindingResult);
@@ -344,9 +333,7 @@ public class SettingController {
     }
 
     @PostMapping("/setting/withdrawal/email")
-    public String checkWithdrawalEmail(@Validated @ModelAttribute SocialUserWithdrawRequestDto socialUserWithdrawRequestDto, BindingResult bindingResult, Model model) {
-
-        bindingResult = validationService.validateEmailForWithdrawal(socialUserWithdrawRequestDto, bindingResult);
+    public String checkWithdrawalEmail(@Validated({WithdrawEmailValidationSequence.class}) @ModelAttribute SocialUserWithdrawRequestDto socialUserWithdrawRequestDto, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors = {}", bindingResult);

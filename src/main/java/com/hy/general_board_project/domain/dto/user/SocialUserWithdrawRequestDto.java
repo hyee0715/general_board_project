@@ -1,10 +1,14 @@
 package com.hy.general_board_project.domain.dto.user;
 
 import com.hy.general_board_project.domain.user.User;
+import com.hy.general_board_project.validator.validation.setting.WithdrawEmail;
+import com.hy.general_board_project.validator.validation.setting.WithdrawEmailValidationGroups;
 import lombok.*;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+@WithdrawEmail(groups = WithdrawEmailValidationGroups.IdentificationCheckWithEmailGroup.class)
 @Getter
 @Setter
 @ToString
@@ -18,7 +22,8 @@ public class SocialUserWithdrawRequestDto implements UserDto {
 
     private String provider;
 
-    @NotBlank
+    @Email(groups = WithdrawEmailValidationGroups.EmailCheckGroup.class)
+    @NotBlank(groups = WithdrawEmailValidationGroups.NotNullGroup.class)
     private String requestEmail;
 
     @Builder
@@ -34,5 +39,9 @@ public class SocialUserWithdrawRequestDto implements UserDto {
                 .email(email)
                 .provider(provider)
                 .build();
+    }
+
+    public boolean isValidWithdrawEmail() {
+        return email.equals(requestEmail);
     }
 }

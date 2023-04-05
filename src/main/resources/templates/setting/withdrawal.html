@@ -197,12 +197,15 @@
 
                                 <div class="mb-3">
                                     <label for="requestEmail">이메일</label>
-                                    <input type="requestEmail" class="form-control" id="requestEmail"
+                                    <input type="text" class="form-control" id="requestEmail"
                                            th:field="*{requestEmail}" th:errorclass="field-error-form"
                                            placeholder="이메일을 입력해주세요."
                                            name="requestEmail" required>
                                     <div class="field-error" th:errors="*{requestEmail}">
                                         이메일 오류
+                                    </div>
+                                    <div class="field-error" th:errors="${socialUserWithdrawRequestDto}">
+                                        이메일 일치 오류
                                     </div>
                                 </div>
 

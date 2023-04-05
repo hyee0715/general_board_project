@@ -4,10 +4,10 @@ import static com.hy.general_board_project.service.MessageService.showMessageAnd
 
 import com.hy.general_board_project.service.EmailService;
 import com.hy.general_board_project.service.UserFindService;
-import com.hy.general_board_project.service.ValidationService;
 import com.hy.general_board_project.domain.dto.message.MessageDto;
 import com.hy.general_board_project.domain.dto.user.FindPasswordDto;
 import com.hy.general_board_project.domain.dto.user.FindUsernameDto;
+import com.hy.general_board_project.validator.validation.user.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,7 +29,6 @@ public class UserFindController {
 
     private final UserFindService userFindService;
     private final EmailService emailService;
-    private final ValidationService validationService;
 
     @GetMapping("/user/findUsername")
     public String findUsername(Model model) {
@@ -38,11 +37,7 @@ public class UserFindController {
     }
 
     @PostMapping("/user/findUsername")
-    public String findUsername(@Validated @ModelAttribute FindUsernameDto findUsernameDto, BindingResult bindingResult, Model model) throws MessagingException {
-
-        bindingResult = validationService.validateUsernameForFinding(findUsernameDto, bindingResult);
-        bindingResult = validationService.validateEmailForFinding(findUsernameDto, bindingResult);
-        bindingResult = validationService.checkGlobalErrorForFinding(findUsernameDto, bindingResult);
+    public String findUsername(@Validated({RealNameValidationSequence.class, EmailValidationSequence.class, FindUsernameValidationSequence.class}) @ModelAttribute FindUsernameDto findUsernameDto, BindingResult bindingResult, Model model) throws MessagingException {
 
         if (bindingResult.hasErrors()) {
             log.info("errors = {}", bindingResult);
@@ -75,12 +70,7 @@ public class UserFindController {
     }
 
     @PostMapping("/user/findPassword")
-    public String findPassword(@Validated @ModelAttribute FindPasswordDto findPasswordDto, BindingResult bindingResult, Model model) throws MessagingException {
-
-        bindingResult = validationService.validateRealNameForFindingPassword(findPasswordDto, bindingResult);
-        bindingResult = validationService.validateUsernameForFindingPassword(findPasswordDto, bindingResult);
-        bindingResult = validationService.validateEmailForFindingPassword(findPasswordDto, bindingResult);
-        bindingResult = validationService.checkGlobalErrorForFindingPassword(findPasswordDto, bindingResult);
+    public String findPassword(@Validated({RealNameValidationSequence.class, UsernameValidationSequence.class, EmailValidationSequence.class, FindPasswordValidationSequence.class})  @ModelAttribute FindPasswordDto findPasswordDto, BindingResult bindingResult, Model model) throws MessagingException {
 
         if (bindingResult.hasErrors()) {
             log.info("errors = {}", bindingResult);
