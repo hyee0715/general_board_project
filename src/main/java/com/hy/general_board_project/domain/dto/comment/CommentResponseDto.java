@@ -17,6 +17,7 @@ public class CommentResponseDto {
     private String nickname;
     private Long boardId;
     private Long commentWriterId;
+    private String commentWriterProfileImageStoreName;
 
     public CommentResponseDto(Comment comment) {
         this.id = comment.getId();
@@ -26,5 +27,6 @@ public class CommentResponseDto {
         this.nickname = comment.getUser().getNickname();
         this.boardId = comment.getBoard().getId();
         this.commentWriterId = comment.getUser().getId();
+        this.commentWriterProfileImageStoreName = comment.getUser().getProfileImage() != null ? comment.getUser().getProfileImage().getStoreName() : null;
     }
 }
