@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="fragments/header :: header">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
@@ -14,7 +14,8 @@
                 <div class="border-bottom">
                     <h2 class="mb-3" th:text="${boardDetailResponseDto.title}" style="font-size: 40px;">제목</h2>
                     <p class="fst-italic" style="margin-top:30px; font-size: 13px;">
-                        <img th:src="|https://generalboardbucket.s3.ap-northeast-2.amazonaws.com/${writerProfileImageStoreName}|" alt="" width="32" height="32"
+                        <img th:src="|https://generalboardbucket.s3.ap-northeast-2.amazonaws.com/${writerProfileImageStoreName}|"
+                             alt="" width="32" height="32"
                              class="rounded-circle"
                              onerror="this.onerror=null; this.src='/image/defaultProfileImage.png';">
                         <a th:text="${boardDetailResponseDto.writer}">작성자</a>
@@ -53,11 +54,98 @@
                     <!--                </nav>-->
                 </div>
                 </p>
+
+                <div th:if="${comments != null}" class="card">
+                    <div class="card-header bi bi-chat-dots">
+                        <a th:text="${#lists.size(comments)}"></a> Comments
+                        <hr/>
+                        <ul class="list-group-flush" th:each="comment : ${comments}">
+                            <li class="list-group-item" th:id="'comments-'+${comment.id}">
+                                <div class="d-flex text-muted">
+
+                                    <!--      <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"/><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>-->
+
+                                    <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <strong class="text-gray-dark" th:text="${comment.nickname}">댓글 작성자
+                                                    닉네임</strong>
+                                                <a th:text="${comment.createdDate} ? ${#temporals.format(comment.createdDate,'yyyy-MM-dd HH:mm')} : ${comment.createdDate}"
+                                                   style="margin-left: 8px;">댓글 작성일</a>
+                                                <a th:if="${comment.modifiedDate != comment.createdDate}"
+                                                   style="margin-left: 2px;">(수정됨)</a>
+                                            </div>
+                                            <div th:if="${comment.commentWriterId} == ${userId}">
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                        data-bs-toggle="collapse"
+                                                        th:attr="data-bs-target='#collapseExample'+${comment.id}"
+                                                        aria-expanded="false" aria-controls="collapseExample"
+                                                        style="font-size: 3px; padding:3px;">
+                                                    수정
+                                                </button>
+                                                <button class="btn btn-outline-secondary" type="button"
+                                                        th:onclick="'main.commentDelete(' + ${boardDetailResponseDto.id} + ',' + ${comment.id} + ')'"
+                                                        style="font-size:3px; padding:3px;">
+                                                    삭제
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <span class="d-block" th:text="${comment.content}"
+                                              style="margin-top:3px;">댓글 내용</span>
+                                    </div>
+                                </div>
+
+                                <div class="collapse border-bottom w-100" th:id="'collapseExample'+${comment.id}">
+                                    <form>
+                                        <input type="hidden" id="commentId" th:value="${comment.id}"/>
+                                        <input type="hidden" id="boardIdForComment"
+                                               th:value="${boardDetailResponseDto.id}"/>
+                                        <div class="card-body">
+                                                <textarea id="comment-content" class="form-control" rows="2"
+                                                          th:text="${comment.content}"
+                                                          style="font-size: 13px;"></textarea>
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    id="btn-comment-update"
+                                                    style="font-size:3px; padding:3px; margin-top:7px;">
+                                                저장하기
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header bi bi-chat-right-dots">Write a Comment</div>
+                    <form>
+                        <input type="hidden" id="boardId" th:value="${boardDetailResponseDto.id}"/>
+                        <a sec:authorize="isAuthenticated()">
+                            <div class="card-body">
+                                <textarea id="content" class="form-control" rows="4" placeholder="댓글을 입력하세요"></textarea>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" id="btn-comment-save"
+                                        class="btn btn-outline-secondary bi bi-pencil-square"> 등록
+                                </button>
+                            </div>
+                        </a>
+
+                        <a sec:authorize="!isAuthenticated()">
+                            <div class="card-body" style="font-size: small"><a href="/user/login">로그인</a>을 하시면 댓글을 등록할 수
+                                있습니다.
+                            </div>
+                        </a>
+                    </form>
+                </div>
             </div>
         </div>
     </main>
 </div> <!-- /container -->
 <div th:replace="fragments/footer :: footer"/>
+
+<script src="/js/app/comment.js"></script>
 
 </body>
 </html>
