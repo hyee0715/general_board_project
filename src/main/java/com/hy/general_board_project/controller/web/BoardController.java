@@ -1,5 +1,6 @@
 package com.hy.general_board_project.controller.web;
 
+import com.hy.general_board_project.domain.dto.comment.CommentResponseDto;
 import com.hy.general_board_project.domain.user.User;
 import com.hy.general_board_project.domain.user.UserRepository;
 import com.hy.general_board_project.service.BoardService;
@@ -51,6 +52,11 @@ public class BoardController {
     @GetMapping("/detail/{no}")
     public String detail(@PathVariable("no") Long id, Model model, HttpServletRequest request, HttpServletResponse response) {
         BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(id);
+        List<CommentResponseDto> comments = boardDetailResponseDto.getComments();
+
+        if (comments != null && !comments.isEmpty()) {
+            model.addAttribute("comments", comments);
+        }
 
         /* 조회수 로직 */
         Cookie oldCookie = null;

@@ -1,12 +1,14 @@
 package com.hy.general_board_project.domain.board;
 
 import com.hy.general_board_project.domain.Time;
+import com.hy.general_board_project.domain.comment.Comment;
 import com.hy.general_board_project.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -35,6 +37,10 @@ public class Board extends Time {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user; //Writer Entity
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OrderBy("id asc")
+    private List<Comment> comments;
 
     @Builder
     public Board(String title, String writer, String content, Integer view, Long writerId, User user) {

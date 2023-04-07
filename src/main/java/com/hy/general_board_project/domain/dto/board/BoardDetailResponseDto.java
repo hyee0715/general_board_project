@@ -1,10 +1,13 @@
 package com.hy.general_board_project.domain.dto.board;
 
 import com.hy.general_board_project.domain.board.Board;
+import com.hy.general_board_project.domain.dto.comment.CommentResponseDto;
 import com.hy.general_board_project.domain.user.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -21,9 +24,10 @@ public class BoardDetailResponseDto {
     private Integer view;
     private Long writerId;
     private User user;
+    private List<CommentResponseDto> comments;
 
     @Builder
-    public BoardDetailResponseDto(Long id, String title, String writer, String profileImage, String content, LocalDateTime createdDate, LocalDateTime modifiedDate, Integer view, Long writerId, User user) {
+    public BoardDetailResponseDto(Long id, String title, String writer, String profileImage, String content, LocalDateTime createdDate, LocalDateTime modifiedDate, Integer view, Long writerId, User user, List<CommentResponseDto> comments) {
         this.id = id;
         this.title = title;
         this.writer = writer;
@@ -34,6 +38,7 @@ public class BoardDetailResponseDto {
         this.view = view;
         this.writerId = writerId;
         this.user = user;
+        this.comments = comments;
     }
 
     // Entity -> BoardDetailResponseDto로 변환
@@ -48,6 +53,7 @@ public class BoardDetailResponseDto {
                 .view(board.getView())
                 .writerId(board.getWriterId())
                 .user(board.getUser())
+                .comments(board.getComments().stream().map(CommentResponseDto::new).collect(Collectors.toList()))
                 .build();
     }
 }
