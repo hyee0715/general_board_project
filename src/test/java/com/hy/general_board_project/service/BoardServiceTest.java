@@ -50,6 +50,7 @@ class BoardServiceTest {
                         .nickname("닉네임")
                         .password("abcd123##")
                         .email("aa@aa")
+                        .certified("Y")
                         .build();
 
         Long userId = userService.joinUser(requestDto);

@@ -39,6 +39,7 @@ class UserFindServiceTest {
                         .nickname("닉네임")
                         .password("abcd123##")
                         .email("aabc@aabcd.com")
+                        .certified("Y")
                         .build();
 
         userId = userService.joinUser(requestDto);
