@@ -49,8 +49,8 @@ public class BoardController {
         return "board/write";
     }
 
-    @GetMapping("/detail/{no}")
-    public String detail(@PathVariable("no") Long id, Model model, HttpServletRequest request, HttpServletResponse response) {
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long id, Model model, HttpServletRequest request, HttpServletResponse response) {
         BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(id);
         List<CommentResponseDto> comments = boardDetailResponseDto.getComments();
 
@@ -119,9 +119,9 @@ public class BoardController {
         return "board/detail";
     }
 
-    @GetMapping("/detail/update/{no}")
-    public String update(@PathVariable("no") Long no, Model model) {
-        BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(no);
+    @GetMapping("/detail/update/{id}")
+    public String update(@PathVariable("id") Long id, Model model) {
+        BoardDetailResponseDto boardDetailResponseDto = boardService.getBoardDetail(id);
 
         model.addAttribute("boardDetailResponseDto", boardDetailResponseDto);
         model.addAttribute("nickname", settingService.getUserNickname());
