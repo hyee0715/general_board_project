@@ -59,7 +59,7 @@
 				function() {
 					$.ajax({
 						url : "/api/user/email/send",
-						type : "GET",
+						type : "POST",
 						data : $("#signUpForm").serialize(),
 						success : function(data) {
 							alert("이메일이 전송되었습니다.")
