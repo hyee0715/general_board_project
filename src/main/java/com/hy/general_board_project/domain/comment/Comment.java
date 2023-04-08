@@ -35,4 +35,8 @@ public class Comment extends Time {
     public void update(String content) {
         this.content = content;
     }
+
+    public void removeUser() {
+        this.user = null;
+    }
 }

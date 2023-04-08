@@ -24,9 +24,13 @@ public class CommentResponseDto {
         this.content = comment.getContent();
         this.createdDate = comment.getCreatedDate();
         this.modifiedDate = comment.getModifiedDate();
-        this.nickname = comment.getUser().getNickname();
+        this.nickname = comment.getUser() == null ? "탈퇴한 사용자" : comment.getUser().getNickname();
         this.boardId = comment.getBoard().getId();
-        this.commentWriterId = comment.getUser().getId();
-        this.commentWriterProfileImageStoreName = comment.getUser().getProfileImage() != null ? comment.getUser().getProfileImage().getStoreName() : null;
+        this.commentWriterId = comment.getUser() == null ? -1L : comment.getUser().getId();
+        this.commentWriterProfileImageStoreName = null;
+
+        if (comment.getUser() != null && comment.getUser().getProfileImage() != null) {
+            this.commentWriterProfileImageStoreName = comment.getUser().getProfileImage().getStoreName();
+        }
     }
 }

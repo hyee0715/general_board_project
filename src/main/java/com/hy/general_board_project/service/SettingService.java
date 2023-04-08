@@ -43,6 +43,7 @@ public class SettingService {
     private final HttpSession httpSession;
     private final BoardService boardService;
     private final FileStoreService fileStoreService;
+    private final CommentService commentService;
 
     @Transactional
     public String updateUserNickname(UserInfoUpdateRequestDto userInfoUpdateRequestDto) {
@@ -252,6 +253,7 @@ public class SettingService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. username = " + username));
 
+        commentService.deleteUserRelation(user.getId());
         boardService.deleteUserRelation(user.getId());
         userRepository.delete(user);
     }
@@ -261,6 +263,7 @@ public class SettingService {
         User user = userRepository.findByEmailAndProvider(email, provider)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. email = " + email + " provider = " + provider));
 
+        commentService.deleteUserRelation(user.getId());
         boardService.deleteUserRelation(user.getId());
         userRepository.delete(user);
     }
