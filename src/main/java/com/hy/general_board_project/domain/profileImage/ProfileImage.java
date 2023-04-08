@@ -14,11 +14,14 @@ import javax.persistence.*;
 public class ProfileImage extends Time {
 
     @Id
-    @Column(name = "PROFILE_IMAGE_ID")
+    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String uploadName;
+
+    @Column(nullable = false)
     private String storeName;
 
     @OneToOne(mappedBy = "profileImage")

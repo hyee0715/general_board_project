@@ -31,7 +31,7 @@ public class Board extends Time {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private Integer view;
 
-    @Column
+    @Column(nullable = false)
     private Long writerId;
 
     @ManyToOne(fetch = FetchType.LAZY)

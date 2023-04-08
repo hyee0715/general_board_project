@@ -25,7 +25,7 @@ public class User extends Time {
 
     private String password;
 
-    @Column
+    @Column(nullable = false)
     private String nickname;
 
     @Column(nullable = false)
@@ -37,6 +37,7 @@ public class User extends Time {
 
     private String provider;
 
+    @Column(nullable = false)
     private String certified;
 
     @OneToOne
