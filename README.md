@@ -68,6 +68,9 @@ http://ec2-43-201-158-17.ap-northeast-2.compute.amazonaws.com:8080/
 
 ## 사용 예제
 
+<details>
+<summary>메인 페이지 / 회원 기능</summary>
+
 ![image](https://user-images.githubusercontent.com/59169881/230759846-5c4bf4ab-49a3-482a-8d08-99d871c8f26b.png)
 
 해당 화면이 메인 페이지로, 게시글 전체 목록을 조회합니다.<br/>
@@ -137,7 +140,10 @@ form 일반 회원가입 직후 본인 인증 이메일 안내 페이지 입니�
 ![image](https://user-images.githubusercontent.com/59169881/230769853-df3d2cf6-8623-437d-a6d5-040b18ffa3c3.png)
 
 입력한 값과 일치하는 계정이 존재하면, 임시 비밀번호를 전송합니다. 임시 비밀번호로 로그인할 수 있습니다.
+</details>
 
+<details>
+<summary>게시판 기능</summary>
 
 ![image](https://user-images.githubusercontent.com/59169881/230769979-e9e8e454-696c-468c-bd81-3f29a157cadc.png)
 
@@ -180,8 +186,13 @@ form 일반 회원가입 직후 본인 인증 이메일 안내 페이지 입니�
 
 ![image](https://user-images.githubusercontent.com/59169881/230770209-e589b1e9-a91e-4ad3-a8f1-4ff9119760e2.png)
 
-수정하기 버튼을 누러서 수정할 수 있습니다.
+수정하기 버튼을 클릭하여 수정할 수 있습니다.
 
+</details>
+
+
+<details>
+<summary>설정 기능</summary>
 
 ![image](https://user-images.githubusercontent.com/59169881/230760837-16093ff2-e280-4859-8c4b-9fd2b994785e.png)
 
@@ -223,11 +234,15 @@ form 가입 회원에게는 탈퇴 시에 비밀번호 입력을 요구합니다
 ![image](https://user-images.githubusercontent.com/59169881/230770343-b3369474-c999-4987-b4a4-06f81d08e19b.png)
 
 탈퇴한 사용자의 게시물과 댓글은 그대로 남고, 댓글에는 댓글 작성자의 닉네임만 '탈퇴한 사용자'로 변경됩니다.
-
+</details>
 
 ## 구조 및 설계
 
 #### 1. 패키지 구조
+
+<details>
+<summary>패키지 구조 펼쳐보기</summary>
+
 
 ```
 📦 src
@@ -418,7 +433,7 @@ form 가입 회원에게는 탈퇴 시에 비밀번호 입력을 요구합니다
  ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜 UserServiceTest.java
  ┃ ┃ ┃ ┃ ┃ ┗ 📜 GeneralBoardProjectApplicationTests.java
 ```
-
+</details>
 
 #### 2. DB 설계
 
@@ -445,6 +460,5 @@ form 가입 회원에게는 탈퇴 시에 비밀번호 입력을 요구합니다
 <img width="518" alt="댓글 관련 ap i" src="https://user-images.githubusercontent.com/59169881/230759437-71c95b54-161c-4b9f-a34d-612e749616e8.PNG"><br/>
 
 
-
 ## 마치며
-후에 리팩토링을 거치며 더욱 효율적인 성능을 가진 프로젝트를 만들고 싶습니다. 부족한 것이 많아 공부하면서 추가적으로 업데이트 할 계획입니다.
+후에 리팩토링을 거치며 더욱 완성도 높은 프로젝트를 만들고 싶습니다. 부족한 점이 많아 공부하면서 업데이트 할 계획입니다.
