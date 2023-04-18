@@ -96,6 +96,10 @@ http://ec2-43-201-158-17.ap-northeast-2.compute.amazonaws.com:8080/
 
 회원가입 페이지 입니다.
 
+![image](https://user-images.githubusercontent.com/59169881/232667037-5f2e61d3-d732-47a4-ac2b-2d1d5ae3066e.png)
+유효하지 않은 값을 입력하면 오류 메시지를 표시합니다.
+
+
 ![image](https://user-images.githubusercontent.com/59169881/230769386-33ff34e3-21f1-448f-9b41-916b11a31521.png)
 
 form 일반 회원가입 직후 본인 인증 이메일 안내 페이지 입니다. '이메일 인증하기' 버튼을 누르면 회원가입시에 입력했던 이메일로 본인 인증을 할 수 있습니다.
